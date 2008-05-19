@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# wallpaper-control
+# A simple script to control random wallpapers in KDE
+#
+# David Precious, davidp@preshweb.co.uk
+# $Id$
+
+desktop=$(dcop kwin KWinInterface currentDesktop)
+wallpaper=$(dcop kdesktop KBackgroundIface currentWallpaper $desktop)
+
+case $1 in
+    which)
+        echo "Wallpaper on desktop $desktop is $wallpaper"
+    ;;
+    
+    next)
+    	dcop kdesktop KBackgroundIface changeWallpaper
+    ;;
+    
+   delete)
+        echo "Delete $wallpaper ?"
+        echo "(Interrupt now to bail)"
+        read foo
+        rm $wallpaper
+    ;;
+        
+    *)
+        echo "Unrecognised command"
+    ;;
+
+esac
+
