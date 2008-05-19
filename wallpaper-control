@@ -13,6 +13,10 @@ case $1 in
     which)
         echo "Wallpaper on desktop $desktop is $wallpaper"
     ;;
+
+    whichmsgbox)
+        kdialog --msgbox "Wallpaper on desktop $desktop is $wallpaper"
+    ;;
     
     next)
     	dcop kdesktop KBackgroundIface changeWallpaper
