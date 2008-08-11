@@ -79,23 +79,26 @@ alias updateprofile='scp davidp@supernova.preshweb.co.uk:.profile $HOME'
 
 
 # machine-specific stuff:
-if [ $(hostname --fqdn) == "cyborg.uk2net.com" ]; then
-    export CGI=/usr/local/apache_1.1/cgi-bin
-    export cgi=/usr/local/apache_1.1/cgi-bin/
-    export lib=/usr/local/uk2net/lib
-    export log=/usr/local/uk2net/log
+case $(hostname --fqdn) in
+    cyborg.uk2net.com)
+        export CGI=/usr/local/apache_1.1/cgi-bin
+        export cgi=/usr/local/apache_1.1/cgi-bin/
+        export lib=/usr/local/uk2net/lib
+        export log=/usr/local/uk2net/log
+        export PERL5LIB=/usr/local/uk2net/log
 
-    alias pw='grep dave /amail/admin/makeadmpwd.txt'
-    alias golddb='mysql -h 83.170.64.3 -u superultra --password=peon superultra'
-    alias maxmaildb='mysql -h 10.0.0.123 -u cymaxmail --password=wn2wmh maxmail'
-    alias atmaildb='mysql -h 83.170.81.130 -u root --password=gerbil atmail'
-fi
-
-if [ $(hostname --fqdn) == "shop1.uk2.net" ]; then
-    export carts=/usr/local/apache/carts
-fi
-
-
+        alias pw='grep dave /amail/admin/makeadmpwd.txt'
+        alias golddb='mysql -h 83.170.64.3 -u superultra --password=peon superultra'
+        alias maxmaildb='mysql -h 10.0.0.123 -u cymaxmail --password=wn2wmh maxmail'
+        alias atmaildb='mysql -h 83.170.81.130 -u root --password=gerbil atmail'
+    ;;
+    alchemist.uk2.net)
+        export PERL5LIB=/usr/local/uk2net/lib
+    ;;
+    shop1.uk2.net)
+        export carts=/usr/local/apache/carts
+    ;;
+esac
 
 
 
