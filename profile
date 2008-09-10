@@ -86,6 +86,7 @@ case $(hostname --fqdn) in
         export lib=/usr/local/uk2net/lib
         export log=/usr/local/uk2net/log
         export PERL5LIB=/usr/local/uk2net/log
+        export PATH=/usr/local/openssh/bin:$PATH
 
         alias pw='grep dave /amail/admin/makeadmpwd.txt'
         alias golddb='mysql -h 83.170.64.3 -u superultra --password=peon superultra'
