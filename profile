@@ -92,6 +92,7 @@ case $(hostname --fqdn) in
         alias golddb='mysql -h 83.170.64.3 -u superultra --password=peon superultra'
         alias maxmaildb='mysql -h 10.0.0.123 -u cymaxmail --password=wn2wmh maxmail'
         alias atmaildb='mysql -h 83.170.81.130 -u root --password=gerbil atmail'
+	alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL'
     ;;
     alchemist.uk2.net)
         export PERL5LIB=/usr/local/uk2net/lib
