@@ -116,7 +116,26 @@ export PREPENDTITLE=''
 # destination otherwise.
 # Usage: deploy from to
 function deploy() {
-    if perl -I/usr/local/uk2net/lib -c $1 ; then
+    SOURCEPATH=$1
+    DESTPATH=$2
+    # This is an evil little incantation:
+    FILENAME=${SOURCEPATH##*/}
+
+    # If we were given the directory name to deploy the file to rather than
+    # the full new path, we wouldn't be able to do the diff, so infer
+    # the new path:
+    if [ -d "$DESTPATH" ]; then
+        DESTPATH="$DESTPATH/$FILENAME"
+    fi
+
+    DESTDIR=$(dirname $DESTPATH)
+    if [ -d "$DESTDIR/.svn" ]; then
+        echo "$DESTDIR is a Subversion checkout, refusing to deploy there."
+        return
+    fi
+
+    # TODO: determine if it's actually a Perl script/module
+    if perl -I/usr/local/uk2net/lib -c $SOURCEPATH ; then
         echo "Compiled OK."
     else
         echo "It didn't compile!  Are you sure you want to deploy?"
@@ -124,20 +143,19 @@ function deploy() {
         read foo;
     fi
 
-    # if the destination exists, do a diff (FIXME: this will fail if you
-    # just give the destination directory, and there's a file of this name
-    # in that directory)
-    if [ -f $2 ]; then
-        echo "Diffing against $2"
-        diff -u $2 $1 | less
+    # if the destination exists, do a diff
+    if [ -f $DESTPATH ]; then
+        echo "Diffing against $DESTPATH"
+        diff -u $SOURCEPATH $DESTPATH | less
         echo "Happy with the diff?  Enter to deploy, interrupt to bail"
         read foo;
     fi
 
-    if [ -w $2 ]; then
-        cp -p $1 $2 && echo "Deployed $1 to $2"
+    if [ -w $DESTPATH ]; then
+        cp -p $SOURCEPATH $DESTPATH && echo "Deployed $SOURCEPATH to $DESTPATH"
     else
-        sudo cp -p $1 $2 && echo "Deployed $1 to $2 (as root)"
+        sudo cp -p $SOURCEPATH $DESTPATH && echo \
+            "Deployed $SOURCEPATH to $DESTPATH (as root)"
     fi
 }
 
