@@ -75,7 +75,7 @@ alias hg="history | grep"
 alias kilall="killall"
 
 # self-update :)
-alias updateprofile='scp davidp@supernova.preshweb.co.uk:.profile $HOME'
+alias updateprofile='wget -O ~/.profile http://www.preshweb.co.uk/downloads/profile'
 
 
 # machine-specific stuff:
@@ -146,7 +146,7 @@ function deploy() {
     # if the destination exists, do a diff
     if [ -f $DESTPATH ]; then
         echo "Diffing against $DESTPATH"
-        diff -u $SOURCEPATH $DESTPATH | less
+        diff -u $DESTPATH $SOURCEPATH | less
         echo "Happy with the diff?  Enter to deploy, interrupt to bail"
         read foo;
     fi
