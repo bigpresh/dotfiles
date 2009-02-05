@@ -103,7 +103,7 @@ case $(hostname --fqdn) in
         export lib=/usr/local/uk2net/lib
         export log=/usr/local/uk2net/log
         export PERL5LIB=/usr/local/uk2net/lib
-        alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL'
+        alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL && ssh-add'
     ;;
     alchemist.uk2.net)
         export PERL5LIB=/usr/local/uk2net/lib
