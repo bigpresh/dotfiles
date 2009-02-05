@@ -94,6 +94,7 @@ case $(hostname --fqdn) in
         export log=/usr/local/uk2net/log
         export PERL5LIB=/usr/local/uk2net/log
         export PATH=/usr/local/openssh/bin:$PATH
+        alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL'
 
         # Cyborg has some DB connection aliases (e.g. "atmaildb") which contain
         # the passwords; obviously don't want those here, so load them from
