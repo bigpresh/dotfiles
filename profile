@@ -38,7 +38,7 @@
 if [ -x /usr/bin/biff ]; then biff n; fi
 
 # show at a glance how the box is performing as we log in
-LOAD=`cat /proc/loadavg | cut -d ' ' -f 1,2,3`
+LOAD=$(cat /proc/loadavg | cut -d ' ' -f 1,2,3)
 PROCS=$(ps aux | wc -l)
 
 # print pretty banner and loadavg etc only if we're 
@@ -95,11 +95,10 @@ case $(hostname --fqdn) in
         export PERL5LIB=/usr/local/uk2net/log
         export PATH=/usr/local/openssh/bin:$PATH
 
-        alias pw='grep dave /amail/admin/makeadmpwd.txt'
-        alias golddb='mysql -h 83.170.64.3 -u superultra --password=peon superultra'
-        alias maxmaildb='mysql -h 10.0.0.123 -u cymaxmail --password=wn2wmh maxmail'
-        alias atmaildb='mysql -h 83.170.81.130 -u root --password=gerbil atmail'
-	alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL'
+        # Cyborg has some DB connection aliases (e.g. "atmaildb") which contain
+        # the passwords; obviously don't want those here, so load them from
+        # that file:
+        source ~/.dbaliases
     ;;
     alchemist.uk2.net)
         export PERL5LIB=/usr/local/uk2net/lib
