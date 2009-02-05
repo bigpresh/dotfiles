@@ -30,6 +30,8 @@
 #
 # mcd(dir)
 # create a directory and immediately change into it
+#
+# fuck/kilall are aliases to killall (why do I find that hard to type?)
 ###################################################################
 
 # disable mail notifications
@@ -77,6 +79,7 @@ alias cdback='cd $OLDPWD'
 alias cb='cd $OLDPWD'
 alias hg="history | grep"
 alias kilall="killall"
+alias fuck="killall"
 
 # self-update :)
 alias updateprofile='wget -O ~/.profile http://www.preshweb.co.uk/downloads/profile'
@@ -204,12 +207,6 @@ function usage() {
 function mcd() {
     mkdir -p "$*" && cd "$*" && pwd
 }
-
-# Easier to type than killall:
-function fuck() {
-    killall $*
-}
-
 
 
 prependtitle() {
