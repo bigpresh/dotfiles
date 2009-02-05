@@ -45,18 +45,22 @@ LOAD=`cat /proc/loadavg | cut -d ' ' -f 1,2,3`
 if [ "$TERM" == "xterm" ]; then
     if [ -f ~/banner ]; then cat ~/banner; fi;
     echo " $HOSTNAME : LOAD: $LOAD"
+
+    if [ "$HOSTNAME" == "cyborg.uk2net.com" ]; then
+        grep dave /amail/admin/makeadmpwd.txt;
+    fi
 fi
 
 
 # set some environment vars
 
 # pick visual editor to use, in order of preference:
-if [ -x /usr/bin/mcedit ]; then
-    export VISUAL=/usr/bin/mcedit
+if [ -x /usr/bin/vim ]; then
+    export VISUAL=/usr/bin/vim
 elif [ -x nano ]; then
     export VISUAL=nano
-elif [ -x /usr/bin/vim ]; then
-    export VISUAL=/usr/bin/vim
+elif [ -x /usr/bin/mcedit ]; then
+    export VISUAL=/usr/bin/mcedit
 fi
 
 export GZIP="-9"
@@ -199,6 +203,11 @@ function usage() {
 
 function mcd() {
     mkdir -p "$*" && cd "$*" && pwd
+}
+
+# Easier to type than killall:
+function fuck() {
+    killall $*
 }
 
 
