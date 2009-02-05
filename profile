@@ -98,6 +98,12 @@ case $(hostname --fqdn) in
         # that file:
         source ~/.dbaliases
     ;;
+    depardieu.uk2.net)
+        export cgi=/usr/local/uk2net/cgi
+        export lib=/usr/local/uk2net/lib
+        export log=/usr/local/uk2net/log
+        export PERL5LIB=/usr/local/uk2net/lib
+        alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL'
     alchemist.uk2.net)
         export PERL5LIB=/usr/local/uk2net/lib
     ;;
