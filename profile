@@ -81,9 +81,6 @@ alias hg="history | grep"
 alias kilall="killall"
 alias fuck="killall"
 
-# self-update :)
-alias updateprofile='wget -O ~/.profile http://www.preshweb.co.uk/downloads/profile'
-
 
 # machine-specific stuff:
 case $(hostname --fqdn) in
@@ -92,7 +89,7 @@ case $(hostname --fqdn) in
         export cgi=/usr/local/apache_1.1/cgi-bin/
         export lib=/usr/local/uk2net/lib
         export log=/usr/local/uk2net/log
-        export PERL5LIB=/usr/local/uk2net/log
+        export PERL5LIB=/usr/local/uk2net/lib
         export PATH=/usr/local/openssh/bin:$PATH
         alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL'
 
@@ -173,12 +170,10 @@ psmatch () {
 }
 
 
+# kill any process matching the given regexp (so be careful what the regexp
+# will match!!)
+# second param, if given, is the signal to use.
 function killmatching() {
-    # will kill any process matching the given 
-    # regexp (so be careful what the regexp
-    # will match!!)
-    # second param, if given, is the signal to
-    # use.
 
     if [ "$1" = "" ]; then
         echo "Usage: killmatching <pattern> [<signal>]"
@@ -186,44 +181,52 @@ function killmatching() {
         return
     fi
 
-    if [ "$2" != '' ]
-    then
+    # Not all boxes have a grep that supports the -P (perl regex) option:
+    if [ "$(echo 'foo' | grep -P 'fo+')" == "" ]; then
+        echo "grep on this box doesn't support the -P option."
+        return;
+    fi
+
+    if [ "$2" != '' ]; then
         local SIG=$2
     else
         local SIG='TERM'
     fi
+    # Find all processes matching the regexp given, get the PIDs, and kill.
     ps ax -eo pid,comm | grep -P "$1" | grep -v grep | sed -r 's/^\s+//' \
         | cut -d ' ' -f 1 | xargs kill -s $SIG
 }
 
+# return total disc space used by given file or dir (including subdirs + files)
 function usage() {
-    # return total disc space used by given file
-    # or dir (including sub dirs + files)
-
     du -ch $1 | grep total
 }
 
-
+# Make a new directory, and immediately change in to it.
 function mcd() {
     mkdir -p "$*" && cd "$*" && pwd
 }
 
+# self-update :)
+function updateprofile() {
+    echo "Fetching new copy of profile"
+    wget -O ~/.profile http://www.preshweb.co.uk/downloads/profile && \
+    echo "Sourcing updated profile" && \
+    source ~/.profile && \
+    echo ".profile updated".
+}
 
+# sets a string that will be prepended to the xterm title by the prompt (PS1)
 prependtitle() {
-    # sets a string that will be prepended to the xterm
-    # title by the prompt (PS1) command
     PREPENDTITLE={$1}:
     setprompt
 }
 
+# sets terminal title.  If given a title to use, it's appended to the
+# default prompt.
 setprompt() {
-    # sets terminal title.  If given a title to use, it's appended
-    # to the default prompt.
-
     local title="$1"
-
     case $TERM in
-        
         screen)
             PROMPTSET='\[\033];${PREPENDTITLE} screen \u@\h:\w\007\]'
             ;;
@@ -235,12 +238,11 @@ setprompt() {
             ;;
     esac
 
-    # custom prompt:
+    # Set custom prompt:
     PS1="${PROMPTSET}[\u@\h:\w]\\$ "
 }
 
 
 # set the prompt:
 setprompt
-
 
