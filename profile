@@ -210,7 +210,7 @@ function mcd() {
 # self-update :)
 function updateprofile() {
     echo "Fetching new copy of profile"
-    wget -O ~/.profile http://www.preshweb.co.uk/downloads/profile && \
+    wget -q -O ~/.profile http://www.preshweb.co.uk/downloads/profile && \
     echo "Sourcing updated profile" && \
     source ~/.profile && \
     echo ".profile updated".
