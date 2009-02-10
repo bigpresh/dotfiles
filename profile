@@ -81,15 +81,18 @@ alias hg="history | grep"
 alias kilall="killall"
 alias fuck="killall"
 
+# A few variables for easy quick access to common paths (some of these may
+# be overridden in the machine-specific stuff below)
+export cgi=/usr/local/uk2net/cgi
+export lib=/usr/local/uk2net/lib
+export log=/usr/local/uk2net/log
+export PERL5LIB=/usr/local/uk2net/lib
 
 # machine-specific stuff:
 case $(hostname --fqdn) in
     cyborg.uk2net.com)
         export CGI=/usr/local/apache_1.1/cgi-bin
         export cgi=/usr/local/apache_1.1/cgi-bin/
-        export lib=/usr/local/uk2net/lib
-        export log=/usr/local/uk2net/log
-        export PERL5LIB=/usr/local/uk2net/lib
         export PATH=/usr/local/openssh/bin:$PATH
         alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL'
 
@@ -99,14 +102,12 @@ case $(hostname --fqdn) in
         source ~/.dbaliases
     ;;
     depardieu.uk2.net)
-        export cgi=/usr/local/uk2net/cgi
-        export lib=/usr/local/uk2net/lib
-        export log=/usr/local/uk2net/log
-        export PERL5LIB=/usr/local/uk2net/lib
         alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL && ssh-add'
     ;;
+    rasputin.uk2.net)
+        alias codemonkey='sudo su codemonkey'
+    ;;
     alchemist.uk2.net)
-        export PERL5LIB=/usr/local/uk2net/lib
     ;;
     shop1.uk2.net)
         export carts=/usr/local/apache/carts
