@@ -114,6 +114,10 @@ case $(hostname --fqdn) in
     ;;
 esac
 
+# If this box has bash-completion available, source it:
+if [ -r '/etc/bash_competion' ]; then
+    . /etc/bash_completion
+fi
 
 
 
