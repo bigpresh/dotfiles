@@ -259,3 +259,30 @@ setprompt() {
 # set the prompt:
 setprompt
 
+
+# Write out a more usable vim config:
+writevimconfig() {
+    cat <<VIMCONFIG > ~/.vimrc
+
+set number
+
+syntax on
+set nowrap
+set shiftwidth=4
+set shiftround
+set expandtab
+set tabstop=4
+set autoindent
+set smarttab     "Backspace at start of line outdents"
+
+" for Perl programming, have things in braces indenting themselves:
+autocmd FileType perl set smartindent
+
+" have the h and l cursor keys wrap between lines (like <Space> and <BkSpc> do
+" by default), and ~ covert case over line breaks; also have the cursor keys
+" wrap in insert mode:
+set whichwrap=h,l,~,[,]
+
+VIMCONFIG
+}
+
