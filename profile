@@ -293,3 +293,35 @@ set whichwrap=h,l,~,[,]
 VIMCONFIG
 }
 
+# Do an svn commit, with diffs included in the commit message
+svncommit() {
+
+    # Start preparing the commit message which we'll then edit
+    COMMITMSG=/tmp/$USER-commitmsg
+    echo > $COMMITMSG
+    echo "--This line, and those below, will be ignored--" >> $COMMITMSG
+    svn status "$@" >> $COMMITMSG
+    echo >> $COMMITMSG
+
+    # Now do a diff; work out stats on lines added/removed by looking at
+    # the diff, add that info, then the diff itself
+    svn diff "$@"   > /tmp/$USER-svndiff
+    LINESADDED=$(  grep '^+[^+]' /tmp/$USER-svndiff | wc -l)
+    LINESREMOVED=$(grep '^-[^-]' /tmp/$USER-svndiff | wc -l)
+    echo "Added $LINESADDED lines, removed $LINESREMOVED lines" >> $COMMITMSG
+    echo >> $COMMITMSG
+    cat /tmp/$USER-svndiff >> $COMMITMSG
+    echo >> $COMMITMSG
+
+    ORIGMD5=$(md5sum $COMMITMSG)
+    $VISUAL $COMMITMSG
+
+    if [[ "$(md5sum $COMMITMSG)" == "$ORIGMD5" ]]; then
+        echo "Commit message unchanged, commit aborted";
+    else
+        svn commit "$@" -F $COMMITMSG
+    fi
+
+    rm $COMMITMSG
+    rm /tmp/$USER-svndiff
+}
