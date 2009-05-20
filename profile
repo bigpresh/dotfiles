@@ -95,6 +95,7 @@ case $(hostname --fqdn) in
         export cgi=/usr/local/apache_1.1/cgi-bin/
         export PATH=/usr/local/openssh/bin:$PATH
         alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL'
+        alias uk2perl='sudo perl -d ~/uk2perl'
 
         # Cyborg has some DB connection aliases (e.g. "atmaildb") which contain
         # the passwords; obviously don't want those here, so load them from
