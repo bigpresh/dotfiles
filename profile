@@ -121,10 +121,17 @@ if [ -r '/etc/bash_completion' ]; then
 fi
 
 
+# Write out my vim settings (see further down for them)
+writevimconfig
+
+
+
 
 # this can get set by the prependtitle() function
 # and is prepended to the xterm window title
 export PREPENDTITLE=''
+
+
 
 ########## custom functions: ###############################
 
