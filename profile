@@ -84,6 +84,8 @@ alias cb='cd $OLDPWD'
 alias hg="history | grep"
 alias kilall="killall"
 alias fuck="killall"
+alias svnci="svncommit"
+alias ci="svncommit"
 
 # A few variables for easy quick access to common paths (some of these may
 # be overridden in the machine-specific stuff below)
@@ -186,7 +188,7 @@ function deploy() {
 
 # look for processes matching the given regexp
 psmatch () {
-    ps aux | grep -P "$1" | grep -v grep
+    ps aux | grep -E "$1" | grep -v grep
 }
 
 
@@ -201,20 +203,14 @@ function killmatching() {
         return
     fi
 
-    # Not all boxes have a grep that supports the -P (perl regex) option:
-    if [ "$(echo 'foo' | grep -P 'fo+')" == "" ]; then
-        echo "grep on this box doesn't support the -P option."
-        return;
-    fi
-
     if [ "$2" != '' ]; then
         local SIG=$2
     else
         local SIG='TERM'
     fi
     # Find all processes matching the regexp given, get the PIDs, and kill.
-    ps ax -eo pid,comm | grep -P "$1" | grep -v grep | sed -r 's/^\s+//' \
-        | cut -d ' ' -f 1 | xargs kill -s $SIG
+    ps ax -eo pid,comm | grep -E "$1" | grep -v grep | sed -r 's/^\s+//' \
+        | cut -d ' ' -f 1 | sudo xargs kill -s $SIG
 }
 
 # return total disc space used by given file or dir (including subdirs + files)
