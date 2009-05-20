@@ -282,6 +282,9 @@ set tabstop=4
 set autoindent
 set smarttab     "Backspace at start of line outdents"
 
+" More normal backspace behaviour:
+set backspace=indent,eol,start
+
 " for Perl programming, have things in braces indenting themselves:
 autocmd FileType perl set smartindent
 
