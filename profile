@@ -209,8 +209,8 @@ function killmatching() {
         local SIG='TERM'
     fi
     # Find all processes matching the regexp given, get the PIDs, and kill.
-    ps ax -eo pid,comm | grep -E "$1" | grep -v grep | sed -r 's/^\s+//' \
-        | cut -d ' ' -f 1 | sudo xargs kill -s $SIG
+    ps aux | grep -E "$1" | grep -v grep \
+        | awk '{print $2'} | sudo xargs kill -s $SIG
 }
 
 # return total disc space used by given file or dir (including subdirs + files)
