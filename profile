@@ -271,6 +271,7 @@ set number
 
 syntax on
 set nowrap
+set textwidth=80
 set shiftwidth=4
 set shiftround
 set expandtab
