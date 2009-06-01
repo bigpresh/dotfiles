@@ -51,6 +51,7 @@ PROCS=$(ps aux | wc -l)
 if [ "$TERM" == "xterm" ]; then
     if [ -f ~/banner ]; then cat ~/banner; fi;
     echo " $HOSTNAME : LOAD: $LOAD PROCS: $PROCS"
+    echo '.profile : $Id$'
 
     if [ "$HOSTNAME" == "cyborg.uk2net.com" ]; then
         grep dave /amail/admin/makeadmpwd.txt;
@@ -266,6 +267,8 @@ setprompt
 # Write out a more usable vim config:
 writevimconfig() {
     cat <<VIMCONFIG > ~/.vimrc
+" vimrc written from .profile
+" $Id$
 
 set number
 
