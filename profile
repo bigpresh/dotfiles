@@ -281,6 +281,7 @@ set expandtab
 set tabstop=4
 set autoindent
 set smarttab     "Backspace at start of line outdents"
+set ruler        "Show current position in file at bottom"
 
 " More normal backspace behaviour:
 set backspace=indent,eol,start
@@ -292,6 +293,25 @@ autocmd FileType perl set smartindent
 " by default), and ~ covert case over line breaks; also have the cursor keys
 " wrap in insert mode:
 set whichwrap=h,l,~,[,]
+
+" Don't make noise:
+set visualbell
+
+" I always use terminals with dark backgrounds:
+set background=dark
+
+" make the completion menus readable
+highlight Pmenu ctermfg=0 ctermbg=3
+highlight PmenuSel ctermfg=0 ctermbg=7
+
+"The following should be done automatically for the default colour scheme
+"at least, but it is not in Vim 7.0.17.
+if &bg == "dark"
+  highlight MatchParen ctermbg=darkblue guibg=blue
+endif
+  
+" Incremental search as you type (don't use on slow terminals)
+set incsearch
 
 VIMCONFIG
 }
