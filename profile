@@ -310,8 +310,10 @@ if &bg == "dark"
   highlight MatchParen ctermbg=darkblue guibg=blue
 endif
   
-" Incremental search as you type (don't use on slow terminals)
-set incsearch
+
+" Show any lines which go over 80 chars:
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.*/
 
 VIMCONFIG
 }
