@@ -310,8 +310,7 @@ if &bg == "dark"
   highlight MatchParen ctermbg=darkblue guibg=blue
 endif
   
-
-" Show any lines which go over 80 chars:
+" Highlight lines that go over 80 chars:
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.*/
 
