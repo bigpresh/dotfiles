@@ -123,7 +123,7 @@ case $(hostname --fqdn) in
 esac
 
 # If this box has bash-completion available, source it:
-if [ -r '/etc/bash_completion' ]; then
+if [[ -r '/etc/bash_completion' && ! -f "$HOME/.bash_completion_broken" ]]; then
     . /etc/bash_completion
 fi
 
