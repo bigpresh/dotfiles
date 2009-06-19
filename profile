@@ -286,8 +286,9 @@ set ruler        "Show current position in file at bottom"
 " More normal backspace behaviour:
 set backspace=indent,eol,start
 
-" for Perl programming, have things in braces indenting themselves:
+" for coding, have things in braces indenting themselves:
 autocmd FileType perl set smartindent
+autocmd FileType php  set smartindent
 
 " have the h and l cursor keys wrap between lines (like <Space> and <BkSpc> do
 " by default), and ~ covert case over line breaks; also have the cursor keys
