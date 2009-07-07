@@ -55,6 +55,7 @@ if [ "$TERM" == "xterm" ]; then
 
     if [ "$HOSTNAME" == "cyborg.uk2net.com" ]; then
         cat ~/.adminpassword;
+        echo;
     fi
 fi
 
