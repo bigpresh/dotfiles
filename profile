@@ -54,7 +54,7 @@ if [ "$TERM" == "xterm" ]; then
     echo '.profile : $Id$'
 
     if [ "$HOSTNAME" == "cyborg.uk2net.com" ]; then
-        grep dave /amail/admin/makeadmpwd.txt;
+        cat ~/.adminpassword;
     fi
 fi
 
