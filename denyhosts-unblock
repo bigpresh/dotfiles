@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Unblock a host that denyhosts blocked.
+# $Id$
+
+IP=$1
+
+if [[ "$IP" == "" ]]; then
+    echo "Usage: $0 ip"
+    exit
+fi
+
+cd /var/lib/denyhosts
+for file in *; do
+    grep -v $IP > /tmp/$file.new;
+    sudo mv /tmp/$file.new $file;
+done
+
+
+
