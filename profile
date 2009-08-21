@@ -318,6 +318,8 @@ if v:version >= 700
     set cursorcolumn
 endif
 
+" Don't need the toolbar, it takes up valuable space:
+set guioptions-=T
 
 " Highlight lines that go over 80 chars:
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
