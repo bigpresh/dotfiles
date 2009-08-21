@@ -311,10 +311,19 @@ highlight PmenuSel ctermfg=0 ctermbg=7
 if &bg == "dark"
   highlight MatchParen ctermbg=darkblue guibg=blue
 endif
-  
+
+" Show cursor position easily:
+set cursorline
+set cursorcolumn
+
+
 " Highlight lines that go over 80 chars:
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.*/
+
+"Useful shortcuts:
+:imap ;na Account->new( accountname => '' );<left><left><left><left> 
+
 
 VIMCONFIG
 }
