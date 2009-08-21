@@ -313,8 +313,10 @@ if &bg == "dark"
 endif
 
 " Show cursor position easily:
-set cursorline
-set cursorcolumn
+if v:version >= 700
+    set cursorline
+    set cursorcolumn
+endif
 
 
 " Highlight lines that go over 80 chars:
