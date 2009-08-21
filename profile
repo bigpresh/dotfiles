@@ -323,6 +323,12 @@ endif
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.*/
 
+
+if has('gui_running')
+    colorscheme murphy
+    set guifont=Monaco\ 7
+endif
+
 "Useful shortcuts:
 :imap ;na Account->new( accountname => '' );<left><left><left><left> 
 
