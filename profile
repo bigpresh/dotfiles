@@ -332,6 +332,9 @@ set guifont=Monaco\ 7
 "Useful shortcuts:
 :imap ;na Account->new( accountname => '' );<left><left><left><left> 
 
+" Delete lines from insert mode with Ctrl+k
+:imap <silent> <C-k> <Esc>ddi
+
 
 VIMCONFIG
 }
