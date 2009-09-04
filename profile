@@ -365,7 +365,8 @@ svncommit() {
     MESSAGEOK=0
     while [ $MESSAGEOK=="0" ]; do
         
-        $VISUAL $COMMITMSG
+        # TODO: make sure it's vim/vi before using -c
+        $VISUAL -c 'startinsert' $COMMITMSG
         
         # Initially assume it's OK, then find out if not
         MESSAGEOK=1
