@@ -360,11 +360,13 @@ svncommit() {
     echo >> $COMMITMSG
 
     ORIGMD5=$(md5sum $COMMITMSG)
-    $VISUAL $COMMITMSG
 
     # Now, edit (and retry editing) until we're happy
     MESSAGEOK=0
     while [ $MESSAGEOK=="0" ]; do
+        
+        $VISUAL $COMMITMSG
+        
         # Initially assume it's OK, then find out if not
         MESSAGEOK=1
 
