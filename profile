@@ -373,17 +373,19 @@ svncommit() {
 
         # Check the message was edited
         if [[ "$(md5sum $COMMITMSG)" == "$ORIGMD5" ]]; then
-            echo "Commit message unchanged - try again";
+            echo "Commit message unchanged - try again or interrupt to abort"
             MESSAGEOK=0
+            sleep 10
         fi
 
         # If we're on a UK2 box and forgot to add the stupid Impact: line for
         # PCI-compliance reasons, complain:
         if [[ "${HOSTNAME: -7}"=='uk2.net' ]] && \
-           [[ ! $(grep 'Impact:' $COMMITMSG) ]] ; then
+           ! grep -q 'Impact:' $COMMITMSG ; then
            MESSAGEOK=0
            echo "You must supply an Impact: line in the commit message"
            echo "This is needed for UK2 PCI compliance."
+           sleep 5
         fi
     done
 
