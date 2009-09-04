@@ -362,12 +362,36 @@ svncommit() {
     ORIGMD5=$(md5sum $COMMITMSG)
     $VISUAL $COMMITMSG
 
-    if [[ "$(md5sum $COMMITMSG)" == "$ORIGMD5" ]]; then
-        echo "Commit message unchanged, commit aborted";
-    else
-        svn commit "$@" -F $COMMITMSG
-    fi
+    # Now, edit (and retry editing) until we're happy
+    MESSAGEOK=0
+    while [ $MESSAGEOK=="0" ]; do
+        # Initially assume it's OK, then find out if not
+        MESSAGEOK=1
 
-    rm $COMMITMSG
-    rm /tmp/$USER-svndiff
+        # Check the message was edited
+        if [[ "$(md5sum $COMMITMSG)" == "$ORIGMD5" ]]; then
+            echo "Commit message unchanged - try again";
+            MESSAGEOK=0
+        fi
+
+        # If we're on a UK2 box and forgot to add the stupid Impac: line for
+        # PCI-compliance reasons, complain:
+        if [[ "${HOSTNAME: -7}"=='uk2.net' ]] && \
+           [[ ! $(grep 'Impact:' /dev/shm/wtftest) ]] ; then
+           MESSAGEOK=0
+           echo "You must supply an Impact: line in the commit message"
+           echo "This is needed for UK2 PCI compliance."
+        fi
+    done
+
+    # When we get here, the message must be acceptable so commit:
+    if [ svn commit "$@" -F $COMMITMSG ]; then
+        echo "Committed, removing message file $COMMITMSG"
+        echo "Added $LINESADDED lines, removed $LINESREMOVED lines"
+        rm $COMMITMSG
+        rm /tmp/$USER-svndiff
+    else
+        echo "Commit failed, message left in $COMMITMSG"
+        echo "Diff left in /tmp/$USER-svndiff"
+    fi
 }
