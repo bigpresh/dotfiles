@@ -376,10 +376,10 @@ svncommit() {
             MESSAGEOK=0
         fi
 
-        # If we're on a UK2 box and forgot to add the stupid Impac: line for
+        # If we're on a UK2 box and forgot to add the stupid Impact: line for
         # PCI-compliance reasons, complain:
         if [[ "${HOSTNAME: -7}"=='uk2.net' ]] && \
-           [[ ! $(grep 'Impact:' /dev/shm/wtftest) ]] ; then
+           [[ ! $(grep 'Impact:' $COMMITMSG) ]] ; then
            MESSAGEOK=0
            echo "You must supply an Impact: line in the commit message"
            echo "This is needed for UK2 PCI compliance."
