@@ -287,6 +287,10 @@ set ruler        "Show current position in file at bottom"
 " More normal backspace behaviour:
 set backspace=indent,eol,start
 
+" Allow me to switch from a buffer with unsaved changes without
+" saving/abandoning them - just makes the buffer hidden:
+set hidden
+
 " for coding, have things in braces indenting themselves:
 autocmd FileType perl set smartindent
 autocmd FileType php  set smartindent
@@ -363,7 +367,7 @@ svncommit() {
 
     # Now, edit (and retry editing) until we're happy
     MESSAGEOK=0
-    while [ $MESSAGEOK=="0" ]; do
+    while [ $MESSAGEOK == "0" ]; do
         
         # TODO: make sure it's vim/vi before using -c
         $VISUAL -c 'startinsert' $COMMITMSG
