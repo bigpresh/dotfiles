@@ -384,7 +384,7 @@ svncommit() {
 
         # If we're on a UK2 box and forgot to add the stupid Impact: line for
         # PCI-compliance reasons, complain:
-        if [[ "${HOSTNAME: -7}"=='uk2.net' ]] && \
+        if [[ "${HOSTNAME: -7}" == "uk2.net" ]] && 
            ! grep -q 'Impact:' $COMMITMSG ; then
            MESSAGEOK=0
            echo "You must supply an Impact: line in the commit message"
@@ -394,7 +394,7 @@ svncommit() {
     done
 
     # When we get here, the message must be acceptable so commit:
-    if [ svn commit "$@" -F $COMMITMSG ]; then
+    if svn commit "$@" -F $COMMITMSG ; then
         echo "Committed, removing message file $COMMITMSG"
         echo "Added $LINESADDED lines, removed $LINESREMOVED lines"
         rm $COMMITMSG
