@@ -100,6 +100,9 @@ export PERL5LIB=/usr/local/uk2net/lib
 
 # machine-specific stuff:
 case $(hostname --fqdn) in
+    supernova.preshweb.co.uk)
+        export MPD_HOST=supernova
+    ;;
     cyborg.uk2net.com)
         export CGI=/usr/local/apache_1.1/cgi-bin
         export cgi=/usr/local/apache_1.1/cgi-bin/
