@@ -78,6 +78,8 @@ export GREP_OPTIONS='--binary-files=without-match'
 export HISTCONTROL=ignoreboth
 shopt -s histappend
 
+# Notice if the window size changed:
+shopt -s checkwinsize
 
 
 # some useful command aliases
