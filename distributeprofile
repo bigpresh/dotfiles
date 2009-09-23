@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Damned PCI firewall means the PCI'd boxes can't connect outbound to fetch
+# updated .profile, so this script pushes .profile from this box to them all.
+
+# Extended to push it to lots of hosts :)
+
+HOSTS="
+depardieu.uk2.net
+clooney.uk2.net
+coen.uk2.net
+fleming.uk2.net
+rasputin.uk2.net
+knox.uk2.net
+controlpanel.dave.dev.uk2.net
+proxy-sov.uk2.net
+devmail.internal.uk2.net
+phone-monitor.internal.uk2.net
+alchemist.uk2.net
+cyborg.uk2.net
+nagios.uk2.net
+bigpresh@kryten.gridstar.net
+bigpresh@lister.gridstar.net
+"
+
+for host in $HOSTS; do
+    echo $host | grep -q @ || host="dave@$host"
+    echo "$host..."
+    scp ~/.profile $host:
+done
