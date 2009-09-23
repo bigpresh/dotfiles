@@ -354,6 +354,12 @@ svncommit() {
     # Start preparing the commit message which we'll then edit
     COMMITMSG=/tmp/$USER-commitmsg
     echo > $COMMITMSG
+
+    # Add a blank Impact: line, if it's a UK2 box
+    if [[ "${HOSTNAME: -7}" == "uk2.net" ]]; then
+        echo "Impact: " > $COMMITMSG
+    fi
+
     echo "--This line, and those below, will be ignored--" >> $COMMITMSG
     svn status "$@" >> $COMMITMSG
     echo >> $COMMITMSG
