@@ -355,9 +355,13 @@ svncommit() {
     COMMITMSG=/tmp/$USER-commitmsg
     echo > $COMMITMSG
 
-    # Add a blank Impact: line, if it's a UK2 box
+    # Add an Impact: line, if it's a UK2 box, possibly guessing at a suitable
+    # value too
     if [[ "${HOSTNAME: -7}" == "uk2.net" ]]; then
-        echo "Impact: " >> $COMMITMSG
+        if [[ $* = *fleming* ]]; then
+            IMPACTVAL="1 - staff-only admin script"
+        fi
+        echo "Impact: $IMPACTVAL" >> $COMMITMSG
     fi
 
     echo "--This line, and those below, will be ignored--" >> $COMMITMSG
