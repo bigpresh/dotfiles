@@ -284,7 +284,7 @@ set textwidth=80
 set shiftwidth=4
 set shiftround
 set expandtab
-set tabstop=4
+set tabstop=8
 set autoindent
 set smarttab     "Backspace at start of line outdents"
 set ruler        "Show current position in file at bottom"
