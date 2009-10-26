@@ -357,6 +357,7 @@ svncommit() {
 
     # Add an Impact: line, if it's a UK2 box, possibly guessing at a suitable
     # value too
+    IMPACTVAL=''
     if [[ "${HOSTNAME: -7}" == "uk2.net" ]]; then
         if [[ $* == *fleming* ]]; then
             IMPACTVAL="1 - staff-only admin script"
