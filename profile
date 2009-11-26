@@ -344,6 +344,8 @@ set guifont=Monaco\ 7
 " Delete lines from insert mode with Ctrl+k
 :imap <silent> <C-k> <Esc>ddi
 
+" Quick buffer switching with ^b using the BufExplorer plugin
+:nmap <C-b> <Esc>:BufExplorer<CR>
 
 VIMCONFIG
 }
