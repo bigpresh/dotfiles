@@ -453,7 +453,7 @@ function update_ssh_auth_sock() {
 }
 
 # Automatically try to use the socket, if we can:
-update_ssh_auth_sock()
+update_ssh_auth_sock
 
 
 
