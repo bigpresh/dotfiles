@@ -194,7 +194,7 @@ function deploy() {
 
 
 # look for processes matching the given regexp
-psmatch () {
+function psmatch () {
     ps aux | grep -E "$1" | grep -v grep
 }
 
@@ -427,5 +427,53 @@ svncommit() {
     else
         echo "Commit failed, message left in $COMMITMSG"
         echo "Diff left in /tmp/$USER-svndiff"
+    fi
+}
+
+
+
+# Handle SSH agent authentication socket changes for screen sessions
+
+# If we have a ~/.ssh_auth_sock file, and SSH_AUTH_SOCK isn't set,
+# source that file.  This allows new windows within an old screen session to
+# continue to use SSH agent auth.
+SSH_SOCK_FILE=$HOME/.ssh_auth_sock
+function update_ssh_auth_sock() {
+
+    if [[ -f $SSH_SOCK_FILE && ! -S "$SSH_AUTH_SOCK" ]]; then
+        echo "Attempting to use SSH auth socket details from $SSH_SOCK_FILE"
+        source $SSH_SOCK_FILE
+        # Now make sure that the socket referred to still exists:
+        if [ ! -S "$SSH_AUTH_SOCK" ]; then
+            echo "Socket $SSH_AUTH_SOCK went away, deleting $SSH_SOCK_FILE"
+            rm $SSH_SOCK_FILE;
+            unset SSH_AUTH_SOCK;
+        fi
+    fi
+}
+
+# Automatically try to use the socket, if we can:
+update_ssh_auth_sock()
+
+
+
+# If we have an SSH auth agent socket, write it to .ssh_auth_sock, then reattach
+# a screen session.  update_ssh_auth_sock()  will use the .ssh_auth_sock file to set
+# $SSH_AUTH_SOCK appropriately, allowing new sessions within the old screen
+# session to use the new auth socket for key-based auth.
+function screen_reattach {
+
+    if [[ "$SSH_AUTH_SOCK" != "" ]]; then
+        echo "Writing $SSH_SOCK_FILE pointing to SSH_AUTH_SOCK"
+        echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" > $SSH_SOCK_FILE
+    fi
+
+    # Now, re-attach a screen; if we had no arguments, just call screen with
+    # sensible re-attaching defaults, otherwise, pass on the arguments
+    # unmolested
+    if [ "$*" == "" ]; then
+        screen -dr
+    else
+        screen "$@"
     fi
 }
