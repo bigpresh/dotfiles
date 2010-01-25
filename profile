@@ -141,6 +141,11 @@ fi
 export PREPENDTITLE=''
 
 
+# Finally, look for machine-specific stuff in ~/.profile-local, and source it if
+# it's there.
+if [ -f "$HOME/.profile-local" ]; then
+    source "$HOME/.profile-local";
+fi
 
 ########## custom functions: ###############################
 
