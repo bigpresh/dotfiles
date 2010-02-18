@@ -364,7 +364,7 @@ svncommit() {
 
     # Add an Impact: line, if it's a UK2 box, possibly guessing at a suitable
     # value too
-    IMPACTVAL=''
+    IMPACTVAL='1'
     if [[ "${HOSTNAME: -7}" == "uk2.net" ]]; then
         if [[ $* == *fleming* ]]; then
             IMPACTVAL="1 - staff-only admin script"
@@ -374,6 +374,9 @@ svncommit() {
         fi
         if [[ $* == *nagios* ]]; then
             IMPACTVAL="1 - internal Nagios monitoring only"
+        fi
+        if [[ $* == *dev* ]]; then
+            IMPACTVAL="1 - just internal dev tools"
         fi
         echo "Impact: $IMPACTVAL" >> $COMMITMSG
     fi
