@@ -266,8 +266,21 @@ setprompt() {
             ;;
     esac
 
-    # Set custom prompt:
-    PS1="${PROMPTSET}[\u@\h:\w]\\$ "
+    # If it's a production host, color the hostname:
+    hostnamecolor=''        
+    if [ $(hostname -d) == "private.uk2.net" ]; then
+        hostnamecolor="31"                                                                  
+    fi                   
+    if [[ $(hostname -d) == *.dev.uk2.net ]]; then
+        hostnamecolor="32"
+    fi                   
+    if [ "$hostnamecolor" != "" ]; then
+        beforehostname="\\e[${hostnamecolor}m"
+        afterhostname="\\e[0m";
+        echo "Prompt should be $hostnamecolor"
+    fi                   
+    # Set custom prompt: 
+    PS1="${PROMPTSET}[\u@$beforehostname\h$afterhostname:\w]\\$ "
 }
 
 
