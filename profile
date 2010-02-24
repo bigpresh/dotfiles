@@ -277,7 +277,6 @@ setprompt() {
     if [ "$hostnamecolor" != "" ]; then
         beforehostname="\\e[${hostnamecolor}m"
         afterhostname="\\e[0m";
-        echo "Prompt should be $hostnamecolor"
     fi                   
     # Set custom prompt: 
     PS1="${PROMPTSET}[\u@$beforehostname\h$afterhostname:\w]\\$ "
