@@ -273,13 +273,34 @@ setprompt() {
     fi                   
     if [[ $(hostname -d) == *.dev.uk2.net ]]; then
         hostnamecolor="32"
-    fi                   
+    fi
+    if [ "$HOSTNAME" == "supernova" ]; then
+        hostnamecolor="36"
+    fi
     if [ "$hostnamecolor" != "" ]; then
-        beforehostname="\\e[${hostnamecolor}m"
-        afterhostname="\\e[0m";
+        prehost="\\e[${hostnamecolor}m"
+        posthost="\\e[0m";
     fi                   
+
+    # Now, for colorising the username:
+    preuser=''
+    postuser=''
+    usercolor=''
+    case "$USER" in
+        root)
+            usercolor="31"
+        ;;
+        codemonkey)
+            usercolor="30;42"
+        ;;
+    esac
+    if [ "$usercolor" != "" ]; then
+        preuser="\\e[${usercolor}m"
+        postuser="\\e[0m"
+    fi
+        
     # Set custom prompt: 
-    PS1="${PROMPTSET}[\u@$beforehostname\h$afterhostname:\w]\\$ "
+    PS1="${PROMPTSET}[$preuser\u$postuser@$prehost\h$posthost:\w]\\$ "
 }
 
 
