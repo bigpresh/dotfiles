@@ -278,8 +278,8 @@ setprompt() {
         hostnamecolor="36"
     fi
     if [ "$hostnamecolor" != "" ]; then
-        prehost="\\e[${hostnamecolor}m"
-        posthost="\\e[0m";
+        prehost='\[\e[${hostnamecolor}m\]'
+        posthost='\[\e[0m\]';
     fi                   
 
     # Now, for colorising the username:
@@ -295,12 +295,12 @@ setprompt() {
         ;;
     esac
     if [ "$usercolor" != "" ]; then
-        preuser="\\e[${usercolor}m"
-        postuser="\\e[0m"
+        preuser='\[\e[${usercolor}m\]'
+        postuser='\[\e[0m\]'
     fi
         
     # Set custom prompt: 
-    PS1="${PROMPTSET}[$preuser\u$postuser@$prehost\h$posthost:\w]\\$ "
+    PS1="${PROMPTSET}[${preuser}\u${postuser}@${prehost}\h${posthost}:\w]\\$ "
 }
 
 
