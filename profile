@@ -385,6 +385,11 @@ set guifont=Monaco\ 7
 " Quick buffer switching with ^b using the BufExplorer plugin
 :nmap <C-b> <Esc>:BufExplorer<CR>
 
+" Toggle paste mode and jump to insert mode with ^p
+:nmap <C-p> :set paste!<cr>i
+
+:map <F2> <Esc>:w<cr>
+
 VIMCONFIG
 }
 
