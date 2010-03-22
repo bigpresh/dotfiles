@@ -388,7 +388,10 @@ set guifont=Monaco\ 7
 " Toggle paste mode and jump to insert mode with ^p
 :nmap <C-p> :set paste!<cr>i
 
-:map <F2> <Esc>:w<cr>
+" F2 to save; shift+F2 to save + quit
+:set <S-F2>=1;2Q
+:nmap <F2> <Esc>:w<cr>
+:nmap <S-F2> <Esc>:wq<cr>
 
 VIMCONFIG
 }
