@@ -277,6 +277,9 @@ setprompt() {
     if [ "$HOSTNAME" == "supernova" ]; then
         hostnamecolor="36"
     fi
+    if [ "$HOSTNAME" == "lyla.preshweb.co.uk" ]; then
+        hostnamecolor="35"
+    fi
     if [ "$hostnamecolor" != "" ]; then
         prehost='\[\e[${hostnamecolor}m\]'
         posthost='\[\e[0m\]';
