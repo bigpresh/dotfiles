@@ -401,7 +401,7 @@ svncommit() {
         if [[ $(svn diff -x -b "$@" ) != '' ]]; then
             IMPACTVAL="1 - whitespace changes only, and we don't do Python :)"
         fi
-        echo "Impact: $IMPACTVAL" >> $COMMITMSG"
+        echo "Impact: $IMPACTVAL" >> $COMMITMSG
     fi
 
 
