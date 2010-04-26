@@ -380,8 +380,10 @@ svncommit() {
 
     # Add an Impact: line, if it's a UK2 box, possibly guessing at a suitable
     # value too
-    IMPACTVAL='1'
     if [[ "${HOSTNAME: -7}" == "uk2.net" ]]; then
+        IMPACTVAL='1'
+
+        # Guesses based on machine name in file paths, first:
         if [[ $* == *fleming* ]]; then
             IMPACTVAL="1 - staff-only admin script"
         fi
@@ -394,8 +396,14 @@ svncommit() {
         if [[ $* == *dev* ]]; then
             IMPACTVAL="1 - just internal dev tools"
         fi
-        echo "Impact: $IMPACTVAL" >> $COMMITMSG
+
+        # If the changes are whitespace-only, then the Impact: line can say so
+        if [[ $(svn diff -x -b "$@" ) != '' ]]; then
+            IMPACTVAL="1 - whitespace changes only, and we don't do Python :)"
+        fi
+        echo "Impact: $IMPACTVAL" >> $COMMITMSG"
     fi
+
 
     echo "--This line, and those below, will be ignored--" >> $COMMITMSG
     echo "Cwd: $(pwd)" >> $COMMITMSG
@@ -414,7 +422,7 @@ svncommit() {
 
     ORIGMD5=$(md5sum $COMMITMSG)
 
-    # Now, edit (and retry editing) until we're happy
+     # Now, edit (and retry editing) until we're happy
     MESSAGEOK=0
     while [ $MESSAGEOK == "0" ]; do
         
