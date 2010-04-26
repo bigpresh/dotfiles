@@ -52,11 +52,6 @@ if [ "$TERM" == "xterm" ]; then
     if [ -f ~/banner ]; then cat ~/banner; fi;
     echo " $HOSTNAME : LOAD: $LOAD PROCS: $PROCS"
     echo '.profile : $Id$'
-
-    if [ "$HOSTNAME" == "cyborg.uk2net.com" ]; then
-        cat ~/.adminpassword;
-        echo;
-    fi
 fi
 
 
@@ -102,29 +97,6 @@ export PERL5LIB=/usr/local/uk2net/lib
 case $(hostname --fqdn) in
     supernova.preshweb.co.uk)
         export MPD_HOST=supernova
-    ;;
-    cyborg.uk2net.com)
-        export CGI=/usr/local/apache_1.1/cgi-bin
-        export cgi=/usr/local/apache_1.1/cgi-bin/
-        export PATH=/usr/local/openssh/bin:$PATH
-        alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL'
-        alias uk2perl='sudo perl -d ~/uk2perl'
-
-        # Cyborg has some DB connection aliases (e.g. "atmaildb") which contain
-        # the passwords; obviously don't want those here, so load them from
-        # that file:
-        source ~/.dbaliases
-    ;;
-    depardieu.uk2.net)
-        alias codemonkey='sudo -H -u codemonkey ssh-agent $SHELL && ssh-add'
-    ;;
-    rasputin.uk2.net)
-        alias codemonkey='sudo su codemonkey'
-    ;;
-    alchemist.uk2.net)
-    ;;
-    shop1.uk2.net)
-        export carts=/usr/local/apache/carts
     ;;
 esac
 
