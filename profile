@@ -85,6 +85,8 @@ alias kilall="killall"
 alias fuck="killall"
 alias svnci="svncommit"
 alias ci="svncommit"
+alias uk2do="~/todo.pl --group UK2"
+alias cm="sudo su codemonkey"
 
 # A few variables for easy quick access to common paths (some of these may
 # be overridden in the machine-specific stuff below)
