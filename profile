@@ -241,20 +241,35 @@ setprompt() {
             ;;
     esac
 
-    # If it's a production host, color the hostname:
-    hostnamecolor=''        
-    if [ $(hostname -d) == "private.uk2.net" ]; then
-        hostnamecolor="31"                                                                  
-    fi                   
-    if [[ $(hostname -d) == *.dev.uk2.net ]]; then
-        hostnamecolor="32"
-    fi
-    if [ "$HOSTNAME" == "supernova" ]; then
-        hostnamecolor="36"
-    fi
-    if [ "$HOSTNAME" == "lyla.preshweb.co.uk" ]; then
-        hostnamecolor="35"
-    fi
+    # Coloured hostnames for certain boxes
+    hostnamecolor=''
+    case $HOSTNAME in
+        # Live boxes get a red prompt (Danger, Will Robinson!)
+        *.private.uk2.net)
+            hostnamecolor=31
+        ;;
+
+        # My own dev VPSes get green prompts
+        *.dave.dev.uk2.net)
+            hostnamecolor=32
+        ;;
+
+        # Other developer's VPSes get brown prompts
+        *.dev.uk2.net)
+            hostnamecolor=33
+        ;;
+
+        # supernova gets teal:
+        supernova)
+            hostnamecolor=36
+        ;;
+
+        # Lyla gets purple
+        lyla.preshweb.co.uk)
+            hostnamecolor=35
+        ;;
+    esac
+
     if [ "$hostnamecolor" != "" ]; then
         prehost='\[\e[${hostnamecolor}m\]'
         posthost='\[\e[0m\]';
