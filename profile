@@ -243,7 +243,7 @@ setprompt() {
 
     # Coloured hostnames for certain boxes
     hostnamecolor=''
-    case $HOSTNAME in
+    case $(hostname -f) in
         # Live boxes get a red prompt (Danger, Will Robinson!)
         *.private.uk2.net)
             hostnamecolor=31
@@ -260,7 +260,7 @@ setprompt() {
         ;;
 
         # supernova gets teal:
-        supernova)
+        supernova.preshweb.co.uk)
             hostnamecolor=36
         ;;
 
