@@ -527,3 +527,22 @@ function screen_reattach {
         screen "$@"
     fi
 }
+
+
+# Quick way to find out about the basic hardware specs of a box
+function sysinfo {
+    # CPU info
+    grep -m2 -E '(name|MHz)' /proc/cpuinfo
+    echo -en 'num CPUs\t: ' && grep -c 'model name' /proc/cpuinfo
+    
+    # Total memory
+    grep MemTotal /proc/meminfo
+
+    # space used/remaining on real filesystems
+    # (Get header from df output first, then all filesystems that are worth
+    # seeing)
+    df -mh | grep Filesystem
+    df -mh | grep -E '/dev' | grep -Ev '(tmpfs|udev)'
+
+    uptime
+}
