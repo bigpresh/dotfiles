@@ -565,7 +565,8 @@ function pastesshkey {
     WHO=$1
     $VISUAL /tmp/sshkey-$WHO
     sudo mkdir /home/$WHO/.ssh
-    sudo cat /tmp/sshkey-$WHO >> /home/$WHO/.ssh/authorized_keys
+    sudo tee -a /home/$WHO/.ssh/authorized_keys < /tmp/sshkey-$WHO 1>/dev/null
+    rm /tmp/sshkey-$WHO
     echo "Pasted key added to /home/$WHO/.ssh/authorized_keys"
     sshpermsfix $WHO
 }
