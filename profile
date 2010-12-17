@@ -558,3 +558,17 @@ function sshpermsfix {
     echo "Fixed up ownership and permissions on /home/$WHO/.ssh"
 }
 
+# Add an SSH key for a user.  Fires up $VISUAL on a tmp file so you can paste in
+# the key, then moves it into place, and uses sshpermsfix() to fix up
+# permissions.
+function pastesshkey {
+    $WHO=$1
+    $VISUAL /tmp/sshkey-$WHO
+    sudo mkdir /home/$WHO/.ssh
+    sudo cat /tmp/sshkey-$WHO >> /home/$WHO/.ssh/authorized_keys
+    echo "Pasted key added to /home/$WHO/.ssh/authorized_keys"
+    sshpermsfix $WHO
+}
+
+
+
