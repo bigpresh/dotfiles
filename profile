@@ -551,7 +551,7 @@ function sysinfo {
 # Fix up the permissions on someone's ~/.ssh dir for key-based auth.
 # Assumes user is in their own group (e.g. user bob, group bob)
 function sshpermsfix {
-    $WHO=$1
+    WHO=$1
     sudo chown -R $WHO:$WHO /home/$WHO/.ssh
     sudo chmod 700 /home/$WHO/.ssh
     sudo chmod 600 /home/$WHO/.ssh/authorized_keys
@@ -562,7 +562,7 @@ function sshpermsfix {
 # the key, then moves it into place, and uses sshpermsfix() to fix up
 # permissions.
 function pastesshkey {
-    $WHO=$1
+    WHO=$1
     $VISUAL /tmp/sshkey-$WHO
     sudo mkdir /home/$WHO/.ssh
     sudo cat /tmp/sshkey-$WHO >> /home/$WHO/.ssh/authorized_keys
