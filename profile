@@ -546,3 +546,15 @@ function sysinfo {
 
     uptime
 }
+
+
+# Fix up the permissions on someone's ~/.ssh dir for key-based auth.
+# Assumes user is in their own group (e.g. user bob, group bob)
+function sshpermsfix {
+    $WHO=$1
+    sudo chown -R $WHO:$WHO /home/$WHO/.ssh
+    sudo chmod 700 /home/$WHO/.ssh
+    sudo chmod 600 /home/$WHO/.ssh/authorized_keys
+    echo "Fixed up ownership and permissions on /home/$WHO/.ssh"
+}
+
