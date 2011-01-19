@@ -415,10 +415,11 @@ svncommit() {
             IMPACTVAL="1 - just internal dev tools"
         fi
 
-        # If the changes are whitespace-only, then the Impact: line can say so
-        if [[ $(svn diff -x -w "$@" ) != '' ]]; then
-            IMPACTVAL="1 - whitespace changes only, and we don't do Python :)"
-        fi
+        # TODO: find out why this stopped working.
+        ## If the changes are whitespace-only, then the Impact: line can say so
+        #if [[ $(svn diff -x -w "$@" ) != '' ]]; then
+        #    IMPACTVAL="1 - whitespace changes only, and we don't do Python :)"
+        #fi
         echo "Impact: $IMPACTVAL" >> $COMMITMSG
     fi
 
