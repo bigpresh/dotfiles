@@ -96,6 +96,8 @@ export lib=/usr/local/uk2net/lib
 export log=/usr/local/uk2net/log
 export PERL5LIB=/usr/local/uk2net/lib
 
+export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/"
+
 # machine-specific stuff:
 case $(hostname --fqdn) in
     supernova.preshweb.co.uk)
@@ -480,6 +482,20 @@ svncommit() {
         echo "Diff left in /tmp/$USER-svndiff"
     fi
 }
+
+
+# Safe SVN update; display a diff of what's about to happen first.
+function up {
+    echo "Showing diff..."
+    svn diff -r BASE:HEAD "$@"
+    echo
+    echo "Differences above will be applied if you continue."
+    echo "Enter to accept and update, interrupt to bail."
+    read
+    echo "OK, updating..."
+    svn up "$@"
+}
+
 
 
 
