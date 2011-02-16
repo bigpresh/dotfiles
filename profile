@@ -85,6 +85,7 @@ alias kilall="killall"
 alias fuck="killall"
 alias svnci="svncommit"
 alias ci="svncommit"
+alias ss="svnstatus"
 alias uk2do="todo.pl --group UK2"
 alias cm="sudo su codemonkey"
 alias mysql="mysql --safe-updates --show-warnings"
@@ -496,6 +497,10 @@ function up {
     svn up "$@"
 }
 
+# SVN status without all the fucking externals
+function svnstatus {
+    svn status --ignore-externals "$@" | grep -v '^X'
+}
 
 
 
