@@ -80,6 +80,7 @@ shopt -s checkwinsize
 # some useful command aliases
 alias cdback='cd $OLDPWD'
 alias cb='cd $OLDPWD'
+alias cd='cd -P'  # follow symlinks 
 alias hg="history | grep"
 alias kilall="killall"
 alias fuck="killall"
