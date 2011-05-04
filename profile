@@ -254,7 +254,7 @@ setprompt() {
         ;;
 
         # Staging boxes get yellow prompts
-        *.staging.uk2.net)
+        *.staging.private.uk2.net)
             hostnamecolor=93
         ;;
 
