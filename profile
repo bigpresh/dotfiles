@@ -248,14 +248,14 @@ setprompt() {
     # Coloured hostnames for certain boxes
     hostnamecolor=''
     case $(hostname -f) in
-        # Live boxes get a red prompt (Danger, Will Robinson!)
-        *.private.uk2.net)
-            hostnamecolor=31
-        ;;
-
         # Staging boxes get yellow prompts
         *.staging.private.uk2.net)
             hostnamecolor=93
+        ;;
+
+        # Live boxes get a red prompt (Danger, Will Robinson!)
+        *.private.uk2.net)
+            hostnamecolor=31
         ;;
 
         # My own dev VPSes get green prompts
