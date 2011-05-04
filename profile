@@ -253,6 +253,11 @@ setprompt() {
             hostnamecolor=31
         ;;
 
+        # Staging boxes get yellow prompts
+        *.staging.uk2.net)
+            hostnamecolor=93
+        ;;
+
         # My own dev VPSes get green prompts
         *.dave.dev.uk2.net)
             hostnamecolor=32
