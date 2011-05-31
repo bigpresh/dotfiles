@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Add an account for Dave with his key.
+# Should be usable for Debian boxes, at least.
+# This is intended to let people easily create me an account with my SSH key,
+# just by wget'ing it and piping it to bash.
+
+NEWUSER=davidp
+KEYURL=http://www.preshweb.co.uk/downloads/keys/david-precious-ssh-key
+
+echo "Creating user account $NEWUSER"
+useradd --create-home --comment "David Precious <davidp@preshweb.co.uk>" $NEWUSER
+
+echo "Adding SSH key for $NEWUSER from $KEYURL"
+mkdir /home/$NEWUSER/.ssh
+wget -O /home/$NEWUSER/.ssh/authorized_keys $KEYURL
+
+# Make sure permissions are correct so the key is accepted:
+chown -R $NEWUSER /home/$NEWUSER/.ssh
+chmod 700 /home/$NEWUSER
+chmod 700 /home/$NEWUSER/.ssh
+chmod 600 /home/$NEWUSER/.ssh/authorized_keys
+
+echo "Adding $NEWUSER to sudo group"
+usermod -a -G sudo $NEWUSER
+
+echo "All done."
+
