@@ -493,7 +493,10 @@ svncommit() {
 
 
 # Safe SVN update; display a diff of what's about to happen first.
-function up {
+function up() {
+    for file in "$@"; do
+        echo -ne "$file\t" && svn info "$file" | grep 'Last Changed Rev'
+    done
     echo "Showing diff..."
     svn diff -r BASE:HEAD "$@"
     echo
