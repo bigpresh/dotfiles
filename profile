@@ -114,7 +114,14 @@ if [[ -r '/etc/bash_completion' && ! -f "$HOME/.bash_completion_broken" ]]; then
 fi
 
 
-
+# If we have fortune installed, show one (use boxes, if that's available)
+if [ $(which fortune) ]; then
+    if [ $(which boxes) ]; then
+        fortune | boxes -d shell
+    else
+        fortune
+    fi
+fi
 
 # this can get set by the prependtitle() function
 # and is prepended to the xterm window title
@@ -493,10 +500,7 @@ svncommit() {
 
 
 # Safe SVN update; display a diff of what's about to happen first.
-function up() {
-    for file in "$@"; do
-        echo -ne "$file\t" && svn info "$file" | grep 'Last Changed Rev'
-    done
+function up {
     echo "Showing diff..."
     svn diff -r BASE:HEAD "$@"
     echo
