@@ -69,13 +69,15 @@ fi
 export GZIP="-9"
 export GREP_OPTIONS='--binary-files=without-match'
 
-# bash history settings:
-export HISTCONTROL=ignoreboth
-shopt -s histappend
+# Some Bash-specific stuff
+if [[ "$SHELL" == *bash* ]]; then
+    # bash history settings:
+    export HISTCONTROL=ignoreboth
+    shopt -s histappend
 
-# Notice if the window size changed:
-shopt -s checkwinsize
-
+    # Notice if the window size changed:
+    shopt -s checkwinsize
+fi
 
 # some useful command aliases
 alias cdback='cd $OLDPWD'
