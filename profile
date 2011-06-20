@@ -108,6 +108,10 @@ case $(hostname --fqdn) in
     supernova.preshweb.co.uk)
         export MPD_HOST=supernova
     ;;
+    alchemist.uk2.net)
+        # Alchemist's mysql client doesn't support --safe-updates
+        unalias mysql
+    ;;
 esac
 
 # If this box has bash-completion available, source it:
