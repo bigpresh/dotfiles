@@ -52,6 +52,15 @@ if [ "$TERM" == "xterm" ]; then
     if [ -f ~/banner ]; then cat ~/banner; fi;
     echo " $HOSTNAME : LOAD: $LOAD PROCS: $PROCS"
     echo '.profile : $Id$'
+
+    # If we have fortune installed, show one (use boxes, if that's available)
+    if [ $(which fortune) ]; then
+        if [ $(which boxes) ]; then
+            fortune | boxes -d shell
+        else
+            fortune
+        fi
+    fi
 fi
 
 
@@ -119,15 +128,6 @@ if [[ -r '/etc/bash_completion' && ! -f "$HOME/.bash_completion_broken" ]]; then
     . /etc/bash_completion
 fi
 
-
-# If we have fortune installed, show one (use boxes, if that's available)
-if [ $(which fortune) ]; then
-    if [ $(which boxes) ]; then
-        fortune | boxes -d shell
-    else
-        fortune
-    fi
-fi
 
 # this can get set by the prependtitle() function
 # and is prepended to the xterm window title
