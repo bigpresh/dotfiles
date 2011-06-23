@@ -112,6 +112,8 @@ export PERL5LIB=/usr/local/uk2net/lib
 
 export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/"
 
+export IMPALA_BOXES="buscemi clooney coen depardieu fleming knox rasputin vault"
+
 # machine-specific stuff:
 case $(hostname --fqdn) in
     supernova.preshweb.co.uk)
@@ -614,4 +616,17 @@ function pastesshkey {
 }
 
 
-
+# Convenient aliaes to SSH to UK2 boxes
+function live() {
+    ssh $1.uk2.net;
+}
+function staging() {
+    ssh $1.staging.uk2.net;
+}
+function dev() {
+    ssh $1.dave.dev.uk2.net;
+}
+# with auto-complete for box names:
+complete -W "$IMPALA_BOXES" live
+complete -W "$IMPALA_BOXES" staging
+complete -W "$IMPALA_BOXES" dev
