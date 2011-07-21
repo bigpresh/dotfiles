@@ -28,8 +28,10 @@ chmod 700 /home/$NEWUSER
 chmod 700 /home/$NEWUSER/.ssh
 chmod 600 /home/$NEWUSER/.ssh/authorized_keys
 
-echo "Adding $NEWUSER to sudo group"
-usermod -a -G sudo $NEWUSER
-
+# Add me to sudo/wheel group (depending on distro, one or the other of this
+# should work, one will probably fail)
+echo "Adding $NEWUSER to sudo/wheel group"
+usermod -a -G sudo  $NEWUSER
+usermod -a -G wheel $NEWUSER
 echo "All done."
 
