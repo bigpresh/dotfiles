@@ -417,6 +417,14 @@ VIMCONFIG
 # Do an svn commit, with diffs included in the commit message
 svncommit() {
 
+    # Firstly, take a look at the first argument, and see if the directory it's
+    # in contains a .svn dir.  If not, it'll be me mistakenly using this command
+    # for a Git repo - it may as well try to DWIM:
+    if [[ ! -d "${1%/*}/.svn" ]]; then
+        git commit -v "$@"
+        return
+    fi
+
     # Start preparing the commit message which we'll then edit
     COMMITMSG=/tmp/$USER-commitmsg
     echo > $COMMITMSG
