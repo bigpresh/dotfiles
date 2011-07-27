@@ -69,7 +69,7 @@ fi
 # pick visual editor to use, in order of preference:
 if [ -x /usr/bin/vim ]; then
     export VISUAL=/usr/bin/vim
-elif [ -x nano ]; then
+elif [ -x /usr/bin/nano ]; then
     export VISUAL=/usr/bin/nano
 elif [ -x /usr/bin/mcedit ]; then
     export VISUAL=/usr/bin/mcedit
