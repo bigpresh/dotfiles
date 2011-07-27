@@ -70,7 +70,7 @@ fi
 if [ -x /usr/bin/vim ]; then
     export VISUAL=/usr/bin/vim
 elif [ -x nano ]; then
-    export VISUAL=nano
+    export VISUAL=/usr/bin/nano
 elif [ -x /usr/bin/mcedit ]; then
     export VISUAL=/usr/bin/mcedit
 fi
