@@ -14,6 +14,7 @@ fi
 
 
 KEYURL=http://www.preshweb.co.uk/downloads/keys/david-precious-ssh-key
+PROFILEURL=http://www.preshweb.co.uk/downloads/profile
 
 echo "Creating user account $NEWUSER"
 useradd --create-home --comment "David Precious <davidp@preshweb.co.uk>" $NEWUSER
@@ -33,6 +34,10 @@ chmod 600 /home/$NEWUSER/.ssh/authorized_keys
 echo "Adding $NEWUSER to sudo/wheel group"
 usermod -a -G sudo  $NEWUSER
 usermod -a -G wheel $NEWUSER
+
+# Grab my profile
+wget -N -O /home/$NEWUSER/.profile $PROFILEURL
+chown $NEWUSER /home/$NEWUSER/.profile
 
 # Make sure I've got an appropriate shell.  Some Ubuntu boxes seem to default me
 # to /bin/sh, which isn't helpful.
