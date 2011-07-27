@@ -33,5 +33,11 @@ chmod 600 /home/$NEWUSER/.ssh/authorized_keys
 echo "Adding $NEWUSER to sudo/wheel group"
 usermod -a -G sudo  $NEWUSER
 usermod -a -G wheel $NEWUSER
+
+# Make sure I've got an appropriate shell.  Some Ubuntu boxes seem to default me
+# to /bin/sh, which isn't helpful.
+echo "Setting shell to /bin/bash"
+chsh -s /bin/bash $NEWUSER
+
 echo "All done."
 
