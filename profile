@@ -7,6 +7,8 @@
 #   | and a custom prompt (PS1) which updates the xterm title |
 #   | with where I am.  The same file can be copied to many   |
 #   | machines, hence the machine-specific tweaks in it.      |
+#   |                                                         |
+#   | David Precious, http://www.preshweb.co.uk/              |
 #   |   ______________________________________________________|_
 #   \_/________________________________________________________/
 #
@@ -36,6 +38,24 @@
 # create a directory and immediately change into it
 #
 # fuck/kilall are aliases to killall (why do I find that hard to type?)
+#
+# ci(files)
+# Shorthand to commit; auto-detects whether it's Subversion or Git checkout and
+# calls either git commit -v or my custom svncommit() function which prepares a
+# commit message showing the diff as well (like git commit -v does), and
+# automatically adds an "Impact:" line for PCI compliance where required.
+#
+# pastesshkey(username)
+# Opens $VISUAL to paste in an SSH public key, then sets it up for the given
+# user (appends it to /home/$username/.ssh/authorized_keys, setting permissions
+# appropriately.
+#
+# sysinfo()
+# Returns basic system specs (CPU, RAM, HDD space)
+#
+# sshpermsfix(username)
+# Fixes up the permissions for a user's ~/.ssh/authorized_keys
+#
 ###################################################################
 
 # disable mail notifications
