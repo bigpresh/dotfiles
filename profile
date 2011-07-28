@@ -86,6 +86,9 @@ if [[ "$SHELL" == *bash* ]]; then
 
     # Notice if the window size changed:
     shopt -s checkwinsize
+
+    # Ignore .svn dirs when tab-completing:
+    export FIGNORE=.svn
 fi
 
 # some useful command aliases
