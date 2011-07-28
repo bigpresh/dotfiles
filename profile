@@ -108,7 +108,7 @@ if [[ "$SHELL" == *bash* ]]; then
     shopt -s checkwinsize
 
     # Ignore .svn dirs when tab-completing:
-    export FIGNORE=.svn
+    export FIGNORE=".svn"
 fi
 
 # some useful command aliases
