@@ -132,7 +132,7 @@ export cgi=/usr/local/uk2net/cgi
 export lib=/usr/local/uk2net/lib
 export log=/usr/local/uk2net/log
 export PERL5LIB=/usr/local/uk2net/lib
-export PERL5OPT=-"M5.010"
+export PERL5OPT=-"-M5.010"
 export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/"
 
 export IMPALA_BOXES="buscemi clooney coen depardieu fleming knox rasputin vault"
