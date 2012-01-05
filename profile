@@ -99,7 +99,7 @@ export GZIP="-9"
 export GREP_OPTIONS='--binary-files=without-match'
 
 # Some Bash-specific stuff
-if [[ "$SHELL" == *bash* ]]; then
+if [ "$SHELL" == *bash* ]; then
     # bash history settings:
     export HISTCONTROL=ignoreboth
     shopt -s histappend
@@ -109,6 +109,11 @@ if [[ "$SHELL" == *bash* ]]; then
 
     # Ignore .svn dirs when tab-completing:
     export FIGNORE=".svn"
+
+    # If this box has bash-completion available, source it:
+    if [[ -r '/etc/bash_completion' && ! -f "$HOME/.bash_completion_broken" ]]; then
+        . /etc/bash_completion
+    fi
 fi
 
 # some useful command aliases
@@ -147,11 +152,6 @@ case $(hostname --fqdn) in
         unalias mysql
     ;;
 esac
-
-# If this box has bash-completion available, source it:
-if [[ -r '/etc/bash_completion' && ! -f "$HOME/.bash_completion_broken" ]]; then
-    . /etc/bash_completion
-fi
 
 
 # this can get set by the prependtitle() function
