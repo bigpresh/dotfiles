@@ -151,7 +151,7 @@ case $(hostname --fqdn) in
         # Alchemist's mysql client doesn't support --safe-updates
         unalias mysql
     ;;
-    *.chimera.*)
+    *chimera.*)
         # Chimera boxes use perlbrew, so switch to the right perl
         export PERLBREW_ROOT=/opt/perlbrew
         source $PERLBREW_ROOT/etc/bashrc
