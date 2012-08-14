@@ -141,6 +141,7 @@ export PERL5LIB=/usr/local/uk2net/lib
 export PERL5OPT="-M5.010"
 export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/"
 export IMPALA_BOXES="buscemi clooney coen depardieu fleming knox rasputin vault"
+export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 lb1 lb2 eco"
 export todaylogs="/usr/local/uk2net/log/$(date +%Y/%b/%-d)"
 
 # machine-specific stuff:
@@ -664,7 +665,11 @@ function staging() {
 function dev() {
     ssh $1.dave.dev.uk2.net;
 }
+function uschimeralive {
+    ssh $1.us.chimera.uk2group.com;
+}
 # with auto-complete for box names:
 complete -W "$IMPALA_BOXES" live
 complete -W "$IMPALA_BOXES" staging
 complete -W "$IMPALA_BOXES" dev
+complete -W "$CHIMERA_BOXES" uschimeralive
