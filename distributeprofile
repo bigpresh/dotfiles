@@ -6,6 +6,13 @@
 # Extended to push it to lots of hosts :)
 
 HOSTS="
+api1.us.chimera.uk2group.com
+api2.us.chimera.uk2group.com
+api3.us.chimera.uk2group.com
+db1.us.chimera.uk2group.com
+db2.us.chimera.uk2group.com
+db3.us.chimera.uk2group.com
+gen.us.chimera.uk2group.com
 depardieu.uk2.net
 clooney.uk2.net
 coen.uk2.net
@@ -17,10 +24,6 @@ proxy-sov.uk2.net
 devmail.internal.uk2.net
 phone-monitor.internal.uk2.net
 alchemist.uk2.net
-cyborg.uk2.net
-nagios.uk2.net
-bigpresh@kryten.gridstar.net
-bigpresh@lister.gridstar.net
 "
 
 for host in $HOSTS; do
