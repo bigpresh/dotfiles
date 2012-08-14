@@ -673,3 +673,14 @@ complete -W "$IMPALA_BOXES" live
 complete -W "$IMPALA_BOXES" staging
 complete -W "$IMPALA_BOXES" dev
 complete -W "$CHIMERA_BOXES" uschimeralive
+
+
+# Quick & dirty Chimera API backend deployment
+function uschimeradeployapi {
+    for boxnum in $(seq 1 3); do
+        echo "api$boxnum..."
+        ssh api$boxnum.us.chimera.uk2group.com \
+            "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull' \
+            && sudo /etc/init.d/dancer restart"
+    done
+}
