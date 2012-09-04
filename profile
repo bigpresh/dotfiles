@@ -603,7 +603,7 @@ function uschimeradeployapi {
 # First arg is pattern to grep for
 # Second (optional) arg is appended to /var/log/chimera
 # e.g. 'foo', '2012/Aug/*/*'
-function uschimeraapigrep {
+function uschimeragreplogs {
     PATTERN=$1
     FILES=$2
 
