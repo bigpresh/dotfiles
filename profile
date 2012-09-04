@@ -127,9 +127,12 @@ alias ci="svncommit"
 alias ss="svnstatus"
 alias uk2do="todo.pl --group UK2"
 alias cm="sudo su codemonkey"
-alias mysql="mysql --safe-updates --show-warnings --select_limit=9999999999999"
 alias cdlogs='cd /usr/local/uk2net/log/$(date +%Y/%b/%-d)'
 alias cdchimeralogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
+
+# Make the MySQL client tell me if I'm about to do something stupid, and have it
+# show me warnings if it just did something stupid.
+alias mysql="mysql --safe-updates --show-warnings --select_limit=9999999999999"
 
 # A few variables for easy quick access to common paths (some of these may
 # be overridden in the machine-specific stuff below)
