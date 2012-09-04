@@ -1,0 +1,16 @@
+=head1 bigpresh's dotfiles
+
+I've decided to keep my Bash profile and various config files here in a GitHub
+repo.
+
+This means that any config file I want to share between machines (as long as it
+doesn't contain sensitive stuff) can go in this repo, each machine can have a
+checkout of the repo in my homedir, and I can symlink stuff - e.g. C<~/.profile>
+can be a symlink to C<~/dotfiles/profile>.
+
+The fact that it's a public repo also means that I could set up a nightly cron
+job to do a C<git pull> to fetch any changes automatically.
+
+Also, as it's public, it's possible some of the stuff I have here might be of
+some interest to others, perhaps.
+
