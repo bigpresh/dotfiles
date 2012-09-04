@@ -684,3 +684,20 @@ function uschimeradeployapi {
             && sudo /etc/init.d/dancer restart"
     done
 }
+
+# Quick & dirty Chimera API log greppage.
+# First arg is pattern to grep for
+# Second (optional) arg is appended to /var/log/chimera
+# e.g. 'foo', '2012/Aug/*/*'
+function uschimerapigrep {
+    PATTERN=$1
+    FILES=$2
+    [ "$FILES" == "" ] && FILES=*/*/*/*
+    FILES="/var/log/chimera/$FILES"
+    for boxnum in $(seq 1 3); do
+        echo "Grepping for $PATTERN in $FILES on api$boxnum..."
+        ssh api$boxnum.us.chimera.uk2group.com \
+            "grep -C 10 '$PATTERN' $FILES"
+    done
+}
+
