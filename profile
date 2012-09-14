@@ -160,6 +160,7 @@ case $(hostname --fqdn) in
         export PERLBREW_ROOT=/opt/perlbrew
         source $PERLBREW_ROOT/etc/bashrc
         perlbrew switch 5.14.2
+        alias cdlogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
     ;;
 esac
 
