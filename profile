@@ -160,6 +160,7 @@ case $(hostname --fqdn) in
         export PERLBREW_ROOT=/opt/perlbrew
         source $PERLBREW_ROOT/etc/bashrc
         perlbrew switch 5.14.2
+        alias cdlogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
     ;;
 esac
 
@@ -298,12 +299,12 @@ setprompt() {
     hostnamecolor=''
     case $(hostname -f) in
         # Staging boxes get yellow prompts
-        *.staging.private.uk2.net)
+        *.staging.private.uk2.net|*.staging.chimera.uk2group.com)
             hostnamecolor=93
         ;;
 
         # Live boxes get a red prompt (Danger, Will Robinson!)
-        *.private.uk2.net)
+        *.private.uk2.net|*.us.chimera.uk2group.com)
             hostnamecolor=31
         ;;
 
