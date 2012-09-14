@@ -626,7 +626,7 @@ function uschimeragreplogs {
     for boxnum in $(seq 1 3); do
         echo "Grepping for $PATTERN in $FILES on api$boxnum..."
         ssh api$boxnum.us.chimera.uk2group.com \
-            "grep -C 10 '$PATTERN' $FILES"
+            "~/dotfiles/chimeraloggrep '$PATTERN' $FILES"
     done
 }
 
