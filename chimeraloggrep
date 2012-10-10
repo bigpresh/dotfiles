@@ -10,6 +10,7 @@ use strict;
 my $regex = shift;
 my $request;
 while (my $line = <>) {
+    next if $line =~ /Trying to match.+against.+/;
     # if this is the start of a new request, see if the previous request matches
     # our pattern, and print it if so
     if ($line =~ /^\d{8}/) {
