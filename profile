@@ -98,7 +98,7 @@ export GZIP="-9"
 export GREP_OPTIONS='--binary-files=without-match'
 
 # Some Bash-specific stuff
-if [ "$SHELL" == *bash* ]; then
+if [[ "$SHELL" = *bash* ]]; then
     # bash history settings:
     export HISTCONTROL=ignoreboth
     shopt -s histappend
