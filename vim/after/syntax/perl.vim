@@ -8,7 +8,7 @@ hi link perlMember       Function
 
 
 " Also, I want labels after control statements to be label colour
-syn match perlControlLabel "\(last\|next\|refo\|goto\|break\)\s\i\+" contains=perlStatementControl
+syn match perlControlLabel "\(last\|next\|redo\|goto\|break\)\s\i\+" contains=perlStatementControl
 hi link perlControlLabel Label
 
 
