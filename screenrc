@@ -1,5 +1,35 @@
-# 256 color support
+autodetach on
+startup_message off
+defscrollback 30000
+defutf8 on
+defflow off
+startup_message off
+vbell off
+altscreen on
+nethack off
+#termcapinfo xterm ti@:te@
+
+backtick 1 0 0 /bin/hostname # Easiest way to get FQHN
+backtick 1 0 60 /usr/bin/whoami
+
+# caption line works in following way
+#       %{= ck}         set default formatting to black on cyan
+#       %{+b r}         make current text bold and red
+#       %H              print hostname
+#       %{-}            clear last format tag
+#       %{+b W}         make current text bold and bright white
+#       %n`             execute backtick n
+#       %=              right align
+#       %C              time (12h)
+#       %A              AM or PM
+#       %Lw             Seems to be a 'List Windows' thing. using -Lw and +Lw
+#                       you can specify extra params, but %Lw on it's own is
+#                       just fine
+caption always "%{= kK} %=%{= kW}%1`@%H%{-} |  %M %d  "
+hardstatus alwayslastline "%{= Kk}%-Lw%{= KW}{%t}%{-}%+Lw  %=  | %C %a "
+
+# 256 colour support
 attrcolor b ".I"
-termcap info xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 defbce "on"
 
