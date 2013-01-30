@@ -98,7 +98,7 @@ export GZIP="-9"
 export GREP_OPTIONS='--binary-files=without-match'
 
 # Some Bash-specific stuff
-if [ "$SHELL" == *bash* ]; then
+if [[ "$SHELL" = *bash* ]]; then
     # bash history settings:
     export HISTCONTROL=ignoreboth
     shopt -s histappend
@@ -592,10 +592,23 @@ complete -W "$CHIMERA_BOXES" uschimeralive
 
 
 # Quick & dirty Chimera API backend deployment
-function uschimeradeployapi {
+function chimeradeployapi {
+    CHIMERAENV=$1
+
+    if [ "$CHIMERAENV" == "staging" ]; then
+        echo "Deploying to staging API boxes"
+        HOSTSUFFIX="staging.chimera.uk2group.com"
+    elif [ "$CHIMERAENV" == "us" ]; then
+        echo "Deploying to $CHIMERAENV live platform"
+        HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
+    else
+        echo "Usage: chimeradeployapi staging|us"
+        return
+    fi
+
     for boxnum in $(seq 1 3); do
-        echo "api$boxnum..."
-        ssh api$boxnum.us.chimera.uk2group.com \
+        echo "api$boxnum.$HOSTSUFFIX..."
+        ssh api$boxnum.$HOSTSUFFIX \
             "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull' \
             && sudo /etc/init.d/dancer restart"
     done

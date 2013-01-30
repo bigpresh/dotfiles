@@ -14,9 +14,11 @@ while (my $line = <>) {
     # if this is the start of a new request, see if the previous request matches
     # our pattern, and print it if so
     if ($line =~ /^\d{8}/) {
-        if ($request =~ /$regex/) {
-            print $request;
-            print "*" x 60 . "\n";
+        if ($request =~ /$regex/m) {
+            if ($request !~ m{GET /order}) {
+                print $request;
+                print "*" x 60 . "\n";
+            }
         }
         $request = $line;
     } else {
