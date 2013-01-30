@@ -206,6 +206,6 @@ else
 endif
 
 " And finally.
-let g:colors_name = "gardener"
-let colors_name   = "gardener"
+let g:colors_name = "jamesronan"
+let colors_name   = "jamesronan"
 
