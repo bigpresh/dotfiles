@@ -6,7 +6,7 @@
 set t_Co=256
 let mapleader=","
 let g:solarized_termcolors=256
-
+colorscheme jamesronan
 
 set number
 
