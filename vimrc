@@ -1,6 +1,13 @@
 " vimrc written from .profile
 " : profile 863 2010-03-22 17:05:45Z davidp $
 
+
+" 256 color support stuff (thanks to Jim for this)
+set t_Co=256
+let mapleader=","
+let g:solarized_termcolors=256
+
+
 set number
 
 syntax on
