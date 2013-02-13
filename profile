@@ -594,6 +594,7 @@ complete -W "$CHIMERA_BOXES" uschimeralive
 # Quick & dirty Chimera API backend deployment
 function chimeradeployapi {
     CHIMERAENV=$1
+    BRANCH=$2
 
     if [ "$CHIMERAENV" == "staging" ]; then
         echo "Deploying to staging API boxes"
@@ -602,16 +603,23 @@ function chimeradeployapi {
         echo "Deploying to $CHIMERAENV live platform"
         HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
     else
-        echo "Usage: chimeradeployapi staging|us"
+        echo "Usage: chimeradeployapi staging|us [branch]"
         return
     fi
 
     for boxnum in $(seq 1 3); do
         echo "api$boxnum.$HOSTSUFFIX..."
+        if [ "$BRANCH" != "" ]; then
+            echo -e "\tSwitch to $BRANCH..."
+            ssh api$boxnum.$HOSTSUFFIX \
+                "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git checkout $BRANCH'"
+        fi
+        echo -e "\tPull changes and restart app..."
         ssh api$boxnum.$HOSTSUFFIX \
             "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull' \
             && sudo /etc/init.d/dancer restart"
     done
+    echo "Deployment complete."
 }
 
 # Quick & dirty Chimera API log greppage.
