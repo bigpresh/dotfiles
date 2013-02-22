@@ -572,22 +572,76 @@ function pastesshkey {
 
 
 # Convenient aliaes to SSH to UK2 boxes
-function live() {
-    ssh $1.uk2.net;
+function _connect_box_type() {
+    type=$1
+    name=$2
+    fullhostname=''
+
+    if [ "$type" = ""  -o "$name" = "" ]; then
+        echo "Usage: (live|staging|dev) boxname"
+    fi
+
+    if [[ $IMPALA_BOXES = *$name* ]]; then
+        case $type in
+            live)
+                fullhostname="$name.uk2.net"
+            ;;
+            staging)
+                fullhostname="$name.staging.uk2.net"
+            ;;
+            dev)
+                fullhostname="$name.dave.dev.uk2.net"
+            ;;
+        esac
+    elif [[ $CHIMERA_BOXES = *$name* ]]; then
+        location=$3
+        if [ $type = "live" -a "$location" = "" ]; then
+            # This defaulting will be a little less useful when the UK live
+            # env is in use; at that point, I might make specifying the location
+            # required.
+            echo "No Chimera location supplied, defaulting to US"
+            location="us"
+        fi
+        case $type in
+            live)
+                fullhostname="$name.$location.chimera.uk2group.com"
+            ;;
+            staging)
+                fullhostname="$name.staging.chimera.uk2group.com"
+            ;;
+            dev)
+                fullhostname="chimera.dave.dev.uk2.net"
+            ;;
+        esac
+    else
+        echo "No idea what box you're talking about."
+        return
+    fi
+    echo "Connecting to $fullhostname..."
+    ssh $fullhostname
 }
-function staging() {
-    ssh $1.staging.uk2.net;
+function live()    {
+    _connect_box_type 'live'    $* 
 }
-function dev() {
-    ssh $1.dave.dev.uk2.net;
+function staging() { 
+    _connect_box_type 'staging' $*
 }
+function dev()     { 
+    _connect_box_type 'dev'     $*
+}
+
+# TODO: retire this
 function uschimeralive {
+    echo "Say 'live $1 us' now instead"
     ssh $1.us.chimera.uk2group.com;
 }
+
+
+
 # with auto-complete for box names:
-complete -W "$IMPALA_BOXES" live
-complete -W "$IMPALA_BOXES" staging
-complete -W "$IMPALA_BOXES" dev
+complete -W "$IMPALA_BOXES $CHIMERA_BOXES" live
+complete -W "$IMPALA_BOXES $CHIMERA_BOXES" staging
+complete -W "$IMPALA_BOXES $CHIMERA_BOXES" dev
 complete -W "$CHIMERA_BOXES" uschimeralive
 
 
