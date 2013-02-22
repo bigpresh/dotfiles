@@ -558,11 +558,13 @@ function sshpermsfix {
 }
 
 # Add an SSH key for a user.  Fires up $VISUAL on a tmp file so you can paste in
-# the key, then moves it into place, and uses sshpermsfix() to fix up
-# permissions.
+# the key then replaces any newlines with a single space (where it wrapped
+# because you forgot to disable wrapping, or copied it from an email), then 
+# moves it into place, and uses sshpermsfix() to fix up permissions.
 function pastesshkey {
     WHO=$1
     $VISUAL /tmp/sshkey-$WHO
+    perl -pi -e 's/\s+/ /mg' /tmp/sshkey-$WHO
     sudo mkdir /home/$WHO/.ssh
     sudo tee -a /home/$WHO/.ssh/authorized_keys < /tmp/sshkey-$WHO 1>/dev/null
     rm /tmp/sshkey-$WHO
