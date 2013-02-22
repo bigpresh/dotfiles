@@ -11,13 +11,11 @@
 #   | David Precious, http://www.preshweb.co.uk/              |
 #   |   ______________________________________________________|_
 #   \_/________________________________________________________/
+# 
 #
-# $Id$
-#
-# Latest copy of this profile can be found at:
-# http://www.preshweb.co.uk/downloads/profile
-# Use the 'updateprofile' command to auto-fetch it.
-#
+# Latest copy of this profile is on GitHub:
+# https://github.com/bigpresh/dotfiles
+
 # useful functions added:
 #
 # prependtitle(title)
