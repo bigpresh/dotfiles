@@ -641,7 +641,7 @@ function uschimeralive {
 # with auto-complete for box names:
 complete -W "$IMPALA_BOXES $CHIMERA_BOXES" live
 complete -W "$IMPALA_BOXES $CHIMERA_BOXES" staging
-complete -W "$IMPALA_BOXES $CHIMERA_BOXES" dev
+complete -W "$IMPALA_BOXES $CHIMERA_BOXES chimera" dev
 complete -W "$CHIMERA_BOXES" uschimeralive
 
 
