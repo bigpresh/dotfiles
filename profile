@@ -593,7 +593,7 @@ function _connect_box_type() {
                 fullhostname="$name.dave.dev.uk2.net"
             ;;
         esac
-    elif [[ $CHIMERA_BOXES = *$name* ]]; then
+    elif [[ "$CHIMERA_BOXES chimera" = *$name* ]]; then
         location=$3
         if [ $type = "live" -a "$location" = "" ]; then
             # This defaulting will be a little less useful when the UK live
