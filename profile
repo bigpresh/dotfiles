@@ -663,7 +663,7 @@ function chimeradeployapi {
 
     for boxnum in $(seq 1 3); do
         echo "api$boxnum.$HOSTSUFFIX..."
-        echo "\tgit pull..."
+        echo -e "\tgit pull..."
         ssh api$boxnum.$HOSTSUFFIX \
             "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull'"
         if [ "$BRANCH" != "" ]; then
