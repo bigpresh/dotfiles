@@ -663,15 +663,16 @@ function chimeradeployapi {
 
     for boxnum in $(seq 1 3); do
         echo "api$boxnum.$HOSTSUFFIX..."
+        echo "\tgit pull..."
+        ssh api$boxnum.$HOSTSUFFIX \
+            "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull'"
         if [ "$BRANCH" != "" ]; then
             echo -e "\tSwitch to $BRANCH..."
             ssh api$boxnum.$HOSTSUFFIX \
                 "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git checkout $BRANCH'"
         fi
-        echo -e "\tPull changes and restart app..."
-        ssh api$boxnum.$HOSTSUFFIX \
-            "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull' \
-            && sudo /etc/init.d/dancer restart"
+        echo -e "\tRestart app..."
+        ssh api$boxnum.$HOSTSUFFIX "sudo /etc/init.d/dancer restart"
     done
     echo "Deployment complete."
 }
