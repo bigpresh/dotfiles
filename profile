@@ -670,6 +670,9 @@ function chimeradeployapi {
             echo -e "\tSwitch to $BRANCH..."
             ssh api$boxnum.$HOSTSUFFIX \
                 "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git checkout $BRANCH'"
+            echo -e "\tgit pull again..."
+            ssh api$boxnum.$HOSTSUFFIX \
+                "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull'"
         fi
         echo -e "\tRestart app..."
         ssh api$boxnum.$HOSTSUFFIX "sudo /etc/init.d/dancer restart"
