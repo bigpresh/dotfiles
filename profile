@@ -282,12 +282,13 @@ prependtitle() {
 # default prompt.
 setprompt() {
     local title="$1"
+    local fullhost=`hostname -f`
     case $TERM in
         screen)
-            PROMPTSET='\[\033];${PREPENDTITLE} screen \u@\h:\w\007\]'
+            PROMPTSET="\[\033];${PREPENDTITLE} screen \u@${fullhost}t:\w\007\]"
             ;;
         xterm*)
-            PROMPTSET='\[\033];${PREPENDTITLE}\u@\h:\w\007\]'
+            PROMPTSET="\[\033];${PREPENDTITLE}\u@${fullhost}:\w\007\]"
             ;;
         *)
             PROMPTSET=''
