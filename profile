@@ -677,6 +677,9 @@ function chimeradeployapi {
         fi
         echo -e "\tRestart app..."
         ssh api$boxnum.$HOSTSUFFIX "sudo /etc/init.d/dancer restart"
+        echo -e "\tKill domain_lookup..."
+        ssh api$boxnum.$HOSTSUFFIX "sudo pkill -f domain_lookup"
+        echo "Deployment to api$boxnum.$HOSTSUFFIX complete."
     done
     echo "Deployment complete."
 }
