@@ -132,6 +132,13 @@ alias cdchimeralogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
 # show me warnings if it just did something stupid.
 alias mysql="mysql --safe-updates --show-warnings --select_limit=9999999999999"
 
+# If on a Debian box where ack is ack-grep, alias it:
+if [ -x /usr/bin/ack-grep ]; then
+    alias ack="/usr/bin/ack-grep"
+fi
+
+
+
 # A few variables for easy quick access to common paths (some of these may
 # be overridden in the machine-specific stuff below)
 export cgi=/usr/local/uk2net/cgi
