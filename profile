@@ -669,24 +669,26 @@ function chimeradeployapi {
         return
     fi
 
-    for boxnum in $(seq 1 3); do
-        echo "api$boxnum.$HOSTSUFFIX..."
+    for box in api1 api2 api3 gen; do
+        echo "$box.$HOSTSUFFIX..."
         echo -e "\tgit pull..."
-        ssh api$boxnum.$HOSTSUFFIX \
+        ssh $box.$HOSTSUFFIX \
             "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull'"
         if [ "$BRANCH" != "" ]; then
             echo -e "\tSwitch to $BRANCH..."
-            ssh api$boxnum.$HOSTSUFFIX \
+            ssh $box.$HOSTSUFFIX \
                 "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git checkout $BRANCH'"
             echo -e "\tgit pull again..."
-            ssh api$boxnum.$HOSTSUFFIX \
+            ssh $box.$HOSTSUFFIX \
                 "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull'"
         fi
-        echo -e "\tRestart app..."
-        ssh api$boxnum.$HOSTSUFFIX "sudo /etc/init.d/dancer restart"
-        echo -e "\tKill domain_lookup..."
-        ssh api$boxnum.$HOSTSUFFIX "sudo pkill -f domain_lookup"
-        echo "Deployment to api$boxnum.$HOSTSUFFIX complete."
+        if [ "$box" != "gen" ]; then
+            echo -e "\tRestart app..."
+            ssh $box.$HOSTSUFFIX "sudo /etc/init.d/dancer restart"
+            echo -e "\tKill domain_lookup..."
+            ssh $box.$HOSTSUFFIX "sudo pkill -f domain_lookup"
+        fi
+        echo "Deployment to $box.$HOSTSUFFIX complete."
     done
     echo "Deployment complete."
 }
