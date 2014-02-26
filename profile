@@ -669,7 +669,7 @@ function chimeradeployapi {
         return
     fi
 
-    if [ "$BRANCH" == ""]; then
+    if [ "$BRANCH" == "" ]; then
         BRANCHSWITCH="no branch change"
     else
         BRANCHSWITCH="changing to branch $BRANCH"
