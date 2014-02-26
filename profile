@@ -674,7 +674,7 @@ function chimeradeployapi {
     else
         BRANCHSWITCH="changing to branch $BRANCH"
     fi
-    MSG="$USER beginning deployment to $CHIMERAENV env ($BRANCHSWITCH)"
+    MSG="$USER beginning deployment to $CHIMERAENV environment ($BRANCHSWITCH)"
     wget -O /dev/null "http://irc.uk2.net:6500/?channel=devs&message=$MSG"
 
     for box in api1 api2 api3 gen; do
@@ -700,7 +700,7 @@ function chimeradeployapi {
     done
     echo "Deployment complete."
 
-    MSG="$USER deployed to $CHIMERAENV env ($BRANCHSWITCH)"
+    MSG="$USER deployed to $CHIMERAENV environment ($BRANCHSWITCH)"
     wget -q -O /dev/null "http://irc.uk2.net:6500/?channel=devs&message=$MSG"
 }
 
