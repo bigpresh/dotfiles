@@ -691,6 +691,11 @@ function chimeradeployapi {
         echo "Deployment to $box.$HOSTSUFFIX complete."
     done
     echo "Deployment complete."
+    if [ "$BRANCH" == "" ]; then
+        BRANCH="(current branch unchanged)"
+    fi
+    MSG="$USER deployed to $CHIMERAENV env ($BRANCH)"
+    wget "http://irc.uk2.net:6500/?channel=devs&message=$MSG"
 }
 
 # Quick & dirty Chimera API log greppage.
