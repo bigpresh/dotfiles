@@ -68,7 +68,7 @@ match OverLength /\%81v.*/
 
 
 " colorscheme murphy
-set guifont=Monaco\ 7
+set guifont=Source\ Code\ Pro\ 9
 
 "Useful shortcuts:
 :imap ;na Account->new( accountname => '' );<left><left><left><left> 
@@ -86,4 +86,7 @@ set guifont=Monaco\ 7
 :set <S-F2>=1;2Q
 :nmap <F2> <Esc>:w<cr>
 :nmap <S-F2> <Esc>:wq<cr>
+
+" Allow w!! to write to files you wouldn't usually have access to - handy
+:cmap w!! %!sudo tee > /dev/null %
 
