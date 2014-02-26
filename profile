@@ -669,6 +669,14 @@ function chimeradeployapi {
         return
     fi
 
+    if [ "$BRANCH" == ""]; then
+        BRANCHSWITCH="no branch change"
+    else
+        BRANCHSWITCH="changing to branch $BRANCH"
+    fi
+    MSG="$USER beginning deployment to $CHIMERAENV env ($BRANCHSWITCH)"
+    wget -O /dev/null "http://irc.uk2.net:6500/?channel=devs&message=$MSG"
+
     for box in api1 api2 api3 gen; do
         echo "$box.$HOSTSUFFIX..."
         echo -e "\tgit pull..."
@@ -691,11 +699,9 @@ function chimeradeployapi {
         echo "Deployment to $box.$HOSTSUFFIX complete."
     done
     echo "Deployment complete."
-    if [ "$BRANCH" == "" ]; then
-        BRANCH="(current branch unchanged)"
-    fi
-    MSG="$USER deployed to $CHIMERAENV env ($BRANCH)"
-    wget "http://irc.uk2.net:6500/?channel=devs&message=$MSG"
+
+    MSG="$USER deployed to $CHIMERAENV env ($BRANCHSWITCH)"
+    wget -q -O /dev/null "http://irc.uk2.net:6500/?channel=devs&message=$MSG"
 }
 
 # Quick & dirty Chimera API log greppage.
