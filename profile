@@ -637,6 +637,9 @@ function staging() {
 function dev()     { 
     _connect_box_type 'dev'     $*
 }
+function uat()     { 
+    _connect_box_type 'uat'     $*
+}
 
 # TODO: retire this
 function uschimeralive {
@@ -651,6 +654,7 @@ complete -W "$IMPALA_BOXES $CHIMERA_BOXES" live
 complete -W "$IMPALA_BOXES $CHIMERA_BOXES" staging
 complete -W "$IMPALA_BOXES $CHIMERA_BOXES chimera" dev
 complete -W "$CHIMERA_BOXES" uschimeralive
+complete -W "$CHIMERA_BOXES" uat
 
 
 # Quick & dirty Chimera API backend deployment
