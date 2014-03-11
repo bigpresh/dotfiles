@@ -704,6 +704,30 @@ function chimeradeployapi {
     wget -q -O /dev/null "http://irc.uk2.net:6500/?channel=devs|cpdevs|qa&message=$MSG"
 }
 
+
+
+# Run a command on all boxes in a given Chimera environmentt
+function chimerarun {
+    CHIMERAENV=$1
+    COMMAND=${*:2} # All params from 2nd onwards
+
+    if [ "$CHIMERAENV" == "staging" ]; then
+        echo "Running '$COMMAND' on staging API boxes"
+        HOSTSUFFIX="staging.chimera.uk2group.com"
+    elif [ "$CHIMERAENV" == "us" ]; then
+        echo "Running '$COMMAND' on $CHIMERAENV live platform"
+        HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
+    else
+        echo "Usage: chimeradeployapi staging|us [branch]"
+        return
+    fi
+
+    for box in api1 api2 api3 gen; do
+        echo "$box.$HOSTSUFFIX..."
+        ssh -t $box.$HOSTSUFFIX "/bin/bash -l -c '$COMMAND'"
+    done
+}
+
 # Quick & dirty Chimera API log greppage.
 # First arg is pattern to grep for
 # Second (optional) arg is appended to /var/log/chimera
