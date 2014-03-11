@@ -663,13 +663,16 @@ function chimeradeployapi {
     BRANCH=$2
 
     if [ "$CHIMERAENV" == "staging" ]; then
-        echo "Deploying to staging API boxes"
+        echo "Deploying to staging boxes"
         HOSTSUFFIX="staging.chimera.uk2group.com"
+    elif [ "$CHIMERAENV" == "uat" ]; then
+        echo "Deploying to UAT boxes"
+        HOSTSUFFIX="uat.chimera.uk2group.com"
     elif [ "$CHIMERAENV" == "us" ]; then
         echo "Deploying to $CHIMERAENV live platform"
         HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
     else
-        echo "Usage: chimeradeployapi staging|us [branch]"
+        echo "Usage: chimeradeployapi staging|uat|us [branch]"
         return
     fi
 
@@ -716,8 +719,11 @@ function chimerarun {
     COMMAND=${*:2} # All params from 2nd onwards
 
     if [ "$CHIMERAENV" == "staging" ]; then
-        echo "Running '$COMMAND' on staging API boxes"
+        echo "Running '$COMMAND' on staging boxes"
         HOSTSUFFIX="staging.chimera.uk2group.com"
+    elif [ "$CHIMERAENV" == "uat" ]; then
+        echo "Running '$COMMAND' on UAT boxes"
+        HOSTSUFFIx="uat.chimera.uk2group.com"
     elif [ "$CHIMERAENV" == "us" ]; then
         echo "Running '$COMMAND' on $CHIMERAENV live platform"
         HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
