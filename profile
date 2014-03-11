@@ -737,6 +737,9 @@ function uschimeragreplogs {
 # Quick perl module version
 function perlmodversion {
     MODNAME=$1;
-    perl -M$MODNAME -e "say qq{$MODNAME = \$$MODNAME::VERSION};"
+    perl -M$MODNAME -e "say qq{$MODNAME = \$$MODNAME::VERSION};" 2>/dev/null
+    if [ $? != 0 ]; then
+        echo "$MODNAME not installed (or failed to find/load it)"
+    fi
 }
 
