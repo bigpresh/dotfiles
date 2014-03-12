@@ -728,7 +728,7 @@ function chimerarun {
         echo "Running '$COMMAND' on $CHIMERAENV live platform"
         HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
     else
-        echo "Usage: chimeradeployapi staging|us [branch]"
+        echo "Usage: chimerarun staging|us|uat command"
         return
     fi
 
