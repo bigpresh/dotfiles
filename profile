@@ -726,7 +726,7 @@ function chimerarun {
         HOSTSUFFIX="staging.chimera.uk2group.com"
     elif [ "$CHIMERAENV" == "uat" ]; then
         echo "Running '$COMMAND' on UAT boxes"
-        HOSTSUFFIx="uat.chimera.uk2group.com"
+        HOSTSUFFIX="uat.chimera.uk2group.com"
     elif [ "$CHIMERAENV" == "us" ]; then
         echo "Running '$COMMAND' on $CHIMERAENV live platform"
         HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
