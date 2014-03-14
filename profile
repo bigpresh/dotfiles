@@ -586,7 +586,7 @@ function _connect_box_type() {
     fullhostname=''
 
     if [ "$type" = ""  -o "$name" = "" ]; then
-        echo "Usage: (live|staging|dev) boxname"
+        echo "Usage: (live|staging|uat|dev) boxname"
     fi
 
     if [[ $IMPALA_BOXES = *$name* ]]; then
@@ -616,6 +616,9 @@ function _connect_box_type() {
             ;;
             staging)
                 fullhostname="$name.staging.chimera.uk2group.com"
+            ;;
+            uat)
+                fullhostname="$name.uat.chimera.uk2group.com"
             ;;
             dev)
                 fullhostname="chimera.dave.dev.uk2.net"
