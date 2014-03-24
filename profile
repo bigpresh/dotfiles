@@ -708,6 +708,17 @@ function chimeradeployapi {
         fi
         echo "Deployment to $box.$HOSTSUFFIX complete."
     done
+
+    # Now check whether we need DB updates:
+    DB_TEST="prove /usr/local/chimera/t/database_structure.t > /dev/null 2>&1"
+    if ssh -q -t gen.$HOSTSUFFIX "/bin/bash -l -c '$DB_TEST'" >/dev/null ; then
+        echo "No DB update required"
+    else 
+        echo "*****************************************"
+        echo "***** DB schema update required *********"
+        echo "*****************************************"
+    fi
+
     echo "Deployment complete."
 
     MSG="$USER deployed to $CHIMERAENV environment ($BRANCHSWITCH)"
