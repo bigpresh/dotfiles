@@ -306,13 +306,19 @@ setprompt() {
     hostnamecolor=''
     case $(hostname -f) in
         # Staging boxes get yellow prompts
-        *.staging.private.uk2.net|*.staging.chimera.uk2group.com)
+        *.staging.*)
             hostnamecolor=93
+        ;;
+
+        # UAT boxes are half-way between staging and live, so get yellow prompts
+        # on a red background (pretty!)
+        *.uat.*)
+            hostnamecolor='1;33;41'
         ;;
 
         # Live boxes get a red prompt (Danger, Will Robinson!)
         *.private.uk2.net|*.us.chimera.uk2group.com)
-            hostnamecolor=31
+            hostnamecolor='1;31'
         ;;
 
         # My own dev VPSes get green prompts
