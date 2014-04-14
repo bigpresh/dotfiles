@@ -649,6 +649,9 @@ function dev()     {
 function uat()     { 
     _connect_box_type 'uat'     $*
 }
+function uk()      {
+    _connect_box_type 'uk'      $*
+}
 
 # TODO: retire this
 function uschimeralive {
