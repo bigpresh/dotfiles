@@ -680,6 +680,9 @@ function chimeradeployapi {
     elif [ "$CHIMERAENV" == "us" ]; then
         echo "Deploying to $CHIMERAENV live platform"
         HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
+    elif [ "$CHIMERAENV" == "uk" ]; then
+        echo "Deploying to $CHIMERAENV live platform"
+        HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
     else
         echo "Usage: chimeradeployapi staging|uat|us [branch]"
         return
