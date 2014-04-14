@@ -609,6 +609,7 @@ function _connect_box_type() {
         esac
     elif [[ "$CHIMERA_BOXES chimera" = *$name* ]]; then
         location=$3
+        echo "Recognised $name as a Chimera box, want location $location";
         if [ $type = "live" -a "$location" = "" ]; then
             # This defaulting will be a little less useful when the UK live
             # env is in use; at that point, I might make specifying the location
@@ -649,8 +650,11 @@ function dev()     {
 function uat()     { 
     _connect_box_type 'uat'     $*
 }
+function us()      {
+    _connect_box_type 'live' $* 'us'
+}
 function uk()      {
-    _connect_box_type 'uk'      $*
+    _connect_box_type 'live' $* 'uk'
 }
 
 # TODO: retire this
