@@ -317,7 +317,7 @@ setprompt() {
         ;;
 
         # Live boxes get a red prompt (Danger, Will Robinson!)
-        *.private.uk2.net|*.us.chimera.uk2group.com)
+        *.private.uk2.net|*.us.chimera.uk2group.com|*.uk.chinera.uk2group.com)
             hostnamecolor='1;31'
         ;;
 
