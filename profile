@@ -148,7 +148,7 @@ export PERL5LIB=/usr/local/uk2net/lib
 export PERL5OPT="-M5.010"
 export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/"
 export IMPALA_BOXES="buscemi clooney coen depardieu fleming knox rasputin vault"
-export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 lb1 lb2 eco"
+export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco"
 export todaylogs="/usr/local/uk2net/log/$(date +%Y/%b/%-d)"
 
 # machine-specific stuff:
