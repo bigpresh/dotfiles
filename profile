@@ -757,8 +757,11 @@ function chimerarun {
     elif [ "$CHIMERAENV" == "us" ]; then
         echo "Running '$COMMAND' on $CHIMERAENV live platform"
         HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
+    elif [ "$CHIMERAENV" == "uk" ]; then
+        echo "Running '$COMMAND' on $CHIMERAENV live platform"
+        HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
     else
-        echo "Usage: chimerarun staging|us|uat command"
+        echo "Usage: chimerarun staging|us|uk|uat command"
         return
     fi
 
