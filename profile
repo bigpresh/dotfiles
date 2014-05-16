@@ -150,6 +150,7 @@ export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/"
 export IMPALA_BOXES="buscemi clooney coen depardieu fleming knox rasputin vault"
 export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco"
 export todaylogs="/usr/local/uk2net/log/$(date +%Y/%b/%-d)"
+alias cdcode="cd /usr/local/uk2net"
 
 # machine-specific stuff:
 case $(hostname --fqdn) in
@@ -167,6 +168,7 @@ case $(hostname --fqdn) in
         perlbrew switch 5.14.2
         export PERL5LIB=/usr/local/chimera/lib
         alias cdlogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
+        alias cdcode='cd /usr/local/chimera'
     ;;
 esac
 
