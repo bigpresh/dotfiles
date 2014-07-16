@@ -669,11 +669,6 @@ function uk()      {
     _connect_box_type 'chi-live' 'uk' $*
 }
 
-# TODO: retire this
-function uschimeralive {
-    echo "Say 'live $1 us' now instead"
-    ssh $1.us.chimera.uk2group.com;
-}
 
 
 
