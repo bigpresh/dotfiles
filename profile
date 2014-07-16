@@ -590,14 +590,26 @@ function pastesshkey {
 # Convenient aliaes to SSH to UK2 boxes
 function _connect_box_type() {
     type=$1
-    name=$2
+    shift
+    # If the type was 'chi-live', the next arg is the location, so grab that
+    # and shift
+    if [ "$type" == "chi-live" ]; then
+        echo "type is chi-live so grabbing location"
+        location=$1;
+        shift;
+        echo "Location wanted is $location"
+    fi
+
+    name=$1
+    shift
     fullhostname=''
 
     if [ "$type" = ""  -o "$name" = "" ]; then
-        echo "Usage: (live|staging|uat|dev) boxname"
+        echo "Usage: (live|staging|uat|dev|us|uk) boxname [cmd]"
     fi
 
     if [[ $IMPALA_BOXES = *$name* ]]; then
+        # there's no location for Impala boxes.
         case $type in
             live)
                 fullhostname="$name.uk2.net"
@@ -610,17 +622,8 @@ function _connect_box_type() {
             ;;
         esac
     elif [[ "$CHIMERA_BOXES chimera" = *$name* ]]; then
-        location=$3
-        echo "Recognised $name as a Chimera box, want location $location";
-        if [ $type = "live" -a "$location" = "" ]; then
-            # This defaulting will be a little less useful when the UK live
-            # env is in use; at that point, I might make specifying the location
-            # required.
-            echo "No Chimera location supplied, defaulting to US"
-            location="us"
-        fi
         case $type in
-            live)
+            chi-live)
                 fullhostname="$name.$location.chimera.uk2group.com"
             ;;
             staging)
@@ -637,26 +640,33 @@ function _connect_box_type() {
         echo "No idea what box you're talking about."
         return
     fi
-    echo "Connecting to $fullhostname..."
-    ssh $fullhostname
+    cmd="$*"
+    echo -n "Connecting to $fullhostname"
+    if [ "$cmd" != "" ]; then
+        echo " and running $cmd..."
+        ssh $fullhostname -t $cmd
+    else
+        echo "..."
+        ssh $fullhostname
+    fi
 }
 function live()    {
-    _connect_box_type 'live'    $* 
+    _connect_box_type 'live' $boxname      $* 
 }
 function staging() { 
-    _connect_box_type 'staging' $*
+    _connect_box_type 'staging' $boxname   $*
 }
 function dev()     { 
-    _connect_box_type 'dev'     $*
+    _connect_box_type 'dev'       $*
 }
 function uat()     { 
-    _connect_box_type 'uat'     $*
+    _connect_box_type 'uat'       $*
 }
 function us()      {
-    _connect_box_type 'live' $* 'us'
+    _connect_box_type 'chi-live' 'us' $*
 }
 function uk()      {
-    _connect_box_type 'live' $* 'uk'
+    _connect_box_type 'chi-live' 'uk' $*
 }
 
 # TODO: retire this
