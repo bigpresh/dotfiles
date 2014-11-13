@@ -10,14 +10,16 @@ colorscheme jamesronan
 
 set number
 
-syntax on
+filetype plugin indent on
+syntax enable
+
 set nowrap
 set textwidth=80
 set shiftwidth=4
 set shiftround
 set expandtab
 set tabstop=8
-set autoindent
+"set autoindent
 set smarttab     "Backspace at start of line outdents"
 set ruler        "Show current position in file at bottom"
 
@@ -29,7 +31,7 @@ set backspace=indent,eol,start
 set hidden
 
 " for coding, have things in braces indenting themselves:
-autocmd FileType perl set smartindent
+"autocmd FileType perl set smartindent
 autocmd FileType php  set smartindent
 
 " have the h and l cursor keys wrap between lines (like <Space> and <BkSpc> do
