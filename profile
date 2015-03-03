@@ -148,7 +148,7 @@ export PERL5LIB=/usr/local/uk2net/lib
 export PERL5OPT="-M5.010"
 export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/"
 export IMPALA_BOXES="buscemi clooney coen depardieu fleming knox rasputin vault"
-export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco"
+export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco log"
 export todaylogs="/usr/local/uk2net/log/$(date +%Y/%b/%-d)"
 alias cdcode="cd /usr/local/uk2net"
 
@@ -626,11 +626,8 @@ function _connect_box_type() {
             chi-live)
                 fullhostname="$name.$location.chimera.uk2group.com"
             ;;
-            staging)
-                fullhostname="$name.staging.chimera.uk2group.com"
-            ;;
-            uat)
-                fullhostname="$name.uat.chimera.uk2group.com"
+            staging|uat|as-live|front-end-dev)
+                fullhostname="$name.$type.chimera.uk2group.com"
             ;;
             dev)
                 fullhostname="chimera.dave.dev.uk2.net"
@@ -668,7 +665,12 @@ function us()      {
 function uk()      {
     _connect_box_type 'chi-live' 'uk' $*
 }
-
+function front-end-dev()     { 
+    _connect_box_type 'front-end-dev' $*
+}
+function as-live()     { 
+    _connect_box_type 'as-live'       $*
+}
 
 
 
