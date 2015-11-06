@@ -827,6 +827,7 @@ function vim {
     if [ "$#" -ne 1 ]; then
         vim $*
     else
+        vimpath=$(which vim)
         if [[ "$1" =~ "::" ]]; then
             filename=$1
             filename=${filename//:://}
@@ -834,7 +835,7 @@ function vim {
         else
             filename=$1
         fi
-        vim $filename
+        $vimpath $filename
     fi
 }
 
