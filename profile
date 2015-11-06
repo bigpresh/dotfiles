@@ -819,3 +819,23 @@ function perlmodversion {
     fi
 }
 
+# Wrap vim, and understand e.g. Foo::Bar -> lib/Foo/Bar.pm
+function vim {
+    # If more than one arg was given, just pass them all on to vim,
+    # don't start trying to work out what to do
+    # TODO: maybe iterate over them, replacing any that make sense?
+    if [ "$#" -ne 1 ]; then
+        vim $*
+    else
+        if [[ "$1" =~ "::" ]]; then
+            filename=$1
+            filename=${filename//:://}
+            filename="lib/$filename.pm"
+        else
+            filename=$1
+        fi
+        vim $filename
+    fi
+}
+
+
