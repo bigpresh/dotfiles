@@ -824,10 +824,10 @@ function vim {
     # If more than one arg was given, just pass them all on to vim,
     # don't start trying to work out what to do
     # TODO: maybe iterate over them, replacing any that make sense?
+    vimpath=$(which vim)
     if [ "$#" -ne 1 ]; then
-        vim $*
+        $vimpath $*
     else
-        vimpath=$(which vim)
         if [[ "$1" =~ "::" ]]; then
             filename=$1
             filename=${filename//:://}
