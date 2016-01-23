@@ -13,12 +13,13 @@ function tempban {
     if [[ "$period" == "" ]]; then
         period="1d"
     fi
-    sudo msm The-Wild cmd tempban $player $period
+    reason=$3
+    sudo msm The-Wild cmd tempban $player $period $reason
 }
 
 function ban {
     player=$1
     reason=$2
-    sudo msm The-Wild cmd tempban $player $reason
+    sudo msm The-Wild cmd ban $player $reason
 }
 
