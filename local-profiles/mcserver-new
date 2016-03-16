@@ -23,3 +23,10 @@ function ban {
     sudo msm The-Wild cmd ban $player $reason
 }
 
+function cmd {
+    cmd="$*"
+    sudo msm The-Wild cmd $cmd
+    tailf ~/latest.log
+}
+
+
