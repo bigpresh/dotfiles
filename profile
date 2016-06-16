@@ -137,7 +137,10 @@ if [ -x /usr/bin/ack-grep ]; then
     alias ack="/usr/bin/ack-grep"
 fi
 
-
+# If synclient is installed, set sensible settings for palm detection
+if [ -x /usr/bin/synclient ]; then
+    synclient PalmDetect=1 PalmMinWidth=4
+fi
 
 # A few variables for easy quick access to common paths (some of these may
 # be overridden in the machine-specific stuff below)
