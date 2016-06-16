@@ -137,8 +137,9 @@ if [ -x /usr/bin/ack-grep ]; then
     alias ack="/usr/bin/ack-grep"
 fi
 
-# If synclient is installed, set sensible settings for palm detection
-if [ -x /usr/bin/synclient ]; then
+# If synclient is installed and we have an X display, set sensible settings
+# for palm detection
+if [[ "DISPLAY" != "" && -x /usr/bin/synclient ]]; then
     synclient PalmDetect=1 PalmMinWidth=4
 fi
 
