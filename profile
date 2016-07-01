@@ -174,6 +174,9 @@ case $(hostname --fqdn) in
         alias cdlogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
         alias cdcode='cd /usr/local/chimera'
     ;;
+    cloudburst|supersonic)
+        export MPD_HOST=supernova
+    ;;
 esac
 
 
