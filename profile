@@ -139,7 +139,7 @@ fi
 
 # If synclient is installed and we have an X display, set sensible settings
 # for palm detection
-if [[ "DISPLAY" != "" && -x /usr/bin/synclient ]]; then
+if [[ "$DISPLAY" != "" && -x /usr/bin/synclient ]]; then
     synclient PalmDetect=1 PalmMinWidth=4
 fi
 
