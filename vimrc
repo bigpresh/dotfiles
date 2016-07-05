@@ -1,12 +1,8 @@
-" vimrc written from .profile
-" : profile 863 2010-03-22 17:05:45Z davidp $
-
 
 " 256 color support stuff (thanks to Jim for this)
 set t_Co=256
 let mapleader=","
 let g:solarized_termcolors=256
-colorscheme jamesronan
 
 set number
 
@@ -91,4 +87,18 @@ set guifont=Source\ Code\ Pro\ 9
 
 " Allow w!! to write to files you wouldn't usually have access to - handy
 :cmap w!! %!sudo tee > /dev/null %
+
+
+" Write versioned backups to backups dir in case of stupity
+set backup
+:silent exec "!mkdir -p ~/tmp/vimbackups"
+set backupdir=~/tmp/vimbackups
+" Update the backup file extension each time Esc is hit to make sure it's fresh
+fun! InitBex()
+ let append_timestamp = strftime("%Y%m%d-%H%M%S")
+ let cmd = "set backupext=_". append_timestamp
+ execute cmd
+endfun
+autocmd BufWritePre * call InitBex()
+
 
