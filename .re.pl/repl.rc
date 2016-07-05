@@ -14,7 +14,7 @@ for my $plugin (qw(
     CompletionDriver::Keywords
     CompletionDriver::INC
     LazyLoad
-
+    DumpHistory
 )) {
     $_REPL->load_plugin($plugin)
         or warn "Failed to load plugin $plugin";
