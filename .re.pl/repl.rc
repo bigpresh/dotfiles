@@ -1,0 +1,47 @@
+# my config for Devel::REPL
+#
+# Load some convenient plugins, set up lazy-loading of commonly
+# used classes, etc.
+#
+# David Precious <davidp@preshweb.co.uk>, 2016
+
+
+for my $plugin (qw(
+    Colors
+    Completion
+    CompletionDriver::LexEnv
+    CompletionDriver::Methods
+    CompletionDriver::Keywords
+    CompletionDriver::INC
+    LazyLoad
+
+)) {
+    $_REPL->load_plugin($plugin)
+        or warn "Failed to load plugin $plugin";
+}
+
+# Common stuff to lazy-load:
+for my $lazy_load_class (qw(
+    DateTime
+    Customer
+    User
+)) {
+    $_REPL->lazy_load($lazy_load_class);
+}
+
+sub new_obj {
+    my $class = shift;
+    require $class;
+    return $class->new(@_);
+}
+
+# Usually the REPL's own output is fine, but sometimes I want to dump an object
+# that supports stringification without it being stringified:
+sub dd {
+    if (eval "require Data::Dump") {
+        print Data::Dump::dump(shift);
+    } else {
+        require "Data::Dumper";
+        print Data::Dumper::Dumper(shift);
+    }
+}
