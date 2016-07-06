@@ -5,7 +5,9 @@
 #
 # David Precious <davidp@preshweb.co.uk>, 2016
 
+use lib 'tmp/lib';
 
+my @loaded_plugins;
 for my $plugin (qw(
     Colors
     Completion
@@ -13,20 +15,21 @@ for my $plugin (qw(
     CompletionDriver::Methods
     CompletionDriver::Keywords
     CompletionDriver::INC
-    LazyLoad
     DumpHistory
+    ModuleAutoLoader
 )) {
     $_REPL->load_plugin($plugin)
         or warn "Failed to load plugin $plugin";
+    push @loaded_plugins, $plugin;
 }
+print "Loaded Devel::REPL plugins: " . join(',', @loaded_plugins) . "\n";
 
 # Common stuff to lazy-load:
 for my $lazy_load_class (qw(
-    DateTime
     Customer
     User
 )) {
-    $_REPL->lazy_load($lazy_load_class);
+    #$_REPL->lazy_load($lazy_load_class);
 }
 
 sub new_obj {
@@ -45,3 +48,4 @@ sub dd {
         print Data::Dumper::Dumper(shift);
     }
 }
+
