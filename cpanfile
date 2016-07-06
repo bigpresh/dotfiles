@@ -2,7 +2,7 @@
 #
 
 require 'Devel::REPL';
-require 'Devel::REPL::Plugin::LazyLoad';
+require 'Devel::REPL::Plugin::ModuleAutoLoader';
 require 'DateTime';
 require 'DBI';
 require 'JSON';
