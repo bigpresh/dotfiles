@@ -1,10 +1,14 @@
 function mute {
     player=$1
     period=$2
+    reason="${@:2}"
     if [[ "$period" == "" ]]; then
         period="10m"
     fi
-    sudo msm The-Wild cmd mute $player $period
+    if [[ "$reason" == "" ]]; then
+        reason="Quiet time for you"
+    fi
+    sudo msm The-Wild cmd mute $player $period "$reason"
 }
 
 function tempban {
@@ -13,14 +17,15 @@ function tempban {
     if [[ "$period" == "" ]]; then
         period="1d"
     fi
-    reason=$3
-    sudo msm The-Wild cmd tempban $player $period $reason
+    reason="${@:2}"
+    sudo msm The-Wild cmd tempban $player $period "$reason"
 }
 
 function ban {
     player=$1
-    reason=$2
-    sudo msm The-Wild cmd ban $player $reason
+    shift
+    reason="$*"
+    sudo msm The-Wild cmd ban $player "$reason"
 }
 
 function cmd {
