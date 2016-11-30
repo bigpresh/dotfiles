@@ -99,10 +99,15 @@ export GREP_OPTIONS='--binary-files=without-match'
 if [[ "$SHELL" = *bash* ]]; then
     # bash history settings:
     export HISTCONTROL=ignoreboth
+    export HISTSIZE=1000
+    export HISTFILESIZE=10000
     shopt -s histappend
 
     # Notice if the window size changed:
     shopt -s checkwinsize
+
+    # Disable session suspend/resume
+    stty -ixon
 
     # Ignore .svn dirs when tab-completing:
     export FIGNORE=".svn"
