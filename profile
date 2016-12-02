@@ -93,7 +93,6 @@ elif [ -x /usr/bin/mcedit ]; then
 fi
 
 export GZIP="-9"
-export GREP_OPTIONS='--binary-files=without-match'
 
 # Some Bash-specific stuff
 if [[ "$SHELL" = *bash* ]]; then
