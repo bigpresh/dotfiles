@@ -132,9 +132,10 @@ alias cm="sudo su codemonkey"
 alias cdlogs='cd /usr/local/uk2net/log/$(date +%Y/%b/%-d)'
 alias cdchimeralogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
 
-# Make the MySQL client tell me if I'm about to do something stupid, and have it
-# show me warnings if it just did something stupid.
-alias mysql="mysql --safe-updates --show-warnings --select_limit=9999999999999"
+# Make the MySQL client tell me if I'm about to do something stupid, have it
+# show me warnings if it just did something stupid, and automatically use
+# vertical output if the result would be too wide to display sensibly.
+alias mysql="mysql --safe-updates --show-warnings --select_limit=9999999999999 --auto-vertical-output"
 
 # If on a Debian box where ack is ack-grep, alias it:
 if [ -x /usr/bin/ack-grep ]; then
