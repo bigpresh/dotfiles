@@ -161,6 +161,11 @@ export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco log1 log2"
 export todaylogs="/usr/local/uk2net/log/$(date +%Y/%b/%-d)"
 alias cdcode="cd /usr/local/uk2net"
 
+# For Test2-powered test suites, I want to see the output as it comes, not
+# all at the end
+REALTIME_TEST_OUTPUT=1
+
+
 # machine-specific stuff:
 case $(hostname --fqdn) in
     supernova.preshweb.co.uk)
