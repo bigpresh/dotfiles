@@ -102,6 +102,13 @@ if [[ "$SHELL" = *bash* ]]; then
     export HISTFILESIZE=10000
     shopt -s histappend
 
+    # Automatically update the history file immediately, so
+    # different sessions don't clobber each other's history.
+    # TODO: this *might* cause some latency, disable if so
+    if [[ ! "$PROMPT_COMMAND" =~ "history" ]]; then
+        export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+    fi
+
     # Notice if the window size changed:
     shopt -s checkwinsize
 
