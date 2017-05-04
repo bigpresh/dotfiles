@@ -153,6 +153,13 @@ fi
 # for palm detection
 if [[ "$DISPLAY" != "" && -x /usr/bin/synclient ]]; then
     synclient PalmDetect=1 PalmMinWidth=4
+	
+    # On my little Lenovo Yoga laptop with a shitty no-buttons trackpad, add
+    # middle-click emulation
+    if [[ "$HOSTNAME" == "rollitover" ]]; then
+        synclient ClickFinger3=2
+        synclient TapButton3=2
+    fi
 fi
 
 # A few variables for easy quick access to common paths (some of these may
