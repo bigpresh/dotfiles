@@ -177,7 +177,7 @@ alias cdcode="cd /usr/local/uk2net"
 
 # For Test2-powered test suites, I want to see the output as it comes, not
 # all at the end
-REALTIME_TEST_OUTPUT=1
+export REALTIME_TEST_OUTPUT=1
 
 
 # machine-specific stuff:
