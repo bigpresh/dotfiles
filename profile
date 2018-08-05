@@ -169,7 +169,6 @@ export lib=/usr/local/uk2net/lib
 export log=/usr/local/uk2net/log
 export PERL5LIB=/usr/local/uk2net/lib
 export PERL5OPT="-M5.010"
-export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/ --mirror-only"
 export IMPALA_BOXES="buscemi clooney coen depardieu fleming knox rasputin vault"
 export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco log1 log2"
 export todaylogs="/usr/local/uk2net/log/$(date +%Y/%b/%-d)"
@@ -209,6 +208,16 @@ esac
 # this can get set by the prependtitle() function
 # and is prepended to the xterm window title
 export PREPENDTITLE=''
+
+# If I have a ~/perl5, then attempt to use local::lib to install my stuff
+# locally; otherwise, configure cpanm to use --sudo.
+if [[ -d ~/perl5 ]]; then
+    echo "~/perl5 found, configuring local::lib";
+    eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
+    export PERL_CPANM_OPT="--mirror http://cpan.mirrors.uk2.net/ --mirror-only"
+else
+    export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/ --mirror-only"
+fi
 
 
 # Finally, look for machine-specific stuff in ~/.profile-local, and source it if
