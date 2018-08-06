@@ -871,9 +871,21 @@ function vim {
         $vimpath $*
     else
         if [[ "$1" =~ "::" ]]; then
+            # First try locally, in the lib/ subdir of where we are - I'll often
+            # be in a project directory
             filename=$1
             filename=${filename//:://}
             filename="lib/$filename.pm"
+
+            # If that didn't result in a filename that exists, though, maybe we
+            # meant an installed Perl module (presumably to view, rather than
+            # edit, one would hope)
+            if [ ! -f "$filename" ]; then
+                perlmodpath=$( perldoc -l $1 )
+                if [ -f "$perlmodpath" ]; then
+                    filename=$perlmodpath
+                fi
+            fi
         else
             filename=$1
         fi
