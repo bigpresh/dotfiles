@@ -892,6 +892,9 @@ function vim {
                 perlmodpath=$( perldoc -l $1 )
                 if [ -f "$perlmodpath" ]; then
                     filename=$perlmodpath
+                else
+                    # Nope - abandon the magic!
+                    $filename=$1
                 fi
             fi
         else
