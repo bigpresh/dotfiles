@@ -867,6 +867,14 @@ function vim {
     # don't start trying to work out what to do
     # TODO: maybe iterate over them, replacing any that make sense?
     vimpath=$(which vim)
+    if [[ "$vimpath" == "" ]]; then
+        # No vim?  WTF?  Maybe it's a box that has vim.tiny?
+        vimpath=$(which vim.tiny)
+        if [[ "$vimpath" == "" ]]; then
+            echo "No vim installed?  What kind of braindead box is this?"
+            return
+        fi
+    fi
     if [ "$#" -ne 1 ]; then
         $vimpath $*
     else
