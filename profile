@@ -900,7 +900,7 @@ function vim {
         else
             filename=$1
         fi
-        $vimpath $filename
+        $vimpath "$filename"
     fi
 }
 
