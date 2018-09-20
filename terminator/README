@@ -1,0 +1,4 @@
+Terminator terminal emulator config
+
+Symlink the config file as ~/.config/terminator/config
+
