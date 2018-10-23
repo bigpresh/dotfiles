@@ -905,3 +905,31 @@ function vim {
 }
 
 
+# Handy "cherry-pick all the commits that are on $feature_branch but not
+# $master branch" helper.  Handy when raising a PR branched from a release
+# branch for a hotfix, where you want only the 
+function cherry_pick_from_branch {
+    feature_branch=$1
+    master_branch=$2
+
+    if [[ "$feature_branch" == "" ]]; then
+        cat <<ENDHELP
+Cherry-picks unmerged commits from branch 1 that aren't on branch 2.
+Usage: cherry_pick_from_branch feature_branch master
+
+You can omit the second, master is default.
+ENDHELP
+        return
+    fi
+    
+    if [[ "$master_branch" == "" ]]; then
+        master_branch="master";
+    fi
+
+    while read commit; do
+        echo "## $commit"
+        sha=$( echo $commit | cut -d ' ' -f 1)
+        git cherry-pick $sha;
+    done < <(git log $feature_branch ^$master_branch --oneline | tac)
+}
+
