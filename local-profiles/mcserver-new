@@ -31,7 +31,7 @@ function ban {
 function cmd {
     cmd="$*"
     sudo msm The-Wild cmd $cmd
-    tailf ~/latest.log
+    tail -f ~/latest.log
 }
 
 
