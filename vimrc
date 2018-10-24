@@ -101,4 +101,10 @@ fun! InitBex()
 endfun
 autocmd BufWritePre * call InitBex()
 
+" Let me open the Perl module under my cursor trivally with c-o
+nmap <C-o> :call LoadPerlModule()<CR>
+
+function! LoadPerlModule()
+    execute 'e `perldoc -l ' . expand("<cWORD>") . '`'
+endfunction
 
