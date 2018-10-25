@@ -926,6 +926,11 @@ ENDHELP
         master_branch="master";
     fi
 
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    echo "Cherry-picking anything new on $feature_branch that isn't in $master_branch to $current_branch"
+    echo "Hit enter to confirm, interrupt to bail"
+    read confirm
+
     while read commit; do
         echo "## $commit"
         sha=$( echo $commit | cut -d ' ' -f 1)
@@ -934,6 +939,6 @@ ENDHELP
             echo "FAILED to cherry-pick $sha, aborting";
             return
         fi
-    done < <(git log $feature_branch ^$master_branch --oneline | tac)
+    done < <(git log $feature_branch ^$master_branch ^$current_branch --oneline | tac)
 }
 
