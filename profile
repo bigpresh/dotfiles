@@ -930,6 +930,10 @@ ENDHELP
         echo "## $commit"
         sha=$( echo $commit | cut -d ' ' -f 1)
         git cherry-pick $sha;
+        if [ $? -ne 0 ]; then
+            echo "FAILED to cherry-pick $sha, aborting";
+            return
+        fi
     done < <(git log $feature_branch ^$master_branch --oneline | tac)
 }
 
