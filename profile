@@ -86,10 +86,13 @@ fi
 # pick visual editor to use, in order of preference:
 if [ -x /usr/bin/vim ]; then
     export VISUAL=/usr/bin/vim
+    export EDITOR=/usr/bin/vim
 elif [ -x /usr/bin/nano ]; then
     export VISUAL=/usr/bin/nano
+    export EDITOR=/usr/bin/nano
 elif [ -x /usr/bin/mcedit ]; then
     export VISUAL=/usr/bin/mcedit
+    export EDITOR=/usr/bin/mcedit
 fi
 
 export GZIP="-9"
