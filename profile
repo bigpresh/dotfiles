@@ -214,7 +214,7 @@ export PREPENDTITLE=''
 
 # If I have a ~/perl5, then attempt to use local::lib to install my stuff
 # locally; otherwise, configure cpanm to use --sudo.
-if [[ -d ~/perl5 ]]; then
+if [[ -d ~/perl5 && "$PS1" != "" ]]; then
     echo "~/perl5 found, configuring local::lib";
     eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
     export PERL_CPANM_OPT="--mirror http://cpan.mirrors.uk2.net/ --mirror-only"
