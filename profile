@@ -93,7 +93,10 @@ elif [ -x /usr/bin/mcedit ]; then
 fi
 
 export GZIP="-9"
-alias grep="/bin/grep --binary-files=without-match"
+
+if [ -x "/bin/grep" ]; then
+    alias grep="/bin/grep --binary-files=without-match"
+fi
 
 
 # Some Bash-specific stuff
