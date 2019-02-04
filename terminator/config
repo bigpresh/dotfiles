@@ -1,0 +1,60 @@
+[global_config]
+  enabled_plugins = InactivityWatch, CustomCommandsMenu, ActivityWatch, TerminalShot, LaunchpadCodeURLHandler, Logger, LaunchpadBugURLHandler
+  focus = mouse
+  inactive_color_offset = 0.65
+  suppress_multiple_term_dialog = True
+  title_font = Oxygen Mono 7
+  title_inactive_bg_color = "#362930"
+  title_use_system_font = False
+[keybindings]
+  edit_window_title = <Shift><Alt>t
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]
+  [[CustomCommandsMenu]]
+    [[[test]]]
+      command = 'echo "this is a test"'
+      enabled = True
+      name = test
+      position = 0
+[profiles]
+  [[default]]
+    background_darkness = 0.95
+    background_image = None
+    background_type = transparent
+    font = Source Code Pro Medium 9
+    foreground_color = "#00ff00"
+    scroll_on_output = False
+    scrollback_lines = 50000
+    use_system_font = False
+    visible_bell = True
+    word_chars = "-A-Za-z0-9./?%&#:_"
+  [[amber-on-black]]
+    background_image = None
+    font = Fira Mono 9
+    foreground_color = "#ed771b"
+    use_system_font = False
+  [[larger]]
+    background_image = None
+    font = Monospace 11
+    use_system_font = False
+  [[smaller]]
+    background_image = None
+    cursor_color = "#c5b6b6"
+    cursor_shape = ibeam
+    font = Monospace 7
+    scroll_on_output = False
+    scrollback_lines = 50000
+    use_system_font = False
+  [[sunshine]]
+    background_color = "#ffffff"
+    background_image = None
+    font = Fira Mono 8
+    foreground_color = "#000000"
+    use_system_font = False

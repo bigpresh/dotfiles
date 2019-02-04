@@ -86,10 +86,13 @@ fi
 # pick visual editor to use, in order of preference:
 if [ -x /usr/bin/vim ]; then
     export VISUAL=/usr/bin/vim
+    export EDITOR=/usr/bin/vim
 elif [ -x /usr/bin/nano ]; then
     export VISUAL=/usr/bin/nano
+    export EDITOR=/usr/bin/nano
 elif [ -x /usr/bin/mcedit ]; then
     export VISUAL=/usr/bin/mcedit
+    export EDITOR=/usr/bin/mcedit
 fi
 
 export GZIP="-9"
@@ -103,10 +106,22 @@ fi
 if [[ "$SHELL" = *bash* ]]; then
     # bash history settings:
     export HISTCONTROL=ignoreboth
+    export HISTSIZE=1000
+    export HISTFILESIZE=10000
     shopt -s histappend
+
+    # Automatically update the history file immediately, so
+    # different sessions don't clobber each other's history.
+    # TODO: this *might* cause some latency, disable if so
+    if [[ ! "$PROMPT_COMMAND" =~ "history" ]]; then
+        export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+    fi
 
     # Notice if the window size changed:
     shopt -s checkwinsize
+
+    # Disable session suspend/resume
+    stty -ixon
 
     # Ignore .svn dirs when tab-completing:
     export FIGNORE=".svn"
@@ -132,9 +147,10 @@ alias cm="sudo su codemonkey"
 alias cdlogs='cd /usr/local/uk2net/log/$(date +%Y/%b/%-d)'
 alias cdchimeralogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
 
-# Make the MySQL client tell me if I'm about to do something stupid, and have it
-# show me warnings if it just did something stupid.
-alias mysql="mysql --safe-updates --show-warnings --select_limit=9999999999999"
+# Make the MySQL client tell me if I'm about to do something stupid, have it
+# show me warnings if it just did something stupid, and automatically use
+# vertical output if the result would be too wide to display sensibly.
+alias mysql="mysql --safe-updates --show-warnings --select_limit=9999999999999 --auto-vertical-output"
 
 # If on a Debian box where ack is ack-grep, alias it:
 if [ -x /usr/bin/ack-grep ]; then
@@ -145,6 +161,13 @@ fi
 # for palm detection
 if [[ "$DISPLAY" != "" && -x /usr/bin/synclient ]]; then
     synclient PalmDetect=1 PalmMinWidth=4
+	
+    # On my little Lenovo Yoga laptop with a shitty no-buttons trackpad, add
+    # middle-click emulation
+    if [[ "$HOSTNAME" == "rollitover" ]]; then
+        synclient ClickFinger3=2
+        synclient TapButton3=2
+    fi
 fi
 
 # A few variables for easy quick access to common paths (some of these may
@@ -154,11 +177,15 @@ export lib=/usr/local/uk2net/lib
 export log=/usr/local/uk2net/log
 export PERL5LIB=/usr/local/uk2net/lib
 export PERL5OPT="-M5.010"
-export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/ --mirror-only"
 export IMPALA_BOXES="buscemi clooney coen depardieu fleming knox rasputin vault"
 export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco log1 log2"
 export todaylogs="/usr/local/uk2net/log/$(date +%Y/%b/%-d)"
 alias cdcode="cd /usr/local/uk2net"
+
+# For Test2-powered test suites, I want to see the output as it comes, not
+# all at the end
+export REALTIME_TEST_OUTPUT=1
+
 
 # machine-specific stuff:
 case $(hostname --fqdn) in
@@ -173,7 +200,9 @@ case $(hostname --fqdn) in
         # Chimera boxes use perlbrew, so switch to the right perl
         export PERLBREW_ROOT=/opt/perlbrew
         source $PERLBREW_ROOT/etc/bashrc
-        perlbrew switch 5.14.2
+        if [ -f /usr/local/chimera/perl_version ]; then
+            perlbrew switch $( cat /usr/local/chimera/perl_version )
+        fi
         export PERL5LIB=/usr/local/chimera/lib
         alias cdlogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
         alias cdcode='cd /usr/local/chimera'
@@ -187,6 +216,16 @@ esac
 # this can get set by the prependtitle() function
 # and is prepended to the xterm window title
 export PREPENDTITLE=''
+
+# If I have a ~/perl5, then attempt to use local::lib to install my stuff
+# locally; otherwise, configure cpanm to use --sudo.
+if [[ -d ~/perl5 && "$PS1" != "" ]]; then
+    echo "~/perl5 found, configuring local::lib";
+    eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
+    export PERL_CPANM_OPT="--mirror http://cpan.mirrors.uk2.net/ --mirror-only"
+else
+    export PERL_CPANM_OPT="--sudo --mirror http://cpan.mirrors.uk2.net/ --mirror-only"
+fi
 
 
 # Finally, look for machine-specific stuff in ~/.profile-local, and source it if
@@ -836,13 +875,36 @@ function vim {
     # don't start trying to work out what to do
     # TODO: maybe iterate over them, replacing any that make sense?
     vimpath=$(which vim)
+    if [[ "$vimpath" == "" ]]; then
+        # No vim?  WTF?  Maybe it's a box that has vim.tiny?
+        vimpath=$(which vim.tiny)
+        if [[ "$vimpath" == "" ]]; then
+            echo "No vim installed?  What kind of braindead box is this?"
+            return
+        fi
+    fi
     if [ "$#" -ne 1 ]; then
         $vimpath $*
     else
         if [[ "$1" =~ "::" ]]; then
+            # First try locally, in the lib/ subdir of where we are - I'll often
+            # be in a project directory
             filename=$1
             filename=${filename//:://}
             filename="lib/$filename.pm"
+
+            # If that didn't result in a filename that exists, though, maybe we
+            # meant an installed Perl module (presumably to view, rather than
+            # edit, one would hope)
+            if [ ! -f "$filename" ]; then
+                perlmodpath=$( perldoc -l $1 )
+                if [ -f "$perlmodpath" ]; then
+                    filename=$perlmodpath
+                else
+                    # Nope - abandon the magic!
+                    $filename=$1
+                fi
+            fi
         else
             filename=$1
         fi
@@ -850,4 +912,41 @@ function vim {
     fi
 }
 
+
+# Handy "cherry-pick all the commits that are on $feature_branch but not
+# $master branch" helper.  Handy when raising a PR branched from a release
+# branch for a hotfix, where you want only the 
+function cherry_pick_from_branch {
+    feature_branch=$1
+    master_branch=$2
+
+    if [[ "$feature_branch" == "" ]]; then
+        cat <<ENDHELP
+Cherry-picks unmerged commits from branch 1 that aren't on branch 2.
+Usage: cherry_pick_from_branch feature_branch master
+
+You can omit the second, master is default.
+ENDHELP
+        return
+    fi
+    
+    if [[ "$master_branch" == "" ]]; then
+        master_branch="master";
+    fi
+
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    echo "Cherry-picking anything new on $feature_branch that isn't in $master_branch to $current_branch"
+    echo "Hit enter to confirm, interrupt to bail"
+    read confirm
+
+    while read commit; do
+        echo "## $commit"
+        sha=$( echo $commit | cut -d ' ' -f 1)
+        git cherry-pick $sha;
+        if [ $? -ne 0 ]; then
+            echo "FAILED to cherry-pick $sha, aborting";
+            return
+        fi
+    done < <(git log $feature_branch ^$master_branch ^$current_branch --oneline | tac)
+}
 
