@@ -146,6 +146,7 @@ alias uk2do="todo.pl --group UK2"
 alias cm="sudo su codemonkey"
 alias cdlogs='cd /usr/local/uk2net/log/$(date +%Y/%b/%-d)'
 alias cdchimeralogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
+alias tailf='tail -f'
 
 # Make the MySQL client tell me if I'm about to do something stupid, have it
 # show me warnings if it just did something stupid, and automatically use
