@@ -89,15 +89,26 @@ set guifont=Source\ Code\ Pro\ 9
 :cmap w!! %!sudo tee > /dev/null %
 
 
-" Write versioned backups to backups dir in case of stupity
+" Write versioned backups to backups dir in case of stupity (but not if it's
+" a file in /dev/shm because that's unlikely of long-term interest)
 set backup
 :silent exec "!mkdir -p ~/tmp/vimbackups"
 set backupdir=~/tmp/vimbackups
 " Update the backup file extension each time Esc is hit to make sure it's fresh
 fun! InitBex()
- let append_timestamp = strftime("%Y%m%d-%H%M%S")
- let cmd = "set backupext=_". append_timestamp
- execute cmd
+  let append_timestamp = strftime("%Y%m%d-%H%M%S")
+  let cmd = "set backupext=_". append_timestamp
+  execute cmd
+ 
+  if expand('%:p:h') =~ '/dev/shm'
+    " Editing an ephemeral file in /dev/shm - probably don't need to back it up,
+    " as long of long-term interest would be there, and it may even be pass
+    " invoking us to edit a password store entry, and we don't want to back that
+    " up in plain text!
+    set nobackup
+  else
+    set backup
+  endif
 endfun
 autocmd BufWritePre * call InitBex()
 
