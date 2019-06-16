@@ -12,5 +12,9 @@ The fact that it's a public repo also means that I could set up a nightly cron
 job to do a C<git pull> to fetch any changes automatically.
 
 Also, as it's public, it's possible some of the stuff I have here might be of
-some interest to others, perhaps.
+some interest to others, perhaps.  If you do find anything here useful, please
+feel free to let me know!
+
+Anything in this repo can be considered to be released under the WTFPL unless
+indicated otherwise.
 
