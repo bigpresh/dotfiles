@@ -1,0 +1,33 @@
+#!/usr/bin/perl
+
+# A quick tool to parse logs etc, extract the interesting portion, and sum up
+# how many of each individual value we saw.
+#
+# Usage:
+# logsum REGEX FILE(s)
+#
+# For instance, if a log had lines with foo=bar, foo=example, foo=bar:
+# logsum '/foo=(.+)/' filename.txt
+# ... would output { foo => 2, example => 1 }
+#
+# David Precious <davidp@preshweb.co.uk>
+
+use strict;
+use Data::Dump;
+
+my %count;
+my $regex = shift;
+my $re_compiled = qr/$regex/
+    or die "Invalid regex!";
+
+while (<>) {
+    if ($_ =~ $re_compiled) {
+        if (!defined $1) {
+            die "Your regex must always capture something";
+        }
+        $count{$1}++;
+    }
+}
+
+print Data::Dump::dump(\%count);
+exit;
