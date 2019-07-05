@@ -179,7 +179,7 @@ export log=/usr/local/uk2net/log
 export PERL5LIB=/usr/local/uk2net/lib
 export PERL5OPT="-M5.010"
 export IMPALA_BOXES="buscemi clooney coen depardieu fleming knox rasputin vault"
-export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco log1 log2"
+export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco log1 log2 otrs"
 export todaylogs="/usr/local/uk2net/log/$(date +%Y/%b/%-d)"
 alias cdcode="cd /usr/local/uk2net"
 
