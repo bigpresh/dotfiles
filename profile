@@ -121,7 +121,9 @@ if [[ "$SHELL" = *bash* ]]; then
     shopt -s checkwinsize
 
     # Disable session suspend/resume
-    stty -ixon
+    if [[ "$TERM" != "" ]]; then
+        stty -ixon
+    fi
 
     # Ignore .svn dirs when tab-completing:
     export FIGNORE=".svn"
