@@ -154,7 +154,7 @@ alias tailf='less +F'
 # show me warnings if it just did something stupid, and automatically use
 # vertical output if the result would be too wide to display sensibly.
 alias mysql="mysql --safe-updates --show-warnings --select_limit=9999999999999 --auto-vertical-output"
-alias mysqllog="mysql --defaults-group-suffix=logger"
+alias mysqllog="/usr/bin/mysql --defaults-group-suffix=logger"
 
 # If on a Debian box where ack is ack-grep, alias it:
 if [ -x /usr/bin/ack-grep ]; then
