@@ -980,6 +980,7 @@ function jrnl {
         echo $BRANCH >> ~/journal.txt.new
     fi
 
+    echo >> ~/journal.txt.new
     echo "$JOURNALMSG" >> ~/journal.txt.new
     echo -e "\n********************************************************\n" >> ~/journal.txt.new
 
