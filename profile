@@ -971,13 +971,13 @@ function jrnl {
     
     echo "OK, write to journal.txt";
     date >> ~/journal.txt.new
-    echo "CWD: $(pwd)" >> ~/journal.txt.new
+    echo "# CWD: $(pwd)" >> ~/journal.txt.new
 
     # If we're in a git repo at the moment, note which branch we were on for
     # easy later reference
     BRANCH=$(git status 2>/dev/null | grep 'On branch')
     if [[ "$BRANCH" != "" ]]; then
-        echo $BRANCH >> ~/journal.txt.new
+        echo "# $BRANCH" >> ~/journal.txt.new
     fi
 
     echo >> ~/journal.txt.new
