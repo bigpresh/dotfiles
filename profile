@@ -975,7 +975,7 @@ function jrnl {
 
     # If we're in a git repo at the moment, note which branch we were on for
     # easy later reference
-    BRANCH=$(git status | grep 'On branch')
+    BRANCH=$(git status 2>/dev/null | grep 'On branch')
     if [[ "$BRANCH" != "" ]]; then
         echo $BRANCH >> ~/journal.txt.new
     fi
