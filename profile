@@ -989,3 +989,23 @@ function jrnl {
     rm ~/journal.txt.orig
     rm ~/journal.txt.new
 }
+
+# If we're on a git branch, get the JIRA ticket URL from it
+function jiraurl {
+    BRANCHMSG=$(git status 2>/dev/null | grep 'On branch')
+    if [[ "$BRANCHMSG" == "" ]]; then
+        echo "Could not determine branch - use this from inside a git checkout"
+        exit
+    fi
+
+    BRANCHNAME=$(echo "$BRANCHMSG" | cut -d ' ' -f 3)
+
+    TICKET=$(echo "$BRANCHNAME" | sed -E 's/.+\/chi-([0-9]+)\/.+/\1/')
+    # FIXME: make sure we matched, in case we were on a branch without a ticket
+    # number in it (e.g. master) or some other repo
+    echo "CHI-$TICKET on JIRA: https://thehut.atlassian.net/browse/CHI-$TICKET"
+    
+}
+
+
+
