@@ -954,3 +954,37 @@ ENDHELP
     done < <(git log $feature_branch ^$master_branch ^$current_branch --oneline | tac)
 }
 
+# Dead simple journal/note taking alias; simply takes the argument and writes it
+# to ~/journal.txt with a timestamp for real simple brain-dumping.
+function jrnl {
+    touch ~/journal.txt
+
+    if [[ "$1" != "" ]]; then
+        # We were called with a message directly
+        JOURNALMSG="$*"
+    else
+        # Fire up the editor to edit a message to then use
+        $EDITOR ~/journal.txt.edit
+        JOURNALMSG=$(cat ~/journal.txt.edit)
+        rm ~/journal.txt.edit
+    fi
+    
+    echo "OK, write to journal.txt";
+    date >> ~/journal.txt.new
+    echo "CWD: $(pwd)" >> ~/journal.txt.new
+
+    # If we're in a git repo at the moment, note which branch we were on for
+    # easy later reference
+    BRANCH=$(git status | grep 'On branch')
+    if [[ "$BRANCH" != "" ]]; then
+        echo $BRANCH >> ~/journal.txt.new
+    fi
+
+    echo "$JOURNALMSG" >> ~/journal.txt.new
+    echo -e "\n********************************************************\n" >> ~/journal.txt.new
+
+    mv ~/journal.txt ~/journal.txt.orig
+    cat ~/journal.txt.new ~/journal.txt.orig > ~/journal.txt
+    rm ~/journal.txt.orig
+    rm ~/journal.txt.new
+}
