@@ -143,6 +143,7 @@ alias kilall="killall"
 alias fuck="killall"
 alias svnci="svncommit"
 alias ci="svncommit"
+alias 'gl'='git log --name-status'
 alias ss="svnstatus"
 alias uk2do="todo.pl --group UK2"
 alias cm="sudo su codemonkey"
