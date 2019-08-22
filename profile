@@ -329,11 +329,22 @@ function mcd() {
 
 # self-update :)
 function updateprofile() {
-    echo "Fetching new copy of profile"
-    wget -q -O ~/.profile http://www.preshweb.co.uk/downloads/profile && \
-    echo "Sourcing updated profile" && \
-    source ~/.profile && \
-    echo ".profile updated".
+    if [[ ! -d ~/dotfiles ]]; then
+        echo "My dotfiles repo should be checked out at ~/dotfiles"
+        exit
+    fi
+
+    CWDBEFORE=$(pwd)
+    cd ~/dotfiles
+    echo "Updating dotfiles repo..."
+    git pull
+    if [ $? != 0 ]; then
+        echo "Git pull failed - look above and fix it"
+    else
+        source profile
+        echo "All done"
+    fi
+    cd $CWDBEFORE
 }
 
 # sets a string that will be prepended to the xterm title by the prompt (PS1)
