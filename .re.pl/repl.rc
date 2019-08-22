@@ -6,6 +6,7 @@
 # David Precious <davidp@preshweb.co.uk>, 2016
 
 use lib 'tmp/lib';
+use lib "$ENV{HOME}/.re.pl/lib";
 
 my @loaded_plugins;
 for my $plugin (qw(
@@ -17,11 +18,14 @@ for my $plugin (qw(
     CompletionDriver::INC
     DumpHistory
     ModuleAutoLoader
+    TerseDumper
 )) {
     $_REPL->load_plugin($plugin)
         or warn "Failed to load plugin $plugin";
     push @loaded_plugins, $plugin;
 }
+
+
 print "Loaded Devel::REPL plugins: " . join(',', @loaded_plugins) . "\n";
 
 # Common stuff to lazy-load:
