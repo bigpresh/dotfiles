@@ -18,7 +18,7 @@ if (eval { require our::way::dumper; 1 }) {
     around format_result => sub {
         my ($orig, $self, @to_dump) = @_; 
         use Data::Dump;
-        my $out = terse_dumper(@to_dump);
+        my $out = our::way::dumper::terse_dumper(@to_dump);
         $self->$orig($out);
     };
 } else {
