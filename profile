@@ -982,7 +982,7 @@ function jrnl {
     fi
     
     echo "OK, write to journal.txt";
-    date >> ~/journal.txt.new
+    date +'%Y-%m-%d %T (%A)' >> ~/journal.txt.new
     echo "# CWD: $(pwd)" >> ~/journal.txt.new
 
     # If we're in a git repo at the moment, note which branch we were on for
