@@ -15,6 +15,10 @@
 #
 # Latest copy of this profile is on GitHub:
 # https://github.com/bigpresh/dotfiles
+# The whole dotfiles repo should be checked out at ~/dotfiles, then symlink
+# ~/.profile (or ~/.bashrc ) to ~/dotfiles/profile, and same for whatever
+# other config files you want to apply to that box.
+# The `updateprofile` command can be used to update from the repo.
 
 # useful functions added:
 #
