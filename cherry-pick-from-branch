@@ -1,0 +1,81 @@
+#!/usr/bin/env perl
+
+use strict;
+use 5.010;
+
+my ($feature_branch, $not_in_branch) = @ARGV;
+$not_in_branch ||= 'master';
+
+if (!$feature_branch) {
+    print <<USAGE;
+$0 feature_branch [not_in_branch]
+
+Cherry-picks only the commits on `feature_branch` which are not on
+`not_in_branch` into your current branch.  `not_in_branch` defaults
+to master if not given.
+
+Intended for use where you have a feature branch from master, and you
+want to cherry-pick the commits on that branch into a release branch for a
+hotfix.
+USAGE
+    exit 1;
+}
+chomp(my $current_branch = `git rev-parse --abbrev-ref HEAD`);
+
+if (!$current_branch || $? != 0) {
+    die "Failed to get current branch!";
+}
+
+# OK, grab the list of commits which would be involved:
+say "OK, cherry-pick commits from $feature_branch"
+    . " which are not in $not_in_branch into $current_branch";
+
+# TODO: maybe a better way to get this - maybe Git.pm?
+my $log = `git log $feature_branch ^$not_in_branch ^$current_branch --oneline`;
+
+# Get a list of commits on our current branch we're cherry-picking to, so we
+# can exclude anything we already have (I thought the ^$current_branch above
+# would work for that, but it doesn't.)
+my $current_branch_log = `git log --oneline`;
+my %already_have_commit = map {
+    (split(' ', $_, 2))[0] => 1
+} split /\n/, $current_branch_log;
+
+my @commits = grep {
+    !$already_have_commit{ $_->[0] }
+} map {
+    [ split ' ', $_, 2 ]
+} reverse split /\n/, $log;
+
+# If we found a massive number of commits, it probably means something has gone
+# wrong and we're trying to cherry-pick a vast swathe of history, not just the
+# little feature we want.  That, or the feature is too damned large to be
+# sensible to cherry-pick and hotfix!
+if (scalar @commits > 50) {
+    die "Number of commits seems too high - " . scalar(@commits);
+}
+
+
+say "OK, we will pick the following " . scalar(@commits)
+    . " commits from $feature_branch:";
+for my $commit (@commits) {;
+    say "[$commit->[0]] $commit->[1]";
+}
+
+say scalar(@commits) . " commits from $feature_branch to cherry-pick"
+    . " into $current_branch";
+say "Hit enter to go ahead if this all looks good, otherwise interrupt";
+my $meh = <STDIN>;
+
+say "OK, let's do this!";
+
+for my $commit (@commits) {
+    my $sha = $commit->[0];
+    say `git cherry-pick $sha`;
+    if ($? != 0) {
+        die "Failed to cherry-pick $sha, aborting!";
+    }
+}
+
+say "All done!"
+
