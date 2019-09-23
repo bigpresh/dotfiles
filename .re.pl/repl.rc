@@ -18,6 +18,7 @@ for my $plugin (qw(
     CompletionDriver::INC
     DumpHistory
     ModuleAutoLoader
+    ReadLineHistory
     TerseDumper
 )) {
     $_REPL->load_plugin($plugin)
