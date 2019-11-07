@@ -1,0 +1,26 @@
+#!/usr/bin/env perl
+
+# Read from STDIN, take a line number or range of numbers and output just those
+# lines, with line numbers prepended.
+#
+# Could do this with e.g. sed -n '20,30p' or similar, but I often want to get
+# the lines around a given line for context, but see which line is which.
+
+use strict;
+
+my $range = shift;
+
+my ($min, $max) = split /[,-]/, $range;
+$max = $min unless $max;
+my $pad = length($max);
+warn "OK, get lines $min to $max, zero-pad to $pad";
+
+my $line_num = 1;
+while (my $line = <>) {
+    if ($line_num >= $min and $line_num <= $max) {
+        printf "%0${pad}d: %s", $line_num, $line;
+    }
+    $line_num++;
+}
+
+
