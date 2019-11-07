@@ -172,5 +172,5 @@ if ($dumper_name) {
 
 sub ::dumpValue {
     my ( $value, $maxdepth ) = @_;
-    warn $dumper_sub->($value);
+    return $dumper_sub->($value);
 }
