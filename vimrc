@@ -11,6 +11,7 @@ syntax enable
 
 set nowrap
 set textwidth=80
+set colorcolumn=80
 set shiftwidth=4
 set shiftround
 set expandtab
