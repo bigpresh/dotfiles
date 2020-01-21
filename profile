@@ -85,7 +85,6 @@ if [ "$TERM" == "xterm" ]; then
 fi
 
 
-# set some environment vars
 
 # pick visual editor to use, in order of preference:
 if [ -x /usr/bin/vim ]; then
@@ -138,6 +137,14 @@ if [[ "$SHELL" = *bash* ]]; then
     fi
 fi
 
+# If we have an environment-specific profile symlinked into a private repo for
+# stuff specific to an environment which can't be publicly released, let it
+# do its stuff now
+if [ -f ~/.profile-env ]; then
+    echo "Sourcing ~/.profile-env for env-specific tweaks"
+    . ~/.profile-env
+fi
+
 # some useful command aliases
 alias cdback='cd $OLDPWD'
 alias cb='cd $OLDPWD'
@@ -149,10 +156,7 @@ alias svnci="svncommit"
 alias ci="svncommit"
 alias 'gl'='git log --name-status'
 alias ss="svnstatus"
-alias uk2do="todo.pl --group UK2"
 alias cm="sudo su codemonkey"
-alias cdlogs='cd /usr/local/uk2net/log/$(date +%Y/%b/%-d)'
-alias cdchimeralogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
 alias tailf='less +F'
 
 # Make the MySQL client tell me if I'm about to do something stupid, have it
@@ -181,15 +185,7 @@ fi
 
 # A few variables for easy quick access to common paths (some of these may
 # be overridden in the machine-specific stuff below)
-export cgi=/usr/local/uk2net/cgi
-export lib=/usr/local/uk2net/lib
-export log=/usr/local/uk2net/log
-export PERL5LIB=/usr/local/uk2net/lib
 export PERL5OPT="-M5.010"
-export IMPALA_BOXES="buscemi clooney coen depardieu fleming knox rasputin vault"
-export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco log1 log2 otrs"
-export todaylogs="/usr/local/uk2net/log/$(date +%Y/%b/%-d)"
-alias cdcode="cd /usr/local/uk2net"
 
 # For Test2-powered test suites, I want to see the output as it comes, not
 # all at the end
@@ -200,21 +196,6 @@ export REALTIME_TEST_OUTPUT=1
 case $(hostname --fqdn) in
     supernova.preshweb.co.uk)
         export MPD_HOST=supernova
-    ;;
-    alchemist.uk2.net)
-        # Alchemist's mysql client doesn't support --safe-updates
-        unalias mysql
-    ;;
-    *chimera.*)
-        # Chimera boxes use perlbrew, so switch to the right perl
-        export PERLBREW_ROOT=/opt/perlbrew
-        source $PERLBREW_ROOT/etc/bashrc
-        if [ -f /usr/local/chimera/perl_version ]; then
-            perlbrew switch $( cat /usr/local/chimera/perl_version )
-        fi
-        export PERL5LIB=/usr/local/chimera/lib
-        alias cdlogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
-        alias cdcode='cd /usr/local/chimera'
     ;;
     cloudburst|supersonic)
         export MPD_HOST=supernova
@@ -269,7 +250,7 @@ function deploy() {
     fi
 
     # TODO: determine if it's actually a Perl script/module
-    if perl -I/usr/local/uk2net/lib -c $SOURCEPATH ; then
+    if perl -c $SOURCEPATH ; then
         echo "Compiled OK."
     else
         echo "It didn't compile!  Are you sure you want to deploy?"
@@ -388,20 +369,11 @@ setprompt() {
             hostnamecolor='1;33;41'
         ;;
 
-        # Live boxes get a red prompt (Danger, Will Robinson!)
-        *.private.uk2.net|*.us.chimera.uk2group.com|*.uk.chimera.uk2group.com)
-            hostnamecolor='1;31'
-        ;;
-
-        # My own dev VPSes get green prompts
-        *.dave.dev.uk2.net)
+        # dev boxes get green prompts
+        *dev.)
             hostnamecolor=32
         ;;
 
-        # Other developer's VPSes get brown prompts
-        *.dev.uk2.net)
-            hostnamecolor=33
-        ;;
 
         # supernova gets teal:
         supernova.preshweb.co.uk)
@@ -413,6 +385,15 @@ setprompt() {
             hostnamecolor=35
         ;;
     esac
+
+    # If we sourced an env-specific profile extension earlier, it may
+    # have declared that it has its own hostname colourisation support
+    # (knowing more about the types of boxes that it applies to), so
+    # if so, ask it
+    if [[ "$EXTENDED_HOSTNAME_COLOR" != "" ]]; then
+        extended_hostname_color $(hostname -f)
+
+    fi
 
     if [ "$hostnamecolor" != "" ]; then
         prehost='\[\e[${hostnamecolor}m\]'
@@ -460,34 +441,6 @@ svncommit() {
     COMMITMSG=/tmp/$USER-commitmsg
     echo > $COMMITMSG
 
-    # Add an Impact: line, if it's a UK2 box, possibly guessing at a suitable
-    # value too
-    if [[ "${HOSTNAME: -7}" == "uk2.net" ]]; then
-        IMPACTVAL='1'
-
-        # Guesses based on machine name in file paths, first:
-        if [[ $* == *fleming* ]]; then
-            IMPACTVAL="1 - staff-only admin script"
-        fi
-        if [[ $* == *phone-monitor* ]]; then
-            IMPACTVAL="1 - staff-only phone reporting"
-        fi
-        if [[ $* == *nagios* ]]; then
-            IMPACTVAL="1 - internal Nagios monitoring only"
-        fi
-        if [[ $* == *dev* ]]; then
-            IMPACTVAL="1 - just internal dev tools"
-        fi
-
-        # TODO: find out why this stopped working.
-        ## If the changes are whitespace-only, then the Impact: line can say so
-        #if [[ $(svn diff -x -w "$@" ) != '' ]]; then
-        #    IMPACTVAL="1 - whitespace changes only, and we don't do Python :)"
-        #fi
-        echo "Impact: $IMPACTVAL" >> $COMMITMSG
-    fi
-
-
     echo "--This line, and those below, will be ignored--" >> $COMMITMSG
     echo "Cwd: $(pwd)" >> $COMMITMSG
     svn status "$@" >> $COMMITMSG
@@ -520,16 +473,6 @@ svncommit() {
             echo "Commit message unchanged - try again or interrupt to abort"
             MESSAGEOK=0
             sleep 10
-        fi
-
-        # If we're on a UK2 box and forgot to add the stupid Impact: line for
-        # PCI-compliance reasons, complain:
-        if [[ "${HOSTNAME: -7}" == "uk2.net" ]] && 
-           ! grep -q 'Impact:' $COMMITMSG ; then
-           MESSAGEOK=0
-           echo "You must supply an Impact: line in the commit message"
-           echo "This is needed for UK2 PCI compliance."
-           sleep 5
         fi
     done
 
@@ -657,228 +600,11 @@ function pastesshkey {
 }
 
 
-# Convenient aliaes to SSH to UK2 boxes
-function _connect_box_type() {
-    type=$1
-    shift
-    # If the type was 'chi-live', the next arg is the location, so grab that
-    # and shift
-    if [ "$type" == "chi-live" ]; then
-        echo "type is chi-live so grabbing location"
-        location=$1;
-        shift;
-        echo "Location wanted is $location"
-    fi
-
-    name=$1
-    shift
-    fullhostname=''
-
-    if [ "$type" = ""  -o "$name" = "" ]; then
-        echo "Usage: (live|staging|uat|dev|us|uk) boxname [cmd]"
-    fi
-
-    if [[ $IMPALA_BOXES = *$name* ]]; then
-        # there's no location for Impala boxes.
-        case $type in
-            live)
-                fullhostname="$name.uk2.net"
-            ;;
-            staging)
-                fullhostname="$name.staging.uk2.net"
-            ;;
-            dev)
-                fullhostname="$name.dave.dev.uk2.net"
-            ;;
-        esac
-    elif [[ "$CHIMERA_BOXES chimera" = *$name* ]]; then
-        case $type in
-            chi-live)
-                fullhostname="$name.$location.chimera.uk2group.com"
-            ;;
-            staging|uat|as-live|front-end-dev)
-                fullhostname="$name.$type.chimera.uk2group.com"
-            ;;
-            dev)
-                fullhostname="chimera.dave.dev.uk2.net"
-            ;;
-        esac
-    else
-        echo "No idea what box you're talking about."
-        return
-    fi
-    cmd="$*"
-    echo -n "Connecting to $fullhostname"
-    if [ "$cmd" != "" ]; then
-        echo " and running $cmd..."
-        ssh $fullhostname -t $cmd
-    else
-        echo "..."
-        ssh $fullhostname
-    fi
-}
-function live()    {
-    _connect_box_type 'live' $boxname      $* 
-}
-function staging() { 
-    _connect_box_type 'staging' $boxname   $*
-}
-function dev()     { 
-    _connect_box_type 'dev'       $*
-}
-function uat()     { 
-    _connect_box_type 'uat'       $*
-}
-function us()      {
-    _connect_box_type 'chi-live' 'us' $*
-}
-function uk()      {
-    _connect_box_type 'chi-live' 'uk' $*
-}
-function front-end-dev()     { 
-    _connect_box_type 'front-end-dev' $*
-}
-function as-live()     { 
-    _connect_box_type 'as-live'       $*
-}
 
 
 
-# with auto-complete for box names:
-complete -W "$IMPALA_BOXES $CHIMERA_BOXES" live
-complete -W "$IMPALA_BOXES $CHIMERA_BOXES" staging
-complete -W "$IMPALA_BOXES $CHIMERA_BOXES chimera" dev
-complete -W "$CHIMERA_BOXES" uschimeralive
-complete -W "$CHIMERA_BOXES" uat
 
 
-# Quick & dirty Chimera API backend deployment
-function chimeradeployapi {
-    CHIMERAENV=$1
-    BRANCH=$2
-
-    if [ "$CHIMERAENV" == "staging" ]; then
-        echo "Deploying to staging boxes"
-        HOSTSUFFIX="staging.chimera.uk2group.com"
-    elif [ "$CHIMERAENV" == "uat" ]; then
-        echo "Deploying to UAT boxes"
-        HOSTSUFFIX="uat.chimera.uk2group.com"
-    elif [ "$CHIMERAENV" == "us" ]; then
-        echo "Deploying to $CHIMERAENV live platform"
-        HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
-    elif [ "$CHIMERAENV" == "uk" ]; then
-        echo "Deploying to $CHIMERAENV live platform"
-        HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
-    else
-        echo "Usage: chimeradeployapi staging|uat|us [branch]"
-        return
-    fi
-
-    if [ "$BRANCH" == "" ]; then
-        BRANCHSWITCH="no branch change"
-    else
-        BRANCHSWITCH="changing to branch $BRANCH"
-    fi
-    MSG="$USER beginning deployment to $CHIMERAENV environment ($BRANCHSWITCH)"
-    wget -O /dev/null --timeout 3 --tries 1  "http://irc.uk2.net:6500/?channel=devs|cpdevs|qa&message=$MSG"
-
-    for box in api1 api2 api3 gen; do
-        echo "$box.$HOSTSUFFIX..."
-        echo -e "\tgit pull..."
-        ssh $box.$HOSTSUFFIX \
-            "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull'"
-        if [ "$BRANCH" != "" ]; then
-            echo -e "\tSwitch to $BRANCH..."
-            ssh $box.$HOSTSUFFIX \
-                "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git checkout $BRANCH'"
-            echo -e "\tgit pull again..."
-            ssh $box.$HOSTSUFFIX \
-                "cd /usr/local/chimera && sudo -u codemonkey bash -li -c 'git pull'"
-        fi
-        if [ "$box" != "gen" ]; then
-            echo -e "\tRestart app..."
-            ssh $box.$HOSTSUFFIX "sudo /etc/init.d/dancer restart"
-            echo -e "\tKill domain_lookup..."
-            ssh $box.$HOSTSUFFIX "sudo pkill -f domain_lookup"
-        fi
-        echo "Deployment to $box.$HOSTSUFFIX complete."
-    done
-
-    # Now check whether we need DB updates:
-    DB_TEST="prove /usr/local/chimera/t/database_structure.t > /dev/null 2>&1"
-    if ssh -q -t gen.$HOSTSUFFIX "/bin/bash -l -c '$DB_TEST'" >/dev/null ; then
-        echo "No DB update required"
-    else 
-        echo "*****************************************"
-        echo "***** DB schema update required *********"
-        echo "*****************************************"
-    fi
-
-    echo "Deployment complete."
-
-    MSG="$USER deployed to $CHIMERAENV environment ($BRANCHSWITCH)"
-    wget -q -O /dev/null --timeout 3 --tries 1  "http://irc.uk2.net:6500/?channel=devs|cpdevs|qa&message=$MSG"
-}
-
-
-
-# Run a command on all boxes in a given Chimera environmentt
-function chimerarun {
-    CHIMERAENV=$1
-    COMMAND=${*:2} # All params from 2nd onwards
-
-    if [ "$CHIMERAENV" == "staging" ]; then
-        echo "Running '$COMMAND' on staging boxes"
-        HOSTSUFFIX="staging.chimera.uk2group.com"
-    elif [ "$CHIMERAENV" == "uat" ]; then
-        echo "Running '$COMMAND' on UAT boxes"
-        HOSTSUFFIX="uat.chimera.uk2group.com"
-    elif [ "$CHIMERAENV" == "us" ]; then
-        echo "Running '$COMMAND' on $CHIMERAENV live platform"
-        HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
-    elif [ "$CHIMERAENV" == "uk" ]; then
-        echo "Running '$COMMAND' on $CHIMERAENV live platform"
-        HOSTSUFFIX="$CHIMERAENV.chimera.uk2group.com"
-    else
-        echo "Usage: chimerarun staging|us|uk|uat command"
-        return
-    fi
-
-    for box in api1 api2 api3 gen; do
-        echo "$box.$HOSTSUFFIX..."
-        ssh -t $box.$HOSTSUFFIX "/bin/bash -l -c '$COMMAND'"
-    done
-}
-
-# Quick & dirty Chimera API log greppage.
-# First arg is pattern to grep for
-# Second (optional) arg is appended to /var/log/chimera
-# e.g. 'foo', '2012/Aug/*/*'
-function uschimeragreplogs {
-    PATTERN=$1
-    FILES=$2
-
-    # A bit of DWIMery RE: Filespec:
-    case "$FILES" in
-    "")  # No FILES spec, then wild card everything
-        FILES=*/*/*/*
-        ;;
- 
-    */*) # A path was supplied. so let it alone.
-        ;;
- 
-    *)   # If a bare filename was specified, prepend "today" dir structure.
-        FILES=`date "+%Y/%b/%-d"`/$FILES
-        ;;
-    esac
-
-    FILES="/var/log/chimera/$FILES"
-    for boxnum in $(seq 1 3); do
-        echo "Grepping for $PATTERN in $FILES on api$boxnum..."
-        ssh api$boxnum.us.chimera.uk2group.com \
-            "~/dotfiles/chimeraloggrep '$PATTERN' $FILES"
-    done
-}
 
 # Quick perl module version
 function perlmodversion {
@@ -1006,22 +732,6 @@ function jrnl {
     rm ~/journal.txt.new
 }
 
-# If we're on a git branch, get the JIRA ticket URL from it
-function jiraurl {
-    BRANCHMSG=$(git status 2>/dev/null | grep 'On branch')
-    if [[ "$BRANCHMSG" == "" ]]; then
-        echo "Could not determine branch - use this from inside a git checkout"
-        exit
-    fi
-
-    BRANCHNAME=$(echo "$BRANCHMSG" | cut -d ' ' -f 3)
-
-    TICKET=$(echo "$BRANCHNAME" | sed -E 's/.+\/chi-([0-9]+)\/.+/\1/')
-    # FIXME: make sure we matched, in case we were on a branch without a ticket
-    # number in it (e.g. master) or some other repo
-    echo "CHI-$TICKET on JIRA: https://thehut.atlassian.net/browse/CHI-$TICKET"
-    
-}
 
 
 
