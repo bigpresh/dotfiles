@@ -155,6 +155,7 @@ alias fuck="killall"
 alias svnci="svncommit"
 alias ci="svncommit"
 alias 'gl'='git log --name-status'
+alias gd='git diff'
 alias ss="svnstatus"
 alias cm="sudo su codemonkey"
 alias tailf='less +F'
