@@ -20,6 +20,7 @@ for my $plugin (qw(
     ModuleAutoLoader
     ReadLineHistory
     TerseDumper
+    ReadLineHistory
 )) {
     $_REPL->load_plugin($plugin)
         or warn "Failed to load plugin $plugin";
