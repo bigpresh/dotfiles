@@ -120,3 +120,10 @@ function! LoadPerlModule()
     execute 'e `perldoc -l ' . expand("<cWORD>") . '`'
 endfunction
 
+
+" more convenient tab switching
+map <C-up> :tabr<cr>
+map <C-down> :tabl<cr>
+map <C-left> :tabp<cr>
+map <C-right> :tabn<cr>
+
