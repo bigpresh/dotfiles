@@ -1,3 +1,14 @@
+
+# Chimera boxes use perlbrew, so switch to the right perl
+export PERLBREW_ROOT=/opt/perlbrew
+source $PERLBREW_ROOT/etc/bashrc
+if [ -f /usr/local/chimera/perl_version ]; then
+    perlbrew switch $( cat /usr/local/chimera/perl_version )
+fi
+export PERL5LIB=/usr/local/chimera/lib
+alias cdlogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
+alias cdcode='cd /usr/local/chimera'
+
 EXTENDED_HOSTNAME_COLOR=1
 
 function extended_hostname_color() {
