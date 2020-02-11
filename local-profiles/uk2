@@ -8,6 +8,7 @@ fi
 export PERL5LIB=/usr/local/chimera/lib
 alias cdlogs='cd /var/log/chimera/$(date +%Y/%b/%-d)'
 alias cdcode='cd /usr/local/chimera'
+export CHIMERA_BOXES="api1 api2 api3 gen db1 db2 db3 lb1 lb2 eco log1 log2 otrs"
 
 EXTENDED_HOSTNAME_COLOR=1
 
