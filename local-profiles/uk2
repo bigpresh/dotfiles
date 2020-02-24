@@ -1,7 +1,9 @@
 
 # Chimera boxes use perlbrew, so switch to the right perl
 export PERLBREW_ROOT=/opt/perlbrew
-source $PERLBREW_ROOT/etc/bashrc
+if [ -f $PERLBREW_ROOT/etc/bashrc ]; then
+    source $PERLBREW_ROOT/etc/bashrc
+fi
 if [ -f /usr/local/chimera/perl_version ]; then
     perlbrew switch $( cat /usr/local/chimera/perl_version )
 fi
