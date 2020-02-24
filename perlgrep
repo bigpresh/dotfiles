@@ -1,0 +1,32 @@
+#!/usr/bin/env perl
+
+use strict;
+
+my $patt = shift;
+
+my $patt_re = qr{$patt}
+    or die "That doesn't look like a valid regexp";
+
+my @json_data;
+my $output_json;
+
+while (my $line = <>) {
+    if ($line =~ $patt_re) {
+        if (keys %+) {
+            # First, if we used named captures, we're after parseable output
+            # so we'll turn them into JSON at the end
+            push @json_data, {%+};
+        } elsif (defined $1) {
+            # Simple capture, output just the bit we wanted to capture
+            print "$1\n";
+        } else {
+            # No captures, output the whole line
+            print $line;
+        }
+    }
+}
+
+if (@json_data) {
+    require JSON;
+    print JSON::to_json(\@json_data);
+}
