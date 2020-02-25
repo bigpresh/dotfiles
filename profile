@@ -385,6 +385,11 @@ setprompt() {
         lyla.preshweb.co.uk)
             hostnamecolor=35
         ;;
+
+        # Headshrinker gets blue
+        headshrinker.preshweb.co.uk)
+            hostnamecolor=34
+        ;;
     esac
 
     # If we sourced an env-specific profile extension earlier, it may
