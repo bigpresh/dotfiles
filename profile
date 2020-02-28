@@ -390,6 +390,11 @@ setprompt() {
         headshrinker.preshweb.co.uk)
             hostnamecolor=34
         ;;
+
+        # slideaway gets bold purple
+        slideaway.preshweb.co.uk)
+            hostnamecolor='35;1'
+        ;;
     esac
 
     # If we sourced an env-specific profile extension earlier, it may
