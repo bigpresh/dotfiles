@@ -440,14 +440,40 @@ setprompt
 # Do an svn commit, with diffs included in the commit message
 svncommit() {
 
-    # Firstly, take a look at the first argument, and see if the directory it's
-    # in contains a .svn dir.  If not, it'll be me mistakenly using this command
-    # for a Git repo - it may as well try to DWIM:
-    if [[ ! -d "$( dirname $1 )/.svn" ]]; then
-        git commit -v "$@"
+    # Most of the time these days, I'm using Git.  If we're in a Git repo,
+    # find out what branch we're on, and if I can find a GitHub issue number
+    # in the branch name, prepend it to the template for the message that
+    # will be opened in my editor
+    git_status=$(git status)
+    if [[ "$git_status" != "" ]]; then
+        template_file=/tmp/commit-message-template
+        echo -n > $template_file
+        gh_num=$(echo $git_status | ~/dotfiles/perlgrep 'On branch.+(?:gh|GH)[_-]?(\d+)')
+        if [[ "$gh_num" != "" ]]; then
+            echo "GH-$gh_num: " >> $template_file
+        fi
+
+        echo -e "\n## Commit summary follows:\n" >> $template_file
+
+        git diff --stat "$@" | sed 's/^/# /' | cat >> $template_file
+
+
+        # If we have vim, then run "a" to go into visual mode at the end
+        # of the first line (i.e. after the GH-xx prefix, if we added one).
+        # (If we don't have vim, what kind of batshit box *is* this?!)
+        vim_path=$(which vim)
+        if [[ "vim_path" != "" ]]; then
+            export GIT_EDITOR="$vim_path -c 'startinsert!'"
+        fi
+        git commit -t $template_file -v "$@"
         return
     fi
 
+    echo "WTF, fell out of git block";
+    return
+
+    # Alright, not a Git repo.  Assume Subversion from now on (should really
+    # check, and if I end up using other VCSes, support them too)
     # Start preparing the commit message which we'll then edit
     COMMITMSG=/tmp/$USER-commitmsg
     echo > $COMMITMSG
