@@ -66,7 +66,7 @@ if [ -x /usr/bin/biff ]; then biff n; fi
 # print pretty banner and loadavg etc only if we're 
 # logging in with an xterm (doing it without checking 
 # can be bad, it can fuck up sshfs / scp etc)
-if [ "$TERM" == "xterm" ]; then
+if [[ "$TERM" == xterm* ]]; then
     if [ -f ~/banner ]; then cat ~/banner; fi;
     # show at a glance how the box is performing as we log in
     LOAD=$(cat /proc/loadavg | cut -d ' ' -f 1,2,3)
