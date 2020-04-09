@@ -770,5 +770,20 @@ function jrnl {
 }
 
 
-
-
+# Convenience wrapper for puppet-master-less boxes to pull new changes from git
+# then run a puppet-apply
+function puppetapply {
+    pwd=`pwd`
+    if [ -d /etc/puppet_secure ]; then
+        echo "git pull in /etc/puppet_secure..."
+        cd /etc/puppet_secure
+        git pull
+    fi
+    echo "cd to /etc/puppet and git pull"
+    cd /etc/puppet
+    git pull
+    echo "Begin puppet run"
+    perl /etc/puppet/modules/puppet_node/files/puppet-lock-apply
+    echo "Leaving you back in $pwd"
+    cd $pwd
+}
