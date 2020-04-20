@@ -72,7 +72,6 @@ if [[ "$TERM" == xterm* ]]; then
     LOAD=$(cat /proc/loadavg | cut -d ' ' -f 1,2,3)
     PROCS=$(ps aux | wc -l)
     echo " $HOSTNAME : LOAD: $LOAD PROCS: $PROCS"
-    echo '.profile : $Id$'
 
     # If we have fortune installed, show one (use boxes, if that's available)
     if [ $(which fortune) ]; then
