@@ -183,6 +183,9 @@ if [[ "$DISPLAY" != "" && -x /usr/bin/synclient ]]; then
     fi
 fi
 
+# Add ~/dotfiles/bin to my $PATH so my convenient utility scripts just work
+export PATH="$PATH:~/dotfiles/bin"
+
 # A few variables for easy quick access to common paths (some of these may
 # be overridden in the machine-specific stuff below)
 export PERL5OPT="-M5.010"
