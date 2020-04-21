@@ -1,0 +1,67 @@
+#!/usr/bin/env perl
+
+# Quick convenient tool to search for a branch matching the given pattern
+# and change to it.
+# 
+# If only one match is found - e.g. you've searched for an issue number or
+# something fairly unique) then switch straight to it.
+# 
+# If not, present a numbered list, and ask you to enter the number of the
+# branch you want.
+
+use strict;
+use 5.010;
+use Data::Dump;
+
+my $pattern = shift or die "Usage: $0 pattern\n";
+
+my @branches = get_branches();
+my @matches = grep { $_->{name} =~ $pattern } @branches;
+
+if (!@matches) {
+  die "No branch matching '$pattern' found\n";
+}
+
+# If only one match, switch to it
+if (@matches == 1) {
+  switch_branch($matches[0]);
+}
+
+# OK, present a numbered list to pick from:
+say "Multiple branches matched '$pattern' - pick the one you want from:";
+my $num = 0;
+for my $branch_spec (@matches) {
+  printf "  [%2d] %s\n", $num++, $branch_spec->{name};
+}
+print "Enter number ?> ";
+chomp($num = <>);
+if (my $picked_branch = $matches[$num]) {
+  switch_branch($picked_branch);
+} else {
+  die "Invalid entry\n";
+}
+
+
+sub get_branches {
+  # First, don't even call git if we're not in a repo
+  if (!-d '.git') {
+    die "This must be used whilst in a git repository checkout\n";
+  }
+  # OK, ask git for a list of branches, which we'll have to clean up
+  my @all_branches = `git branch`;
+  if ($? != 0) {
+    die "Failed to execute git branch to get list of branches!";
+  }
+  return map {
+    /^(\*)?\s+(.+)/ and { name => $2, current => !!$1 }
+  } @all_branches;
+}
+
+sub switch_branch {
+  my $branch_spec = shift;
+  if ($branch_spec->{current}) {
+    die "You're already on $branch_spec->{name}, nothing to do\n";
+  }
+  say `git checkout $branch_spec->{name}`;
+
+}
