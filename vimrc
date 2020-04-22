@@ -9,6 +9,10 @@ set number
 filetype plugin indent on
 syntax enable
 
+" Set terminal title to show what file is being edited
+set title
+autocmd BufEnter * let &titlestring = $USER . "@" . hostname() . " - vim(" . expand("%:t") . ")"
+
 set nowrap
 set textwidth=80
 set colorcolumn=80
