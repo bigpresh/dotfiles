@@ -397,6 +397,11 @@ setprompt() {
         slideaway.preshweb.co.uk)
             hostnamecolor='35;1'
         ;;
+
+        # columbia (Xeon workstation) gets green
+        columbia.preshweb.co.uk)
+            hostnamecolor='32'
+        ;;
     esac
 
     # If we sourced an env-specific profile extension earlier, it may
