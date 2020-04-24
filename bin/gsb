@@ -25,6 +25,7 @@ if (!@matches) {
 # If only one match, switch to it
 if (@matches == 1) {
   switch_branch($matches[0]);
+  exit;
 }
 
 # OK, present a numbered list to pick from:
