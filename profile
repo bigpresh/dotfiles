@@ -455,7 +455,7 @@ svncommit() {
     if [[ "$git_status" != "" ]]; then
         template_file=/tmp/commit-message-template
         echo -n > $template_file
-        gh_num=$(echo $git_status | ~/dotfiles/perlgrep 'On branch.+(?:gh|GH)[_-]?(\d+)')
+        gh_num=$(echo $git_status | perlgrep 'On branch.+(?:gh|GH)[_-]?(\d+)')
         if [[ "$gh_num" != "" ]]; then
             echo "GH-$gh_num: " >> $template_file
         fi
