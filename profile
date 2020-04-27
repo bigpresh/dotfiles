@@ -377,6 +377,11 @@ setprompt() {
             hostnamecolor=32
         ;;
 
+        # live boxes get red prompts
+        *live)
+            hostnamecolor='1;31'
+        ;;
+
 
         # supernova gets teal:
         supernova.preshweb.co.uk)
