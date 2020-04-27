@@ -482,9 +482,6 @@ svncommit() {
         return
     fi
 
-    echo "WTF, fell out of git block";
-    return
-
     # Alright, not a Git repo.  Assume Subversion from now on (should really
     # check, and if I end up using other VCSes, support them too)
     # Start preparing the commit message which we'll then edit
