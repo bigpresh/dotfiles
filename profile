@@ -158,7 +158,7 @@ alias gd='git diff'
 alias ss="svnstatus"
 alias cm="sudo su codemonkey"
 alias tailf='less +F'
-alias puppettest='puppet apply --modulepath=/etc/puppet/forge-modules:/etc/puppetlabs/code/environments/production/modules:/etc/puppet/modules --verbose /etc/puppet/manifests/site.pp --debug'
+alias puppettest='sudo puppet apply --modulepath=/etc/puppet/forge-modules:/etc/puppetlabs/code/environments/production/modules:/etc/puppet/modules --verbose /etc/puppet/manifests/site.pp --debug'
 
 # Make the MySQL client tell me if I'm about to do something stupid, have it
 # show me warnings if it just did something stupid, and automatically use
