@@ -373,12 +373,12 @@ setprompt() {
         ;;
 
         # dev boxes get green prompts
-        *dev.)
+        *dev*)
             hostnamecolor=32
         ;;
 
         # live boxes get red prompts
-        *live)
+        *live*)
             hostnamecolor='1;31'
         ;;
 
