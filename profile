@@ -74,8 +74,8 @@ if [[ "$TERM" == xterm* ]]; then
     echo " $HOSTNAME : LOAD: $LOAD PROCS: $PROCS"
 
     # If we have fortune installed, show one (use boxes, if that's available)
-    if [ $(which fortune) ]; then
-        if [ $(which boxes) ]; then
+    if [ $(which fortune 2>/dev/null) ]; then
+        if [ $(which boxes 2>/dev/null) ]; then
             fortune | boxes -d shell
         else
             fortune
