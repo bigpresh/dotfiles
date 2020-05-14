@@ -111,6 +111,7 @@ if [[ "$SHELL" = *bash* ]]; then
     export HISTSIZE=1000
     export HISTFILESIZE=10000
     shopt -s histappend
+    shopt -s histverify
 
     # Automatically update the history file immediately, so
     # different sessions don't clobber each other's history.
