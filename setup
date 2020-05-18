@@ -5,3 +5,8 @@
 ln -sf $HOME/dotfiles/profile   $HOME/.profile
 ln -sf $HOME/dotfiles/vimrc     $HOME/.vimrc
 ln -sf $HOME/dotfiles/screenrc  $HOME/.screenrc
+
+if [ -x /usr/bin/terminator ]; then
+    mkdir -p $HOME/.config/terminator 2>/dev/null # just in case
+    ln -sf $HOME/dotfiles/terminator/config $HOME/.config/terminator/config
+fi
