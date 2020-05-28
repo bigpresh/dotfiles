@@ -122,8 +122,9 @@ if [[ "$SHELL" = *bash* ]]; then
     # Notice if the window size changed:
     shopt -s checkwinsize
 
-    # Disable session suspend/resume
-    if [[ "$TERM" != "" ]]; then
+    # Disable session suspend/resume - it's too easy to hit Ctrl-S by accident
+    # and freeze the terminal; I have no use for that, so disable it.
+    if [ -t 0 ]; then
         stty -ixon
     fi
 
