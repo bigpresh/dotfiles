@@ -110,6 +110,7 @@ if [[ "$SHELL" = *bash* ]]; then
     export HISTCONTROL=ignoreboth
     export HISTSIZE=1000
     export HISTFILESIZE=10000
+    export HISTTIMEFORMAT="%F %T "
     shopt -s histappend
     shopt -s histverify
 
