@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TOUCHPAD_ID=$(xinput|~/dotfiles/perlgrep '.+Elantech.+id=(\d+)')
+TOUCHPAD_ID=$(xinput|~/dotfiles/bin/perlgrep '.+Elantech.+id=(\d+)')
 
 if [[ "$TOUCHPAD_ID" != "" ]]; then
     echo "Configuring ET touchpad (input device $TOUCHPAD_ID)...";
