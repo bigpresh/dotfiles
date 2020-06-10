@@ -18,5 +18,8 @@ but mostly in case anything in here is useful to others.
 If you do find anything here useful, feel free to use it!  Feel free also to
 drop me a mail and let me know that it was helpful to you - if you want to!
 
+Everything here in this repository, unless noted otherwise, can be considered
+to be released under the terms of the WTFPL.
+
 David Precious <davidp@preshweb.co.uk>
 
