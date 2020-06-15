@@ -13,7 +13,7 @@
 # David Precious <davidp@preshweb.co.uk>
 
 use strict;
-use Data::Dump;
+use Data::Dumper;
 
 my %count;
 my $regex = shift;
@@ -28,6 +28,6 @@ while (<>) {
         $count{$1}++;
     }
 }
-
-print Data::Dump::dump(\%count);
+$Data::Dumper::Sortkeys=1;
+print Data::Dumper::Dumper(\%count);
 exit;
