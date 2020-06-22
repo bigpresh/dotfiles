@@ -800,3 +800,40 @@ function puppetapply {
     echo "Leaving you back in $pwd"
     cd $pwd
 }
+
+# Convenient retry wrapper for retrying ssh connections after a box is
+# restarted until it is reachable again.
+function sshretry {
+    host=$1
+    echo "OK, fingers crossed and wait for $host to be back up..."
+    echo "Started waiting at `date +'%F %H:%M:%S'`"
+    pinging=0;
+    while [ 1 ]; do
+        if ping -c1 $host > /dev/null ; then
+            echo "OK, $host is pingable at `date +'%F %H:%M:%S'`"
+            break;
+        else
+            sleep 1;
+        fi
+    done
+
+    # OK, pingable, now wait for ssh to succeed
+    echo "Pingable, so try to ssh..."
+    while [ 1 ]; do
+        # Sometimes ssh will hang for a long time trying to connect
+        # if sshd is not yet up & ready; set a short timeout ready
+        # for us to try again.  Also, just so we can log the time
+        # we were able to reconnect in case we want to see how long
+        # it was down by scrollback, do a test first
+        if ssh -o 'ConnectTimeout=2' $host exit; then
+            echo "Looks like SSH is available at `date +'%F %H:%M:%S'`"
+            ssh $host
+            break
+        else
+            sleep 1;
+        fi
+    done
+}
+
+
+
