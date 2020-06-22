@@ -805,17 +805,26 @@ function puppetapply {
 # restarted until it is reachable again.
 function sshretry {
     host=$1
+    ping=$2
+
     echo "OK, fingers crossed and wait for $host to be back up..."
     echo "Started waiting at `date +'%F %H:%M:%S'`"
-    pinging=0;
-    while [ 1 ]; do
-        if ping -c1 $host > /dev/null ; then
-            echo "OK, $host is pingable at `date +'%F %H:%M:%S'`"
-            break;
-        else
-            sleep 1;
-        fi
-    done
+
+
+    # Normally, try pinging first, and report when it starts pinging,
+    # so you get an idea when it's sort-of booting; normally it will start
+    # responding to pings well before SSH is ready for use.  If it's
+    # firewalled, though, then we want to be able to skip that
+    if [[ "$ping" != "noping" ]]; then
+        while [ 1 ]; do
+            if ping -c1 $host > /dev/null ; then
+                echo "OK, $host is pingable at `date +'%F %H:%M:%S'`"
+                break;
+            else
+                sleep 1;
+            fi
+        done
+    fi
 
     # OK, pingable, now wait for ssh to succeed
     echo "Pingable, so try to ssh..."
