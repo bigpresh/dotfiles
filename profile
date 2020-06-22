@@ -824,10 +824,10 @@ function sshretry {
                 sleep 1;
             fi
         done
+        echo "Pingable, so try to ssh..."
     fi
 
-    # OK, pingable, now wait for ssh to succeed
-    echo "Pingable, so try to ssh..."
+    # Now wait for ssh to succeed
     while [ 1 ]; do
         # Sometimes ssh will hang for a long time trying to connect
         # if sshd is not yet up & ready; set a short timeout ready
