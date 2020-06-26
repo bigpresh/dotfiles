@@ -387,6 +387,11 @@ setprompt() {
             hostnamecolor='1;31'
         ;;
 
+        # standby boxes are "live at any moment", so get darker red prompts
+        *standby*)
+            hostnamecolor='31'
+        ;;
+
 
         # supernova gets teal:
         supernova.preshweb.co.uk)
