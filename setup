@@ -34,3 +34,6 @@ fi
 
 symlink ~/dotfiles/re.pl ~/.re.pl
 
+# Finally, source the new profile
+. ~/.profile
+
