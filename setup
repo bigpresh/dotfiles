@@ -32,6 +32,10 @@ if [ -x /usr/bin/terminator ]; then
     symlink ~/dotfiles/terminator/config ~/.config/terminator/config
 fi
 
+# Make sure GNU parallel won't show the citation stuff
+mkdir -p ~/.parallel
+touch ~/.parallel/will-cite
+
 symlink ~/dotfiles/re.pl ~/.re.pl
 
 # Finally, source the new profile
