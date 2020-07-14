@@ -1,0 +1,21 @@
+# A list of packages to install from apt for all boxes I use.  GUI stuff for
+# workstations should not be here, that's in the -workstations version of
+# this file.
+# Feed it to apt with e.g.:
+# apt-get install $(grep -vE "^\s*#" filename  | tr "\n" " ")
+# (I may make my setup.sh do that anyway)
+
+vim
+build-essential
+strace
+apcalc
+bat
+git
+multitail
+mc
+earlyoom
+iotop
+iftop
+
+
+

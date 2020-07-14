@@ -1,0 +1,18 @@
+# A list of packages to install from apt for workstations etc (not for headless
+# servers etc)
+# Feed it to apt with e.g.:
+# apt-get install $(grep -vE "^\s*#" filename  | tr "\n" " ")
+# (I may make my setup.sh do that anyway)
+
+terminator
+copyq
+xclip
+zim
+krusader
+nagstamon
+simplescreenrecorder
+cifs-utils
+gpick
+
+
+
