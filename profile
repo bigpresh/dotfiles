@@ -111,6 +111,7 @@ if [[ "$SHELL" = *bash* ]]; then
     export HISTSIZE=1000
     export HISTFILESIZE=10000
     export HISTTIMEFORMAT="%F %T "
+    export HISTIGNORE='*PASS*:*KEY*:*private*:youtube-dl *:'
     shopt -s histappend
     shopt -s histverify
 
