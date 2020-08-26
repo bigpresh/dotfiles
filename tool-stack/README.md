@@ -63,6 +63,10 @@ also called Terminator.
 
 [Terminator docs](https://terminator-gtk3.readthedocs.io/en/latest/)
 
+Ensure more up to date version by adding custom repo:
+
+`sudo add-apt-repository ppa:gnome-terminator`
+
 ### firefox
 
 My favourite browser.  I have Chrome installed as well, but I've always got
