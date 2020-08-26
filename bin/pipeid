@@ -1,0 +1,52 @@
+#!/usr/bin/env perl
+
+# Find endpoints of unix sockets.  Without arguments, lists them all, e.g.
+# PIPE[22529]: 1533 (/usr/bin/znc), 1533 (/usr/bin/znc)
+# PIPE[440090995]: 10731 (/usr/lib/postfix/sbin/master), 10731 (/usr/lib/postfix/sbin/master)
+#
+# To find a specific one, pass the pipe ID as the arg... for e.g. from an strace
+# you might see:
+#   select(9, [6<pipe:[529293520]> 8<pipe:[529293521]>], NULL, NULL, NULL
+# so, to identify it:
+#   $ ./pipeid 529293520
+#   PIPE[529293520]: 5537 (/usr/sbin/fcgiwrap), 11602 (/usr/bin/perl)
+#
+# Quick, dirty, but useful.
+#
+# David Precious <davidp@preshweb.co.uk>, 2020, released under WTFPL.
+
+use 5.012;
+
+my $want_pipe_id = shift;
+
+if ($want_pipe_id) {
+    say "Looking for endpoints for pipe:[$want_pipe_id]";
+} else {
+    say "Listing pipe endpoints";
+}
+
+my %pipe_owners;
+
+# lsof first, to find pipe IDs and PIDs
+my $lsof = `sudo lsof -ln`;
+for my $line (split "\n", $lsof) {
+    my @fields = split /\s+/, $line;
+    next unless $fields[8] eq 'pipe';
+    push @{ $pipe_owners{$fields[7]} }, $fields[1];
+}
+
+# Get a map of PID to exe
+my $ls = `sudo ls -l /proc/*/exe 2>/dev/null`;
+my %pids;
+for my $line (split /\n/, $ls) {
+    my @fields = split /\s+/;
+    $line =~ m{/proc/(\d+)/exe -> (\S+)} and $pids{$1} = $2;
+}
+
+for my $pipe_id (sort keys %pipe_owners) {
+    next if ($want_pipe_id and $pipe_id != $want_pipe_id);
+    say "PIPE[$pipe_id]: " . join ", ", map {
+        "$_ ($pids{$_})"
+    } @{ $pipe_owners{$pipe_id} };
+}
+
