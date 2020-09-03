@@ -29,6 +29,8 @@ since GitHub still doesn't do automated TOCs:
     - [iotop](#iotop)
     - [iftop](#iftop)
     - [Nagstamon](#nagstamon)
+    - [moreutils](#moreutils)
+    - [dateutils](#dateutils)
   - [Firefox addons](#firefox-addons)
     - [[Textern](https://github.com/jlebon/textern) (edit textareas in editor)](#texternhttpsgithubcomjlebontextern-edit-textareas-in-editor)
     - [[DarkReader](https://github.com/darkreader/darkreader)](#darkreaderhttpsgithubcomdarkreaderdarkreader)
@@ -161,6 +163,21 @@ traffic is going and how fast.
 
 Useful Nagios monitor which sits in the notification area and pops up alerts
 if the Nagios install it's monitoring has found any problems.
+
+### moreutils
+
+Collection of Perl utilities, including `parallel`, working much like GNU
+Parallel but with no nagging about citations, which I've made heavy use of.
+
+See [moreutils homepage](https://joeyh.name/code/moreutils/)
+
+### dateutils
+
+Useful collection of date-related utilities, for dealing with dates in various
+ways - calculating dates, searching for dates etc (e.g. `dategrep` which lets
+you search for files containing a date later or earlier than a given date, etc).
+
+See [dateutils homepage](http://www.fresse.org/dateutils/#dategrep)
 
 
 ## Firefox addons
