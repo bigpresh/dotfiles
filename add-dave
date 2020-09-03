@@ -5,16 +5,8 @@
 # This is intended to let people easily create me an account with my SSH key,
 # just by wget'ing it and piping it to bash.
 
-# I'm dave on work boxes, davidp elsewhere
-if [[ "`hostname -f`" == *uk2* ]]; then
-    NEWUSER=dave
-    KEYFILE=david-precious-uk2-ssh-key
-else
-    NEWUSER=davidp
-    KEYFILE=david-precious-ssh-key
-fi
-
-
+NEWUSER=davidp
+KEYFILE=david-precious-ssh-key
 KEYURL=http://www.preshweb.co.uk/downloads/keys/$KEYFILE
 PROFILEURL=http://www.preshweb.co.uk/downloads/profile
 
