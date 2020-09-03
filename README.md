@@ -3,6 +3,11 @@
 This repository contains my dotfiles - config files for various tools I use,
 customising things to the way I like to work.
 
+It also contains some handy scripts in the [`bin/` dir](./bin).
+
+I've also described my commonly used [tool stack](./tool-stack) - the tools
+I use and why - for easy "install all the things I need" on a new box.
+
 It's a repository here on GitHub so I can just clone it on a box when I start
 using it:
 
