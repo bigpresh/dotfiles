@@ -1,0 +1,22 @@
+# Extra stuff for working with KT boxes - nothing sensitive.
+
+function all_kt_boxes {
+    command="$*"
+    known_hosts_file=$HOME/dev/puppet/modules/sshd/files/known-hosts/hosts
+    if [ ! -f $known_hosts_file ]; then
+        echo "No known hosts file at $known_hosts_file found!";
+        exit 1;
+    fi
+
+    # Read the hosts from the known_hosts/hosts file, skipping empty lines and
+    # comments and removing the kaarbontech.net domain.  I could have just fed
+    # the file straight to parallel-ssh, but then we'd hit the Hostname setting
+    # in my .ssh/config that adds the domain automatically, and I can't find
+    # a good way to stop that happening from parallel-ssh, so pre-process the
+    # file to turn them into short form; also skip confirm/global which are
+    # not normal boxes we'd SSH to.
+    KT_HOSTS=$(grep -vE '^(\s*$|#|sftp|global)' $known_hosts_file | sed -re 's/(h-.+)\.kaarbontech\.net/\1/')
+    echo "Hosts: $KT_HOSTS"
+    parallel-ssh -H "$KT_HOSTS" -O "ForwardX11=no" -i -t0 $command
+    echo "parallel-ssh result $?"
+}
