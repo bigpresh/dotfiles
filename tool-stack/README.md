@@ -31,6 +31,7 @@ since GitHub still doesn't do automated TOCs:
     - [Nagstamon](#nagstamon)
     - [moreutils](#moreutils)
     - [dateutils](#dateutils)
+    - [pssh](#pssh)
   - [Firefox addons](#firefox-addons)
     - [[Textern](https://github.com/jlebon/textern) (edit textareas in editor)](#texternhttpsgithubcomjlebontextern-edit-textareas-in-editor)
     - [[DarkReader](https://github.com/darkreader/darkreader)](#darkreaderhttpsgithubcomdarkreaderdarkreader)
@@ -178,6 +179,14 @@ ways - calculating dates, searching for dates etc (e.g. `dategrep` which lets
 you search for files containing a date later or earlier than a given date, etc).
 
 See [dateutils homepage](http://www.fresse.org/dateutils/#dategrep)
+
+### pssh
+
+Parallel SSH / SFTP / SCP / rsync to various boxes.
+
+The apt package installs them as more helpful names, e.g. parallel-ssh.
+
+See [pssh homepage](http://code.google.com/p/parallel-ssh/)
 
 
 ## Firefox addons
