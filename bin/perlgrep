@@ -1,8 +1,15 @@
 #!/usr/bin/env perl
 
 use strict;
+use Getopt::Long;
 
-my $patt = shift;
+my $first_lines = 0;
+
+Getopt::Long::GetOptions(
+    'first_lines=i' => \$first_lines,
+);
+
+my $patt = shift @ARGV;
 
 my $patt_re = qr{$patt}
     or die "That doesn't look like a valid regexp";
@@ -10,7 +17,12 @@ my $patt_re = qr{$patt}
 my @json_data;
 my $output_json;
 
-while (my $line = <>) {
+# If we want to output the first $first_lines regardless, do so now...
+while ($first_lines-- > 0) {
+    print scalar <STDIN>;
+}
+
+while (my $line = <STDIN>) {
     if ($line =~ $patt_re) {
         if (keys %+) {
             # First, if we used named captures, we're after parseable output
