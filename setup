@@ -25,7 +25,7 @@ symlink ~/dotfiles/profile  ~/.profile
 symlink ~/dotfiles/vim      ~/.vim
 symlink ~/dotfiles/vimrc    ~/.vimrc
 symlink ~/dotfiles/screenrc ~/.screenrc
-
+symlink ~/dotfiles/zim/style.conf ~/.config/zim/style.conf
 
 if [ -x /usr/bin/terminator ]; then
     mkdir -p ~/.config/terminator 2>/dev/null
