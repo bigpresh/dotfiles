@@ -32,6 +32,8 @@ since GitHub still doesn't do automated TOCs:
     - [moreutils](#moreutils)
     - [dateutils](#dateutils)
     - [pssh](#pssh)
+    - [ack](#ack)
+    - [ripgrep](#ripgrep)
   - [Firefox addons](#firefox-addons)
     - [[Textern](https://github.com/jlebon/textern) (edit textareas in editor)](#texternhttpsgithubcomjlebontextern-edit-textareas-in-editor)
     - [[DarkReader](https://github.com/darkreader/darkreader)](#darkreaderhttpsgithubcomdarkreaderdarkreader)
@@ -187,6 +189,29 @@ Parallel SSH / SFTP / SCP / rsync to various boxes.
 The apt package installs them as more helpful names, e.g. parallel-ssh.
 
 See [pssh homepage](http://code.google.com/p/parallel-ssh/)
+
+### ack
+
+Excellent code searching tool with sensible defaults to do what you mean,
+fast, and avoids lots of unhelpful matches (e.g. wading through `.git` etc).
+
+Written in Perl, with the power of true Perl regexes out of the box.
+
+apt package `ack-grep`.
+
+
+### ripgrep
+
+Another code search tool, like ack but claims to be faster and can also do
+search & replace.  I still tend to reach for ack by muscle-memory, but I'm 
+trying out ripgrep too.  Can use PCRE.
+
+Used to be in Ubuntu repos as `ripgrep` but it looks like it's now been dropped
+in favour of a Snap package, so grab the .deb from the
+[releases page](https://github.com/BurntSushi/ripgrep/releases) instead.
+
+Andy Lester (ack's author) produced a fantasic
+[feature comparison of ack,ripgrep andothers](https://beyondgrep.com/feature-comparison/)
 
 
 ## Firefox addons

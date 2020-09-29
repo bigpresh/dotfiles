@@ -19,3 +19,4 @@ iftop
 moreutils
 dateutils
 pssh
+ack-grep
