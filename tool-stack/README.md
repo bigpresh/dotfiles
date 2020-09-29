@@ -197,7 +197,9 @@ fast, and avoids lots of unhelpful matches (e.g. wading through `.git` etc).
 
 Written in Perl, with the power of true Perl regexes out of the box.
 
-apt package `ack-grep`.
+[ack homepage](https://beyondgrep.com/)
+
+Install apt package `ack-grep`
 
 
 ### ripgrep
