@@ -212,6 +212,8 @@ Used to be in Ubuntu repos as `ripgrep` but it looks like it's now been dropped
 in favour of a Snap package, so grab the .deb from the
 [releases page](https://github.com/BurntSushi/ripgrep/releases) instead.
 
+[ripgrep on GitHub](https://github.com/BurntSushi/ripgrep)
+
 Andy Lester (ack's author) produced a fantasic
 [feature comparison of ack,ripgrep andothers](https://beyondgrep.com/feature-comparison/)
 
