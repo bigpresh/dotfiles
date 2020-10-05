@@ -204,10 +204,11 @@ Install apt package `ack-grep`
 
 ### ripgrep
 
-Another code search tool, like ack but claims to be faster and can also do
-search & replace.  I still tend to reach for ack by muscle-memory, but I'm 
-trying out ripgrep too.  Can use PCRE, and can use threads to parallelise
-searches, useful on multi-core boxes.
+Another code search tool, like ack but claims to be faster - in particular
+because it can use threads to parallelise searches, useful on multi-core boxes.
+
+I still tend to reach for `ack` by muscle-memory, but I'm trying out ripgrep
+too and it's doing well so far.
 
 Used to be in Ubuntu repos as `ripgrep` but it looks like it's now been dropped
 in favour of a Snap package, so grab the .deb from the
