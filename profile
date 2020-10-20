@@ -854,5 +854,5 @@ function sshretry {
 
 # Show command execution times (and success) after each command
 # script from https://github.com/jichu4n/bash-command-timer
-source bash_command_timer.sh
+source ~/dotfiles/bash_command_timer.sh
 
