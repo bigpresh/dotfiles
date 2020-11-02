@@ -21,7 +21,7 @@ since GitHub still doesn't do automated TOCs:
     - [apcalc](#apcalc)
     - [zim](#zim)
     - [bat - a replacement for cat with colouring, line numbering etc.](#bat---a-replacement-for-cat-with-colouring-line-numbering-etc)
-    - [rr [rr](https://rr-project.org/) - lightweight recording & replay debugger](#rr-rrhttpsrr-projectorg---lightweight-recording--replay-debugger)
+    - [rr - lightweight recording & replay debugger](#rr---lightweight-recording--replay-debugger)
     - [multitail](#multitail)
     - [mc - Midnight Commander](#mc---midnight-commander)
     - [Krusader - twin pane file manager](#krusader---twin-pane-file-manager)
@@ -35,21 +35,21 @@ since GitHub still doesn't do automated TOCs:
     - [ack](#ack)
     - [ripgrep](#ripgrep)
   - [Firefox addons](#firefox-addons)
-    - [[Textern](https://github.com/jlebon/textern) (edit textareas in editor)](#texternhttpsgithubcomjlebontextern-edit-textareas-in-editor)
-    - [[DarkReader](https://github.com/darkreader/darkreader)](#darkreaderhttpsgithubcomdarkreaderdarkreader)
+    - [Textern (edit textareas in editor)](#textern-edit-textareas-in-editor)
+    - [DarkReader](#darkreader)
     - [Adblock Plus](#adblock-plus)
     - [NoScript](#noscript)
-    - [[Multi-Account Containers](https://github.com/mozilla/multi-account-containers#readme)](#multi-account-containershttpsgithubcommozillamulti-account-containersreadme)
-    - [[Textarea Cache](https://addons.mozilla.org/firefox/addon/textarea-cache/)](#textarea-cachehttpsaddonsmozillaorgfirefoxaddontextarea-cache)
+    - [Multi-Account Containers](#multi-account-containers)
+    - [Textarea Cache](#textarea-cache)
     - [JSONView](#jsonview)
-    - [[Stylus](https://add0n.com/stylus.html)](#stylushttpsadd0ncomstylushtml)
-    - [[Tree Style Tab](http://piro.sakura.ne.jp/xul/_treestyletab.html.en)](#tree-style-tabhttppirosakuranejpxul_treestyletabhtmlen)
+    - [Stylus](#stylus)
+    - [Tree Style Tab](#tree-style-tab)
     - [Sanitize Target Attribute](#sanitize-target-attribute)
   - [Stuff that's not in Ubuntu core repos](#stuff-thats-not-in-ubuntu-core-repos)
-    - [[ZeroTier](https://zerotier.com/)](#zerotierhttpszerotiercom)
-    - [[VS Code](https://code.visualstudio.com/download)](#vs-codehttpscodevisualstudiocomdownload)
-    - [[Android Studio](https://developer.android.com/studio)](#android-studiohttpsdeveloperandroidcomstudio)
-    - [[broot](#broot)
+    - [ZeroTier](#zerotier)
+    - [VS Code](#vs-code)
+    - [Android Studio](#android-studio)
+    - [broot](#broot)
 
 
 
@@ -117,10 +117,12 @@ so not locked in to a proprietary format.
 
 ### bat - a replacement for cat with colouring, line numbering etc.
 
-### rr [rr](https://rr-project.org/) - lightweight recording & replay debugger
+### rr - lightweight recording & replay debugger
 
 Lets you run an application once until it crashes, then debug against the
 recording deterministically, including reverse tracing etc.
+
+https://rr-project.org/
 
 ### multitail
 
@@ -223,13 +225,17 @@ Andy Lester (ack's author) produced a fantasic
 
 ## Firefox addons
 
-### [Textern](https://github.com/jlebon/textern) (edit textareas in editor)
+### Textern (edit textareas in editor)
 
 Allows you to edit the text in a `<textarea>` field using a real editor.
 
-### [DarkReader](https://github.com/darkreader/darkreader)
+https://github.com/jlebon/textern
+
+### DarkReader
 
 Turns most sites to "Dark Mode" to be much easier on the eyes.
+
+https://github.com/darkreader/darkreader
 
 ### Adblock Plus
 
@@ -244,7 +250,7 @@ rely on JS from a mountain of shady third parties in order to function.  Half
 the time, though, if they require that, I don't really want to use them
 anyway!
 
-### [Multi-Account Containers](https://github.com/mozilla/multi-account-containers#readme)
+### Multi-Account Containers
 
 Allows each tab to be assigned a different "context".  At work I'm required to
 use a different GitHub account, so I can have a personal context which is
@@ -254,17 +260,21 @@ in all the time.
 
 Separate contexts are nice.
 
-### [Textarea Cache](https://addons.mozilla.org/firefox/addon/textarea-cache/)
+https://github.com/mozilla/multi-account-containers#readme
+
+### Textarea Cache
 
 Caches the contents of textarea fields, so that if a submission fails, for
 e.g., then the text you'd written out isn't lost.  This has saved me so much
 annoyance and wasted time over the years.
 
+https://addons.mozilla.org/firefox/addon/textarea-cache/
+
 ### JSONView
 
-Make viewing JSON documents much more plesant
+Make viewing JSON documents much more pleasant
 
-### [Stylus](https://add0n.com/stylus.html)
+### Stylus
 
 Allow loading custom stylesheets to customise how sites look - there's loads
 of pre-made ones at [userstyles.org](https://userstyles.org/) for most popular
@@ -272,10 +282,14 @@ sites.  I used this more for finding dark mode equivalents before I found
 the DarkReader plugin, which reduces my use of Stylus these days, but it's 
 still handy.
 
-### [Tree Style Tab](http://piro.sakura.ne.jp/xul/_treestyletab.html.en)
+https://add0n.com/stylus.html
+
+### Tree Style Tab
 
 I have a habit of having lots of Firefox tabs open at a time.  This extension
 makes that more manageable, with a sidebar of hierachical tabs.
+
+http://piro.sakura.ne.jp/xul/_treestyletab.html.en
 
 ### Sanitize Target Attribute
 
@@ -285,7 +299,7 @@ Stops links using the `target` attribute to open in a new window/tab.
 
 ## Stuff that's not in Ubuntu core repos
 
-### [ZeroTier](https://zerotier.com/)
+### ZeroTier
 
 Convenient "software-defined network" - easy VPN-esque connections with
 minimal effort.
@@ -296,18 +310,22 @@ I can just have them on a ZeroTier network and get to them over that.
 Download the install script from https://install.zerotier.com/ or if feeling
 brave, `curl https://install.zerotier.com | sudo bash`
 
-### [VS Code](https://code.visualstudio.com/download)
+https://zerotier.com/
+
+### VS Code
 
 I used to be a bit of a vim purist, and I still use vim for a lot of editing.
 
-Howver, I started playing with Virtual Studio Code after seeing my boss using
+However, I started playing with Virtual Studio Code after seeing my boss using
 it, and I have to admit I actually like it.  It's pretty powerful, and I
 find it comes into its own when trying to make sense of a large and complex
 codebase - whipping around between files gets easier, and the GitLens plugin
 showing git blame info in an unobtrusive way right in the editor is pretty
 slick when you're wondering why things were done the way they were etc.
 
-### [Android Studio](https://developer.android.com/studio)
+https://code.visualstudio.com/download
+
+### Android Studio
 
 Massive, bloaty, but invaluable for Android development.  At work we have
 a set of mobile apps.  Android Studio includes a powerful Android device
@@ -316,6 +334,8 @@ emulator, and the Android Device Manager to make setting them up easy.
 So, I can run our apps on emulated Android devices right on my desktop, and
 interrogate them with Chrome's dev tools via `inspect://` to see what's
 going on.
+
+https://developer.android.com/studio
 
 ### broot
 
