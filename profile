@@ -474,7 +474,7 @@ svncommit() {
         echo -n > $template_file
         gh_num=$(echo $git_status | perlgrep 'On branch.+(?:gh|GH)[_-]?(\d+)')
         if [[ "$gh_num" != "" ]]; then
-            echo "GH-$gh_num: " >> $template_file
+            echo " #$gh_num" >> $template_file
         fi
 
         echo -e "\n## Commit summary follows:\n" >> $template_file
@@ -487,7 +487,7 @@ svncommit() {
         # (If we don't have vim, what kind of batshit box *is* this?!)
         vim_path=$(which vim)
         if [[ "vim_path" != "" ]]; then
-            export GIT_EDITOR="$vim_path -c 'startinsert!'"
+            export GIT_EDITOR="$vim_path -c 'startinsert'"
         fi
         git commit -t $template_file -v "$@"
         return
