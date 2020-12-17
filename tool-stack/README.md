@@ -46,6 +46,7 @@ since GitHub still doesn't do automated TOCs:
     - [Stylus](#stylus)
     - [Tree Style Tab](#tree-style-tab)
     - [Sanitize Target Attribute](#sanitize-target-attribute)
+    - [Cookie Quick Manager](#cookie-quick-manager)
   - [Stuff that's not in Ubuntu core repos](#stuff-thats-not-in-ubuntu-core-repos)
     - [ZeroTier](#zerotier)
     - [VS Code](#vs-code)
@@ -304,6 +305,16 @@ http://piro.sakura.ne.jp/xul/_treestyletab.html.en
 Stops links using the `target` attribute to open in a new window/tab.
 *I* will decide if I want it in a new tab.
 
+### Cookie Quick Manager
+
+Allows searching/viewing/editing/exporting cookies - useful tool when debugging
+issues, or to export cookies for a logged in site to feed to a command-line
+tool for it to use an existing session, etc.
+
+Compared to some other similar cookie manager addons out there, this one seems
+particularly powerful and useful, and is also reviewed & recommended by Mozilla
+which matters for an extension which is going to have full access to all your
+cookies!
 
 ## Stuff that's not in Ubuntu core repos
 
