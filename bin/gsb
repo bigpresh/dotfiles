@@ -63,6 +63,8 @@ sub switch_branch {
   if ($branch_spec->{current}) {
     die "You're already on $branch_spec->{name}, nothing to do\n";
   }
+  chomp(my $current_branch = `git rev-parse --abbrev-ref HEAD`);
+  say "Changing branch $current_branch -> $branch_spec->{name}";
   say `git checkout $branch_spec->{name}`;
 
 }
