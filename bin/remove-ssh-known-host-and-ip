@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# When a host's SSH key has changed, ssh will output something like:
+#
+# Offending ECDSA key in /home/davidp/.ssh/known_hosts:55
+#  remove with:
+#  ssh-keygen -f "/home/davidp/.ssh/known_hosts" -R "host.example.com"
+#
+# ... which is convenient, but only removes the entry for the hostname; you
+# run that, then try to SSH again, and will get warned that the key differs
+# to the one for the IP address, e.g.:
+#
+# Warning: the ED25519 host key for 'host.example.com' differs from the key 
+#   for the IP address '127.0.0.2'
+# Offending key for IP in /home/davidp/.ssh/known_hosts:54
+#
+# ... leaving you to go fix that manually, which irritates me.
+# This script, given a hostname, will remove both the name and the IP entries
+# from your known hosts file.
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+NOCOLOUR="\033[0m"
+
+trap 'catch' ERR
+
+HOST=$1
+LOOKUP_RESP=$(host $HOST)
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Failed to resolve IP for '$HOST', bailing!${NOCOLOUR}"
+    exit 1
+fi
+IPS=$(perlgrep 'has address (.+)' <<< "$LOOKUP_RESP")
+echo -e "${GREEN}Remove $HOST from known_hosts file...${NOCOLOUR}"
+ssh-keygen -R $HOST
+for IP in $IPS; do
+    echo -e "${GREEN}Remove $IP from known_hosts file...${NOCOLOUR}"
+    #ssh-keygen -R $IP
+done
+echo -e "${GREEN}Done${NOCOLOUR}"
+
+
+
