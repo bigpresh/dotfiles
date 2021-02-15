@@ -104,10 +104,11 @@ sub get_branches {
 sub switch_branch {
   my $branch_spec = shift;
   if ($branch_spec->{current}) {
-    die colored(
-        "You're already on $branch_spec->{name}, nothing to do\n",
+    say colored(
+        "You're already on $branch_spec->{name}, nothing to do",
         "bright_green bold",
     );
+    exit 1;
   }
   chomp(my $current_branch = `git rev-parse --abbrev-ref HEAD`);
   say colored("Changing branch ", "bright_green")
