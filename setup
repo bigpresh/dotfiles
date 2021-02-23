@@ -21,7 +21,7 @@ function symlink {
 
 
 
-symlink ~/dotfiles/profile  ~/.profile
+symlink ~/dotfiles/profile  ~/.bashrc
 symlink ~/dotfiles/vim      ~/.vim
 symlink ~/dotfiles/vimrc    ~/.vimrc
 symlink ~/dotfiles/screenrc ~/.screenrc
