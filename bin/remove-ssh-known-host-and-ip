@@ -34,7 +34,7 @@ echo -e "${GREEN}Remove $HOST from known_hosts file...${NOCOLOUR}"
 ssh-keygen -R $HOST
 for IP in $IPS; do
     echo -e "${GREEN}Remove $IP from known_hosts file...${NOCOLOUR}"
-    #ssh-keygen -R $IP
+    ssh-keygen -R $IP
 done
 echo -e "${GREEN}Done${NOCOLOUR}"
 
