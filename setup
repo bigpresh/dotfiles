@@ -39,5 +39,5 @@ touch ~/.parallel/will-cite
 symlink ~/dotfiles/re.pl ~/.re.pl
 
 # Finally, source the new profile
-. ~/.profile
+. ~/.bashrc
 
