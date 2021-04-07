@@ -97,6 +97,11 @@ elif [ -x /usr/bin/mcedit ]; then
     export EDITOR=/usr/bin/mcedit
 fi
 
+# If we have a ripgrep config, set the env var to use it
+if [ -f "$HOME/.ripgreprc" ]; then
+    export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
+fi
+
 export GZIP="-9"
 
 if [ -x "/bin/grep" ]; then
