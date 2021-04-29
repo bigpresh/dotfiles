@@ -817,6 +817,15 @@ function sshretry {
 
     echo "OK, fingers crossed and wait for $host to be back up..."
     echo "Started waiting at `date +'%F %H:%M:%S'`"
+    start_timestamp=`date +%s`
+
+    # Resolve any SSH aliases by parsing `ssh -G` output.
+    # e.g. if .ssh/config had an entry like:
+    #   Host myalias
+    #     Hostname real.example.com
+    # then if we're called with sshretry myalias, we want to know to ping
+    # real.example.com.
+    ping_hostname=$(ssh -G $host | awk '$1 == "hostname" { print $2 }')
 
 
     # Normally, try pinging first, and report when it starts pinging,
@@ -825,8 +834,9 @@ function sshretry {
     # firewalled, though, then we want to be able to skip that
     if [[ "$ping" != "noping" ]]; then
         while [ 1 ]; do
-            if ping -c1 $host > /dev/null ; then
-                echo "OK, $host is pingable at `date +'%F %H:%M:%S'`"
+            if ping -c1 $ping_hostname > /dev/null ; then
+                let waited=expr $(date +%s)-$start_timestamp
+                echo "OK, $host is pingable at `date +'%F %H:%M:%S'` after $waited seconds"
                 break;
             else
                 sleep 1;
@@ -837,17 +847,19 @@ function sshretry {
 
     # Now wait for ssh to succeed
     while [ 1 ]; do
+        let waited=expr $(date +%s)-$start_timestamp
         # Sometimes ssh will hang for a long time trying to connect
         # if sshd is not yet up & ready; set a short timeout ready
         # for us to try again.  Also, just so we can log the time
         # we were able to reconnect in case we want to see how long
         # it was down by scrollback, do a test first
         if ssh -o 'ConnectTimeout=2' $host exit; then
-            echo "Looks like SSH is available at `date +'%F %H:%M:%S'`"
+            echo "Looks like SSH is available at `date +'%F %H:%M:%S'` after $waited seconds"
             ssh $host
             break
         else
-            sleep 1;
+            echo "Waiting (waited $waited secs so far for $host)"
+            sleep 2;
         fi
     done
 }
