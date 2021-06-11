@@ -35,6 +35,7 @@ since GitHub still doesn't do automated TOCs:
     - [ack](#ack)
     - [ripgrep](#ripgrep)
     - [reptyr](#reptyr)
+    - [shutter](#shutter)
   - [Firefox addons](#firefox-addons)
     - [Textern (edit textareas in editor)](#textern-edit-textareas-in-editor)
     - [DarkReader](#darkreader)
@@ -231,6 +232,18 @@ Allows you to re-parent a running process to a new terminal.  For instance,
 if you have a long-running process you're running over SSH and forgot to
 start it under screen so you can detach and leave it running, you could just
 use `reptyr $pid` from a screen session to move it there.
+
+### Shutter
+
+Powerful screenshot manager.
+
+Available via a PPA:
+
+```
+sudo add-apt-repository ppa:linuxuprising/shutter
+sudo apt install shutter
+```
+
 
 ## Firefox addons
 
