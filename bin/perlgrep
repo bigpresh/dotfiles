@@ -3,6 +3,9 @@
 use strict;
 use Getopt::Long;
 
+# IDEA: add a -c flag that captures the matches and sums them up
+# - you could just pipe to sort and uniq -c, but that would be cute.
+#
 my $first_lines = 0;
 
 Getopt::Long::GetOptions(
