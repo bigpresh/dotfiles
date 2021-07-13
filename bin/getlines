@@ -1,24 +1,75 @@
 #!/usr/bin/env perl
 
-# Read from STDIN, take a line number or range of numbers and output just those
-# lines, with line numbers prepended.
-#
-# Could do this with e.g. sed -n '20,30p' or similar, but I often want to get
-# the lines around a given line for context, but see which line is which.
+=head1 NAME
+
+getlines
+
+=head1 DESCRIPTION
+
+Read from STDIN, take a line number or range of numbers or range "around"
+and output just those lines, with line numbers prepended, and a pointer at
+the line in question if the "around" notation was used.
+
+Could do this with e.g. sed -n '20,30p' or similar, but I often want to get
+the lines around a given line for context, but see which line is which - 
+particularly in response to an error message which tells me what line of which
+file it came from - I can then quickly display that line, and the surrounding
+lines for context.
+
+=head1 SYNOPSIS
+
+  # Get just a given line of a file
+  getlines 10 /tmp/somefile
+
+  # Get the default window of 5 lines before and after, with an arrow pointing
+  # at the line in question:
+  getlines ~10 /tmp/somefile
+
+  # Get a specified window of 7 lines before and after line 10
+  getlines 10~7 /tmp/somefile
+
+  # Get a specified range of lines
+  getlines 10-20 /tmp/somefile
+
+  
+=cut
 
 use strict;
+use 5.012;
 
 my $range = shift;
+my $pointer;
+
+# Cuteness: if the $range is e.g. 42~5 or ~42, then show 5 lines before and
+# after, or default 5 for the second case.
+if (my($line, $around) = $range =~ m{(\d+)~(\d+)}) {
+    $range = join ",", $line - $around, $line + $around;
+    $pointer = $line;
+} elsif (my ($line) = $range =~ m{~(\d+)$}) {
+    $range = join ",", $line - 5, $line + 5;
+    $pointer = $line;
+}
+    
 
 my ($min, $max) = split /[,-]/, $range;
 $max = $min unless $max;
 my $pad = length($max);
-warn "OK, get lines $min to $max, zero-pad to $pad";
 
 my $line_num = 1;
 while (my $line = <>) {
     if ($line_num >= $min and $line_num <= $max) {
-        printf "%0${pad}d: %s", $line_num, $line;
+        my $pre;
+        if ($pointer) {
+            # We're going to point at the line asked for, so pad with spaces
+            # if not this line or an arrow if it is
+            if ($line_num == $pointer) {
+                $pre = "==> ";
+            } else {
+                $pre = "    ";
+            }
+        }
+
+        printf "${pre}%0${pad}d: %s", $line_num, $line;
     }
     $line_num++;
 }
