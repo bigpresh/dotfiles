@@ -16,6 +16,12 @@ use Term::ANSIColor;
 
 my $pattern = shift or die "Usage: $0 pattern\n";
 
+# TODO: rework so that we skip pulling the list of branches if we said `-` and
+# go straight to the master branch
+if ($pattern eq '-') {
+    $pattern = 'master';
+}
+
 my @branches = get_branches();
 my @matches = grep { $_->{name} =~ $pattern } @branches;
 
@@ -23,7 +29,7 @@ if (!@matches) {
     # First, see if we said "master" but meant whatever the head branch on
     # this repo is (master, main, production, devel, whatever it's called,
     # whether because of silly virtue-signalling or other reasons)
-    if ($pattern =~ /^(head|master|-)$/) {
+    if ($pattern =~ /^(head|master)$/) {
         my $origin = `git remote`;
         # Not sure origin names can contain any shell metachars, but we'll
         # use it in backticks so better safe than sorry...
