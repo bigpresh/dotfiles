@@ -25,6 +25,7 @@ say "Ensuring initial configuration with $state_command{RUN}...";
 open my $xscreensaver_fh, "-|", "xscreensaver-command -watch"
     or die "Failed to execute xscreensaver-command - $!";
 
+say "Waiting for events from xscreensaver-command -watch";
 while (my $line = <$xscreensaver_fh>) {
     my ($new_state) = $line =~ /^([A-Z]+)\b/
         or die "Unrecognised input from xscreensaver_command: '$line'";
@@ -32,15 +33,18 @@ while (my $line = <$xscreensaver_fh>) {
     if (my $cmd = $state_command{$new_state}) {
         warn "State $new_state, run command: $cmd";
         warn "but first, give it a moment...";
-        sleep 4;
+        sleep 6;
+        warn "Alright, on we go...";
         # I've seen weird cases where the command fails - possibly because the
         # second monitor isn't fully "reconnected" at the point it runs? - so
         # retry if it fails initially.
         my $succeeded = 0;
         my $tries     = 0;
         while (!$succeeded && $tries++ < 5) {
+            say "Executing $cmd";
             say `$cmd`;
             if ($? == 0) {
+                say "Command executed successfully";
                 $succeeded++;
             } else {
                 say "Command failed, exited with $? - retrying";
