@@ -1,16 +1,51 @@
 [global_config]
-  enabled_plugins = CustomCommandsMenu, LaunchpadCodeURLHandler, HastebinPlugin, OpenAnyFile, APTURLHandler, Logger, LaunchpadBugURLHandler
   focus = mouse
-  inactive_color_offset = 0.65
-  suppress_multiple_term_dialog = True
-  title_font = Oxygen Mono 7
   title_inactive_bg_color = "#362930"
+  inactive_color_offset = 0.65
+  enabled_plugins = LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler, ActivityWatch, InactivityWatch, Logger, CustomCommandsMenu, OpenAnyFile, HastebinPlugin
+  suppress_multiple_term_dialog = True
   title_use_system_font = False
+  title_font = Oxygen Mono 7
 [keybindings]
-  edit_window_title = <Shift><Alt>t
   full_screen = None
-  help = None
+  edit_window_title = <Shift><Alt>t
   layout_launcher = None
+  help = None
+[profiles]
+  [[default]]
+    visible_bell = True
+    background_darkness = 0.95
+    background_type = transparent
+    cursor_color = "#00ff00"
+    font = Source Code Pro Medium 10
+    foreground_color = "#babdb6"
+    scrollback_lines = 50000
+    word_chars = "-A-Za-z0-9./?%&#:_"
+    use_system_font = False
+  [[amber-on-black]]
+    font = Fira Mono 9
+    foreground_color = "#ed771b"
+    use_system_font = False
+  [[larger]]
+    font = Monospace 11
+    use_system_font = False
+  [[small]]
+    background_darkness = 0.87
+    background_type = transparent
+    cursor_color = "#aaaaaa"
+    font = Source Code Pro Ultra-Light 8
+    use_system_font = False
+  [[smaller]]
+    cursor_shape = ibeam
+    cursor_color = "#c5b6b6"
+    font = Monospace 7
+    scrollback_lines = 50000
+    use_system_font = False
+  [[sunshine]]
+    background_color = "#ffffff"
+    font = Fira Mono 8
+    foreground_color = "#000000"
+    use_system_font = False
 [layouts]
   [[default]]
     [[[child1]]]
@@ -26,38 +61,3 @@
       enabled = True
       name = test
       position = 0
-[profiles]
-  [[default]]
-    background_darkness = 0.95
-    background_type = transparent
-    cursor_color = "#00ff00"
-    font = Source Code Pro Medium 10
-    foreground_color = "#babdb6"
-    scrollback_lines = 50000
-    use_system_font = False
-    visible_bell = True
-    word_chars = "-A-Za-z0-9./?%&#:_"
-  [[amber-on-black]]
-    font = Fira Mono 9
-    foreground_color = "#ed771b"
-    use_system_font = False
-  [[larger]]
-    font = Monospace 11
-    use_system_font = False
-  [[small]]
-    background_darkness = 0.87
-    background_type = transparent
-    cursor_color = "#aaaaaa"
-    font = Source Code Pro Ultra-Light 8
-    use_system_font = False
-  [[smaller]]
-    cursor_color = "#c5b6b6"
-    cursor_shape = ibeam
-    font = Monospace 7
-    scrollback_lines = 50000
-    use_system_font = False
-  [[sunshine]]
-    background_color = "#ffffff"
-    font = Fira Mono 8
-    foreground_color = "#000000"
-    use_system_font = False
