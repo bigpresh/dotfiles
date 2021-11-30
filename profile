@@ -102,8 +102,6 @@ if [ -f "$HOME/.ripgreprc" ]; then
     export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 fi
 
-export GZIP="-9"
-
 if [ -x "/bin/grep" ]; then
     alias grep="/bin/grep --binary-files=without-match"
 fi
