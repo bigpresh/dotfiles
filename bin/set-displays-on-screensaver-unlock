@@ -1,8 +1,7 @@
 #!/usr/bin/env perl
 
 
-use strict;
-use 5.010;
+use 5.012;
 
 # run `xscreensaver-command -watch`, and when a state change is reported to us,
 # run the appropriate command if any.
@@ -17,10 +16,21 @@ my %state_command = (
     RUN     => $cmd,
 );
 
+# We will check at intervals that the config looks right, and attempt to set
+# it right if not - these control how many checks we make and how long between
+# each
+my $max_checks = 20;
+my $time_between_checks = 3;
+my $initial_wait = 6;  # how long to wait after unblank to start checking
+
 # Run the xrandr command once when we start, to make sure we start out
 # with the configuration we want
-say "Ensuring initial configuration with $state_command{RUN}...";
-`$state_command{RUN}`;
+if (!is_configured_correctly()) {
+    say "Ensuring initial configuration with $state_command{RUN}...";
+    `$state_command{RUN}`;
+} else {
+    say "Current config looks good";
+}
 
 open my $xscreensaver_fh, "-|", "xscreensaver-command -watch"
     or die "Failed to execute xscreensaver-command - $!";
@@ -31,28 +41,47 @@ while (my $line = <$xscreensaver_fh>) {
         or die "Unrecognised input from xscreensaver_command: '$line'";
 
     if (my $cmd = $state_command{$new_state}) {
+        # Screens may be powering up and need a little while before the command
+        # will work.  Try it, with pauses, until we're happy it worked.
         warn "State $new_state, run command: $cmd";
         warn "but first, give it a moment...";
-        sleep 6;
-        warn "Alright, on we go...";
-        # I've seen weird cases where the command fails - possibly because the
-        # second monitor isn't fully "reconnected" at the point it runs? - so
-        # retry if it fails initially.
-        my $succeeded = 0;
-        my $tries     = 0;
-        while (!$succeeded && $tries++ < 5) {
-            say "Executing $cmd";
-            say `$cmd`;
-            if ($? == 0) {
-                say "Command executed successfully";
-                $succeeded++;
+        sleep $initial_wait;
+        my $checks = 0;
+        while (1) {
+            if (!is_configured_correctly()) {
+                say "Not yet configured right, executing $cmd";
+                say `$cmd`;
             } else {
-                say "Command failed, exited with $? - retrying";
-                sleep 1;
+                say "Config appears right...";
             }
+            sleep $time_between_checks;
+            last if $checks++ > $max_checks;
         }
+
+        
     } else {
         warn "No command defined for new state $new_state";
     }
 }
 
+
+# Parse the output of `xrandr` to determine whether we're set up correctly
+# (i.e. all connected monitors are configured side-by-side, so the logical
+# display width is the sum of all monitors' widths, rather than the monitors
+# simply mirroring each other)
+sub is_configured_correctly {
+    my $xrandr_out = `xrandr`;
+    if ($? != 0) {
+        die "Failed to check current config, xrandr exited $?, $xrandr_out";
+    }
+    my ($screen_width) = $xrandr_out =~ m{Screen 0:.+current (\d+)}m;
+    say "Current screen width: $screen_width";
+    my $total_width;
+    while ($xrandr_out =~ m{(?<display>\S+) connected (primary )?(?<width>\d+)x\d}gm) {
+        say "Saw display $+{display}, width $+{width}";
+        $total_width += $+{width};
+    }
+
+    say "OK, expect screen width $screen_width to be $total_width";
+    return $screen_width == $total_width;
+}
