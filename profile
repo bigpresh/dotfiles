@@ -163,6 +163,7 @@ alias ci="svncommit"
 alias 'gl'='git log --name-status'
 alias gd='git diff'
 alias gb='git rev-parse --abbrev-ref HEAD'
+alias gpr='git pull --rebase'
 alias ss="svnstatus"
 alias cm="sudo su codemonkey"
 alias tailf='less +F'
