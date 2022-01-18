@@ -19,8 +19,8 @@ my %state_command = (
 # We will check at intervals that the config looks right, and attempt to set
 # it right if not - these control how many checks we make and how long between
 # each
-my $max_checks = 20;
-my $time_between_checks = 3;
+my $max_checks = 25;
+my $time_between_checks = 4;
 my $initial_wait = 6;  # how long to wait after unblank to start checking
 
 # Run the xrandr command once when we start, to make sure we start out
