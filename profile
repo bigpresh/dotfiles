@@ -863,6 +863,15 @@ function sshretry {
     done
 }
 
+# Open the most recent Puppet apply log
+# May need to be more clever in future, but this works for our KT boxes.
+function puppetlog_latest {
+    if [[ -d /var/log/puppet ]]; then
+        sudo less /var/log/puppet/$(sudo ls -1t /var/log/puppet/*.log | head -1)
+    else
+        echo "No /var/log/puppet on this box"
+    fi
+}
 # Show command execution times (and success) after each command
 # script from https://github.com/jichu4n/bash-command-timer
 source ~/dotfiles/bash_command_timer.sh
