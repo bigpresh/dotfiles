@@ -25,7 +25,10 @@ symlink ~/dotfiles/profile  ~/.bashrc
 symlink ~/dotfiles/vim      ~/.vim
 symlink ~/dotfiles/vimrc    ~/.vimrc
 symlink ~/dotfiles/screenrc ~/.screenrc
-symlink ~/dotfiles/zim/style.conf ~/.config/zim/style.conf
+
+if [ -d ~/.config/zim ]; then
+    symlink ~/dotfiles/zim/style.conf ~/.config/zim/style.conf
+fi
 
 if [ -x /usr/bin/terminator ]; then
     mkdir -p ~/.config/terminator 2>/dev/null
@@ -37,6 +40,20 @@ mkdir -p ~/.parallel
 touch ~/.parallel/will-cite
 
 symlink ~/dotfiles/re.pl ~/.re.pl
+
+
+# See if I already have a cronjob configured to update my dotfiles
+# automatically; if not, add it...
+dotfiles_update_cron=$(crontab -l | grep dotfiles)
+if crontab -l | grep dotfiles > /dev/null; then
+    echo "Auto-update cronjob already exists"
+else
+    echo "Adding auto-update cronjob"
+    crontab -l > crontab-tmp
+    cat cron-entry >> crontab-tmp
+    crontab crontab-tmp
+    rm crontab-tmp
+fi
 
 # Finally, source the new profile
 . ~/.bashrc
