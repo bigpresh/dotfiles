@@ -1,3 +1,3 @@
 # Automatically update my dotfiles
-0 */3 * * * cd ~/dotfiles && git pull > /dev/null
+0 */3 * * * cd ~/dotfiles && ./setup > /dev/null
 

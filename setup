@@ -1,6 +1,14 @@
 #!/bin/bash
 
-# Set up links to my profile, vimrc etc.
+# Set up links to my profile, vimrc etc, ensure the repo checkout is correct,
+# add auto-update cronjob if not already present, etc.
+#
+# Intended to be idempotent so it's safe to run this script from a cronjob
+# to auto-update.
+#
+# This means that setting up my preferred environment on a new box can be as
+# simple as checking out the dotfiles repo and running this script from
+# that checkout.
 
 # If the destination exists, but is not a symlink, then rename it and create
 # our desired symlink in place
@@ -63,6 +71,7 @@ fi
 # - if we have git@ for fetch, then the cronjob to auto-update can't work.
 git remote set-url origin https://github.com/bigpresh/dotfiles.gi
 git remote set-url --push origin git@github-personal:bigpresh/dotfiles.git
+git pull
 
 # Finally, source the new profile
 . ~/.bashrc
