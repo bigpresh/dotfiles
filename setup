@@ -69,7 +69,7 @@ fi
 # Make sure the dotfiles repo checkout has the https:// publicly-accessible
 # URL for fetching from the origin, but the git@ one (SSH with key) for pushing
 # - if we have git@ for fetch, then the cronjob to auto-update can't work.
-git remote set-url origin https://github.com/bigpresh/dotfiles.gi
+git remote set-url origin https://github.com/bigpresh/dotfiles.git
 git remote set-url --push origin git@github-personal:bigpresh/dotfiles.git
 git pull
 
