@@ -13,15 +13,17 @@ using it:
 
   git clone https://github.com/bigpresh/dotfiles.git
 
-Then run `~/dotfiles/setup.sh` to symlink stuff into place, and all is good;
-I can then pull changes as and when desired.
+Then cd into `~/dotfiles` and run `./setup` to configure - creating appropriate
+symlinks etc, and also setting the fetch URL to use the https:// URL so it can
+be updated via the cronjob which the setup script automatically adds.
 
 It's a public repository partly so that I can access it without authentication,
-so I can have a cron job that regularly does a `git pull` to keep up to date,
-but mostly in case anything in here is useful to others.
+so the cron job to auto-update works without authentication complexity, but 
+mostly in case anything in here is useful to others.
 
 If you do find anything here useful, feel free to use it!  Feel free also to
-drop me a mail and let me know that it was helpful to you - if you want to!
+drop me a mail and let me know that it was helpful to you - it'd be lovely
+to hear if any of it has helped anyone else.
 
 Everything here in this repository, unless noted otherwise, can be considered
 to be released under the terms of the WTFPL.
