@@ -52,19 +52,15 @@ symlink ~/dotfiles/re.pl ~/.re.pl
 
 # See if I already have a cronjob configured to update my dotfiles
 # automatically; if not, add it...
-dotfiles_update_cron=$(crontab -l | grep dotfiles)
-if crontab -l | grep dotfiles > /dev/null; then
+if crontab -l 2>/dev/null | grep dotfiles > /dev/null; then
     echo "Auto-update cronjob already exists"
 else
     echo "Adding auto-update cronjob"
-    crontab -l > crontab-tmp
+    crontab -l > crontab-tmp 2>/dev/null
     cat cron-entry >> crontab-tmp
     crontab crontab-tmp
     rm crontab-tmp
 fi
-
-# Make sure that the dotfiles repo is checked out via the https:// URL so
-# cronjobs can update it ... unless this is supernova where I edit dotfiles.
 
 # Make sure the dotfiles repo checkout has the https:// publicly-accessible
 # URL for fetching from the origin, but the git@ one (SSH with key) for pushing
