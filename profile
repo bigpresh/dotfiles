@@ -872,6 +872,19 @@ function puppetlog_latest {
         echo "No /var/log/puppet on this box"
     fi
 }
+
+function cdreporoot {
+    ORIGDIR=$PWD
+    while [[ ! -d '.git' ]]; do
+        cd ..
+        if [[ "$PWD" == "/" ]]; then
+            echo "No .git dir found anywhere above this one"
+            cd $ORIGDIR
+            return
+        fi
+    done
+}
+
 # Show command execution times (and success) after each command
 # script from https://github.com/jichu4n/bash-command-timer
 source ~/dotfiles/bash_command_timer.sh
