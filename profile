@@ -885,6 +885,35 @@ function cdreporoot {
     done
 }
 
+
+# Convenient function to report/change selected profile for aws-cli
+# - a little nicer than manually setting $AWS_PROFILE - particularly
+# when combined with tab-completion of profiles.
+# (I might change the "no arguments just shows the current value" behaviour
+# to instead present a menu to pick from, maybe)
+function aws_profile {
+    new_profile=$1
+
+    if [[ "$new_profile" == "" ]]; then
+        echo "Current AWS_PROFILE is $AWS_PROFILE"
+        return
+    fi
+
+    # Set AWS_PROFILE env var to the desired profile name.
+    # TODO: verify that it exists - although if you're tab-completing,
+    # which is the main reason I wrote this, then it'll be alright.
+    export AWS_PROFILE=$new_profile
+    echo "OK, AWS_PROFILE now $AWS_PROFILE"
+}
+
+# If we have aws-cli configured, then set up tab-completion for
+# AWS profiles using our aws_profile() function above
+if [ -f ~/.aws/config ]; then
+    profiles=( $(aws configure list-profiles) )
+    complete -W "${profiles[*]}" aws_profile
+fi
+
+
 # Show command execution times (and success) after each command
 # script from https://github.com/jichu4n/bash-command-timer
 source ~/dotfiles/bash_command_timer.sh
