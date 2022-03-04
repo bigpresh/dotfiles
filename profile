@@ -909,7 +909,7 @@ function aws_profile {
 # If we have aws-cli configured, then set up tab-completion for
 # AWS profiles using our aws_profile() function above
 if [ -f ~/.aws/config ]; then
-    profiles=( $(aws configure list-profiles) )
+    profiles=( $(/usr/local/bin/aws configure list-profiles) )
     complete -W "${profiles[*]}" aws_profile
 fi
 
