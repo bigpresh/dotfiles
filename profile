@@ -480,6 +480,28 @@ svncommit() {
 
         git diff --stat "$@" | sed 's/^/# /' | cat >> $template_file
 
+        # If I'm adding a FIXME, warn me that I probably should have fixed
+        # it; don't complain about already-existing ones or ones I'm removing
+        # though.
+        FIXME=$(git diff "$@" | grep -E '^\+.*FIXME')
+        if [[ "$FIXME" != "" ]]; then
+            cecho RED "WARNING: One or more FIXMEs detected:"
+            echo $FIXME
+            echo "You should probably fix those, rather than commit them?"
+            echo "Enter to commit anyway, otherwise interrupt... ?>"
+            read
+        fi
+
+        # Likewise, watch for potty mouth... maybe make this configurable
+        # by box/repo type, so work stuff gets checked but not personal...
+        FUCKINGRUDE=$(git diff "$@" | grep -E '^\+.*(fuck|shit|cunt|wank)')
+        if [[ "$FUCKINGRUDE" != "" ]]; then
+            cecho RED "Oi, careful with the swearing:"
+            echo "$FUCKINGRUDE"
+            echo "Enter to commit anyway, otherwise interrupt... ?>";
+            read
+        fi
+
 
         # If we have vim, then run "a" to go into visual mode at the end
         # of the first line (i.e. after the GH-xx prefix, if we added one).
@@ -912,6 +934,17 @@ if [ -f ~/.aws/config ]; then
     profiles=( $(/usr/local/bin/aws configure list-profiles) )
     complete -W "${profiles[*]}" aws_profile
 fi
+
+
+# Simple coloured text output, e.g. `cecho red Bad Things Happened!`
+cecho(){
+    RED="\033[0;31m"
+    GREEN="\033[0;32m"
+    YELLOW="\033[1;33m"
+    # ... ADD MORE COLORS
+    NC="\033[0m" # No Color
+    printf "${!1}${2} ${NC}\n"
+}
 
 
 # Show command execution times (and success) after each command
