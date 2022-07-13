@@ -6,7 +6,7 @@ use Getopt::Long;
 # IDEA: add a -c flag that captures the matches and sums them up
 # - you could just pipe to sort and uniq -c, but that would be cute.
 #
-my $first_lines = 0;
+my $first_lines;
 
 Getopt::Long::GetOptions(
     'first-lines|h:i' => \$first_lines,
