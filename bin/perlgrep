@@ -9,8 +9,13 @@ use Getopt::Long;
 my $first_lines = 0;
 
 Getopt::Long::GetOptions(
-    'first_lines=i' => \$first_lines,
+    'first-lines|h:i' => \$first_lines,
 );
+
+if (defined $first_lines && !$first_lines) {
+    # no value given - so default to 1 line
+    $first_lines = 1;
+}
 
 my $patt = shift @ARGV;
 
