@@ -37,6 +37,7 @@ since GitHub still doesn't do automated TOCs:
     - [reptyr](#reptyr)
     - [shutter](#shutter)
     - [pv](#pv)
+    - [q Text as Data](#q)
   - [Firefox addons](#firefox-addons)
     - [Textern (edit textareas in editor)](#textern-edit-textareas-in-editor)
     - [DarkReader](#darkreader)
@@ -266,6 +267,41 @@ or in multiple named places in a pipeline working together, e.g.:
       out: 1.38KiB 0:00:26 [79.0 B/s] [                             <=> 
 ```
 
+### q
+
+[q - Text as Data](http://harelba.github.io/q/) is super handy to process 
+SQL/TSV files, running SQL queries on them directly, without importing them 
+into an actual DBMS or using Apache Drill, etc.
+
+e.g. 
+
+```
+q -d, -H "select tel_num from contacts.csv where group = 'businesses'"
+```
+
+If you're usually processing CSV files, you'll probably want to set up a `.qrc`
+config file that makes that the default - I also needed to set
+`encoding=unicode-escape` to avoid issues with some files, e.g.:
+
+```
+Could not parse the input. Please make sure to set the proper -w input-wrapping parameter for your input, and that you use the proper input encoding (-e). Error: 'utf-8' codec can't decode byte 0x96 in position 3907: invalid start byte
+```
+
+That went away when I used:
+
+```
+[options]
+delimiter=,
+# avoid UTF8 encoding issues - e.g. "Could not parse the input..."
+encoding=unicode-escape
+```
+
+However, for the config file to work properly I needed to grab a .deb release
+file from the [releases page on GitHub](https://github.com/harelba/q/releases)
+because older versions didn't support it properly - see my bug report
+[harelba/q#298](https://github.com/harelba/q/issues/298) where the solution
+was indeed to use a newer version.  At the time of writing, I had 1.8 as the
+Debian-packaged version, but 3.1.6 was the current.
 
 ## Firefox addons
 
