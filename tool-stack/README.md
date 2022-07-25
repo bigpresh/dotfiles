@@ -246,10 +246,10 @@ sudo add-apt-repository ppa:linuxuprising/shutter
 sudo apt install shutter
 ```
 
-### pv (pipeline viewer)
+### pv
 
-Monitors the progress of data through a pipeline, useful to see how quick a
-Unix pipeline processing a lot of data is going.
+`pv`(pipeline viewer) monitors the progress of data through a pipeline, useful
+to see how quick a Unix pipeline processing a lot of data is going.
 
 Man page: https://man7.org/linux/man-pages/man1/pv.1.html
 
