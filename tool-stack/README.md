@@ -36,6 +36,7 @@ since GitHub still doesn't do automated TOCs:
     - [ripgrep](#ripgrep)
     - [reptyr](#reptyr)
     - [shutter](#shutter)
+    - [pv](#pv)
   - [Firefox addons](#firefox-addons)
     - [Textern (edit textareas in editor)](#textern-edit-textareas-in-editor)
     - [DarkReader](#darkreader)
@@ -242,6 +243,27 @@ Available via a PPA:
 ```
 sudo add-apt-repository ppa:linuxuprising/shutter
 sudo apt install shutter
+```
+
+### pv (pipeline viewer)
+
+Monitors the progress of data through a pipeline, useful to see how quick a
+Unix pipeline processing a lot of data is going.
+
+Man page: https://man7.org/linux/man-pages/man1/pv.1.html
+
+Can be used in place of cat, for e.g.:
+
+```
+pv filename | ./process_file
+```
+
+or in multiple named places in a pipeline working together, e.g.:
+
+```
+[davidp@supernova:~]$ pv -cN in /etc/passwd | /shared/tmp/slow_process | pv -cN out > /dev/null
+       in: 3.86KiB 0:00:00 [ 144MiB/s] [=========================================>] 100%            
+      out: 1.38KiB 0:00:26 [79.0 B/s] [                             <=> 
 ```
 
 

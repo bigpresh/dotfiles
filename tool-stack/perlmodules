@@ -1,0 +1,11 @@
+# TODO: make a Task::BeLike::BIGPRESH bundling these up
+
+Dancer
+Module::Refresh
+Devel::REPL
+List::Util
+Devel::REPL::Plugin::ModuleAutoLoader
+
+
+Also contents of House-Management/cpanfile
+
