@@ -195,7 +195,7 @@ if [[ "$DISPLAY" != "" && -x /usr/bin/synclient ]]; then
 fi
 
 # Add ~/dotfiles/bin to my $PATH so my convenient utility scripts just work
-export PATH="$PATH:~/dotfiles/bin"
+export PATH="$PATH:$HOME/dotfiles/bin"
 
 # For Test2-powered test suites, I want to see the output as it comes, not
 # all at the end
