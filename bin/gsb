@@ -21,13 +21,31 @@
 
 use strict;
 use 5.010;
+use Cwd;
 use Data::Dump;
 use Term::ANSIColor;
+use Time::Piece;
 
 my $pattern = shift or die "Usage: $0 pattern\n";
+my $initial_cwd = getcwd();
+
+# Before we do anything else, we want to get the root of the repo
+while (!-d '.git') {
+    if (getcwd() eq '/') {
+        chdir $initial_cwd;
+        die "Found no .git dir in $initial_cwd or above - is this a repo?\n";
+    }
+    chdir '..';
+}
+# but arrange to go back to where we were when we're done:
+END {
+    chdir $initial_cwd;
+}
+
 
 my @branches = get_branches();
 my @matches = grep { $_->{name} =~ $pattern } @branches;
+
 
 # If we said `-`, or `master`, then we want the HEAD branch for the repo,
 # check what that is as some repos use an alternative name (main, production,
@@ -127,13 +145,6 @@ if (my $picked_branch = $matches[$num]) {
 
 
 sub get_branches {
-  # First, don't even call git if we're not in a repo
-  if (!-d '.git') {
-    die colored(
-        "This must be used whilst in a git repository checkout\n", 
-        "red bold",
-    );
-  }
   # OK, ask git for a list of branches, which we'll have to clean up.
   # We'll use -a so that we can match branches we've not checked out yet,
   # but then strip the remotes/xxx/ prefix from them.
@@ -170,5 +181,15 @@ sub switch_branch {
     . " -> "
     .  colored($branch_spec->{name}, "blue");
   say `git checkout $branch_spec->{name}`;
+  if ($? == 0) {
+      # record the switch to our history file
+      my $branch_history_filename = "$ENV{HOME}/tmp/gsb_history";
+      open my $fh, ">>", $branch_history_filename
+        or die "Failed to open $branch_history_filename - $!";
 
+      my $repo_dir = getcwd();
+
+      say {$fh} localtime->datetime . " : $repo_dir : $current_branch -> $branch_spec->{name}";
+  }
 }
+
