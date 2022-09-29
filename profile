@@ -688,7 +688,7 @@ function pastesshkey {
 # Quick perl module version
 function perlmodversion {
     MODNAME=$1;
-    perl -M$MODNAME -E "say qq{$MODNAME = \$$MODNAME::VERSION};" 2>/dev/null
+    perl -M$MODNAME -E "\$MODPATH = '$MODNAME'; \$MODPATH=~s{::}{/}; \$MODPATH .= '.pm'; say qq{$MODNAME = \$$MODNAME::VERSION in \$INC{\$MODPATH}};" 2>/dev/null
     if [ $? != 0 ]; then
         echo "$MODNAME not installed (or failed to find/load it)"
     fi
