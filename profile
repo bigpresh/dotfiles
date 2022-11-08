@@ -935,6 +935,38 @@ if [ -f ~/.aws/config ]; then
     complete -W "${profiles[*]}" aws_profile
 fi
 
+# Convenient CDK stack diff/deploy shorthand, with our BUILD_STACK env
+# var set to only compile the code for that stack...
+function cdk_stack {
+    full_stack_name=$1
+    operation=$2
+    if [[ "$full_stack_name" == "" || "$operation" == "" ]]; then
+        echo "Usage: cdk_stack stack_name operation"
+        echo "  (e.g. cdk_stack kt/dev/foostack deploy)"
+        return;
+    fi
+
+    if [[ "$operation" != "diff" && "$operation" != "deploy" ]]; then
+        echo "I only understand operations 'diff' and 'deploy'"
+        return;
+    fi
+
+    # Make sure we remembered to set $AWS_PROFILE, it's very rare that we'd
+    # have not needed to
+    if [[ "$AWS_PROFILE" == "" ]]; then
+        echo "You haven't set env var \$AWS_PROFILE, that's probably a mistake"
+        return;
+    else
+        echo "Running cdk $operation $stack_name as profile $AWS_PROFILE..."
+    fi
+
+    # The stack name we need to pass to BUILD_STACK is just the last part,
+    # without the e.g. kt/dev/ prefix.
+    stack_name=${full_stack_name##*/}
+    echo "Set BUILD_STACK=$stack_name"
+
+    BUILD_STACK=$stack_name npx cdk $operation $full_stack_name
+}
 
 # Simple coloured text output, e.g. `cecho red Bad Things Happened!`
 cecho(){
