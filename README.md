@@ -11,7 +11,9 @@ I use and why - for easy "install all the things I need" on a new box.
 It's a repository here on GitHub so I can just clone it on a box when I start
 using it:
 
-  git clone https://github.com/bigpresh/dotfiles.git
+```
+git clone https://github.com/bigpresh/dotfiles.git
+```
 
 Then cd into `~/dotfiles` and run `./setup` to configure - creating appropriate
 symlinks etc, and also setting the fetch URL to use the https:// URL so it can
