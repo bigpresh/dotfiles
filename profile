@@ -957,7 +957,12 @@ function cdk_stack {
         echo "You haven't set env var \$AWS_PROFILE, that's probably a mistake"
         return;
     else
-        echo "Running cdk $operation $stack_name as profile $AWS_PROFILE..."
+        echo -n "Running cdk $operation $stack_name as profile "
+        if [[ "$AWS_PROFILE" =~ "live" ]]; then
+            cecho RED $AWS_PROFILE;
+        else
+            cecho GREEN $AWS_PROFILE;
+        fi
     fi
 
     # The stack name we need to pass to BUILD_STACK is just the last part,
@@ -968,7 +973,7 @@ function cdk_stack {
     BUILD_STACK=$stack_name npx cdk $operation $full_stack_name
 }
 
-# Simple coloured text output, e.g. `cecho red Bad Things Happened!`
+# Simple coloured text output, e.g. `cecho RED Bad Things Happened!`
 cecho(){
     RED="\033[0;31m"
     GREEN="\033[0;32m"
