@@ -51,9 +51,9 @@ my @matches = grep { $_->{name} =~ $pattern } @branches;
 # check what that is as some repos use an alternative name (main, production,
 # etc) for operational reasons or virtue-signalling.
 if ($pattern =~ /^(master|-)$/) {
-    # FIXME: make sure there's only one origin.  The vast majority will hve
-    # just one remote, named 'origin', but not always.
-    my $origin = `git remote`;
+    # Get the origin name.  Just use the first origin found, which should
+    # be fine for most cases.
+    my $origin = (split /\n/, `git remote`)[0];
     chomp $origin;
     # Not sure origin names can contain any shell metachars, but we'll
     # use it in backticks so better safe than sorry...
