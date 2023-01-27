@@ -115,7 +115,9 @@ fi
 # flag is set and clear it after the first execution.
 BCT_AT_PROMPT=1
 function BCTPreCommand() {
-  local EXIT="$?"
+  # Dave tweaked to remove local - need this in BCTPostCommand too, and
+  # $? may have been overwritten by then
+  EXIT="$?"
   if [ $EXIT == 0 ]
   then
     # colour for exit without error
@@ -183,7 +185,8 @@ function BCTPostCommand() {
   time_str="${time_str}${num_secs}s${num_msecs_pretty}"
   now_str=$(BCTPrintTime $(($command_end_time / $SEC)))
   if [ -n "$now_str" ]; then
-    local output_str="[ $time_str | $now_str ]"
+    # Dave tweaked to add $EXIT here
+    local output_str="[ $EXIT | $time_str | $now_str ]"
   else
     local output_str="[ $time_str ]"
   fi
