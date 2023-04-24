@@ -1,0 +1,52 @@
+#!/usr/bin/env perl
+
+use 5.012;
+
+if (!$ENV{AWS_PROFILE}) {
+    die "You probably want to set \$AWS_PROFILE in your env first\n";
+}
+
+my $pattern = shift;
+
+my $cmd = "aws lambda list-functions | jq '.Functions[].FunctionName'";
+
+my @functions = split /\n/, `$cmd`;
+
+my @matches;
+
+for my $function (@functions) {
+    # Never interested in CDK-added log retention management lambdas
+    next if $function =~ /LogRetention/;
+
+    if (!$pattern || $function =~ $pattern) {
+        push @matches, $function;
+    }
+}
+
+# If we didn't have a pattern, just list the lambdas we may be interested in
+if (!$pattern) {
+    say "All lambdas:\n";
+    say join "\n", map { " - $_" } @matches;
+    exit;
+}
+
+
+if (@matches != 1) {
+    say "Multiple lambdas match '$pattern':";
+    say join "\n", map { " = $_" } @matches;
+    exit 1;
+}
+
+# OK, good to execute it, assemble an invocation command to call it, passing
+# our payload as JSON (or a filename?) and base64-decoding the result.
+my $name = $matches[0];
+my $payload = shift || '{}';
+my $invoke_cmd = join " ",
+    "aws lambda invoke --function-name $name",
+    "--cli-binary-format raw-in-base64-out",
+    "--payload '$payload'",
+    "out --log-type Tail --query 'LogResult' --output text",
+    "--color on",
+    "| base64 -d";
+say "invoke: $invoke_cmd";
+say `$invoke_cmd`;
