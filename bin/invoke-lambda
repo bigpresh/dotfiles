@@ -23,18 +23,21 @@ for my $function (@functions) {
     }
 }
 
-# If we didn't have a pattern, just list the lambdas we may be interested in
-if (!$pattern) {
-    say "All lambdas:\n";
+# If we didn't have a pattern, or we did but it didn't match any lambdas,
+# bail now, with a list of all lambdas found
+if (!$pattern || !@matches) {
+    if ($pattern) {
+        say "No lambdas matched pattern $pattern!";
+    }
+    say "All lambdas found:\n";
     say join "\n", map { " - $_" } @matches;
-    exit;
+    exit 1;
 }
-
 
 if (@matches != 1) {
     say "Multiple lambdas match '$pattern':";
     say join "\n", map { " = $_" } @matches;
-    exit 1;
+    exit 2;
 }
 
 # OK, good to execute it, assemble an invocation command to call it, passing
