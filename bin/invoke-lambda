@@ -30,7 +30,7 @@ if (!$pattern || !@matches) {
         say "No lambdas matched pattern $pattern!";
     }
     say "All lambdas found:\n";
-    say join "\n", map { " - $_" } @matches;
+    say join "\n", map { " - $_" } @functions;
     exit 1;
 }
 
