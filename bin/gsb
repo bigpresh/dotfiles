@@ -50,7 +50,7 @@ my @matches = grep { $_->{name} =~ $pattern } @branches;
 # If we said `-`, or `master`, then we want the HEAD branch for the repo,
 # check what that is as some repos use an alternative name (main, production,
 # etc) for operational reasons or virtue-signalling.
-if ($pattern =~ /^(master|-)$/) {
+if ($pattern =~ /^(master|-|justprintmasterbranch)$/) {
     # Get the origin name.  Just use the first origin found, which should
     # be fine for most cases.
     my $origin = (split /\n/, `git remote`)[0];
@@ -75,7 +75,6 @@ if ($pattern =~ /^(master|-)$/) {
         exit;
     }
 
-    say "Found origin '$origin'";
     my $origin_info = `git remote show $origin`;
     if (my ($head_branch) = $origin_info =~ m{HEAD branch: (\w+)}) {
         # Find this branch in @branches, as we'll need to pass over the branch spec to switch_branch()
@@ -90,6 +89,13 @@ if ($pattern =~ /^(master|-)$/) {
             );
         }
 
+        # If we just wanted to print the master branch we determined,
+        # do so and exit now
+        if ($pattern eq 'justprintmasterbranch') {
+            say $head_branch;
+            exit;
+        }
+
         if ($pattern ne $head_branch) {
             my $not_master = $pattern eq 'master'
                 ? 'instead of master' : '';
@@ -100,6 +106,7 @@ if ($pattern =~ /^(master|-)$/) {
             switch_branch($head_branch_match);
             exit;
         }
+
     } else {
         die colored(
             "failed to determine HEAD branch for origin $origin!",
