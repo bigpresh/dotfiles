@@ -5,12 +5,14 @@ use Getopt::Long;
 
 my $first_lines;
 my $sum_captures;
+my $count_matches;
 my $debug;
 
 Getopt::Long::GetOptions(
-    'first-lines|h:i' => \$first_lines,
-    'sum-captures' => \$sum_captures,
-    'debug|d' => \$debug,
+    'first-lines|h:i'   => \$first_lines,
+    'sum-captures'      => \$sum_captures,
+    'count-matches|c'   => \$count_matches,
+    'debug|d'           => \$debug,
 );
 
 if (defined $first_lines && !$first_lines) {
@@ -26,6 +28,7 @@ warn "OK, patt: $patt_re\n" if $debug;
 my @json_data;
 my $output_json;
 my $sum;
+my %matches;
 
 # If we want to output the first $first_lines regardless, do so now...
 while ($first_lines-- > 0) {
@@ -44,13 +47,19 @@ while (my $line = <STDIN>) {
             # If we're summing, do so...
             if ($sum_captures) {
                 $sum += $1;
+            } elsif ($count_matches) {
+                $matches{$1}++;
             } else {
                 # output just the bit we wanted to capture
                 print "$1\n";
             }
         } else {
-            # No captures, output the whole line
-            print $line;
+            # No captures, output or count the whole line
+            if ($count_matches) {
+                $matches{$line}++;
+            } else {
+                print $line;
+            }
         }
     }
 }
@@ -62,4 +71,10 @@ if ($sum_captures) {
 if (@json_data) {
     require JSON;
     print JSON::to_json(\@json_data);
+}
+
+if ($count_matches) {
+    for my $match (sort { $matches{$b} <=> $matches{$a} } keys %matches) {
+        print "$match:  $matches{$match}\n";
+    }
 }
