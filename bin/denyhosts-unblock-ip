@@ -1,0 +1,33 @@
+#!/bin/bash
+
+DENYHOSTS_DIR=/var/lib/denyhosts
+
+ip=$1
+
+if [[ ! -d $DENYHOSTS_DIR ]]; then
+    echo "No $DENYHOSTS_DIR - does this box *have* denyhosts?"
+    exit
+fi
+
+if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+    echo "Removing any denyhosts blocks for IP $ip"
+else
+    echo "No/invalid IP supplied.  Usage: $0 IP"
+    exit
+fi
+
+
+
+
+echo "Stopping denyhosts...";
+sudo service denyhosts stop
+
+for file in $DENYHOSTS_DIR/* /etc/hosts.deny; do
+    echo -n "Removing $ip from $file ..."
+    sudo sed -i "/$ip/d" $file
+done
+
+echo "Starting denyhosts back up..."
+sudo service denyhosts start
+
+
