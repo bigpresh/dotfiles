@@ -965,12 +965,12 @@ function cdk_stack {
         fi
     fi
 
-    # The stack name we need to pass to BUILD_STACK is just the last part,
-    # without the e.g. kt/dev/ prefix.
-    stack_name=${full_stack_name##*/}
-    echo "Set BUILD_STACK=$stack_name"
+    # We used to try to work out the stack ID to use in the BUILD_STACK
+    # env var to speed things up by only building the stack being deployed,
+    # but most of our stacks have a different stack ID vs stackName, so that
+    # won't work in a simple fashion.  D'oh.
 
-    BUILD_STACK=$stack_name npx cdk $operation $full_stack_name
+    npx cdk $operation $full_stack_name
 }
 
 # Simple coloured text output, e.g. `cecho RED Bad Things Happened!`
