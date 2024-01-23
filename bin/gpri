@@ -1,0 +1,58 @@
+#!/usr/bin/env perl
+
+# gpri - git pull rebase interactively, with automatic main branch detection
+#
+# Saves the effort of remembering what the master/main/etc branch is, e.g.
+# `git rebase -i devel` or `git rebase -i master` etc - `gpri` will use `gsb`
+# to determine the master branch, and use that.
+# (gsb looks at the "HEAD branch:" returned by `git remote show XXX` for the
+# first remote returned)
+
+use 5.012;
+use Term::ANSIColor;
+
+my $current_branch=`git rev-parse --abbrev-ref HEAD` =~ s/\n//r;
+my $rebase_onto_branch = $ARGV[0];
+
+# If we've not been told the branch to rebase onto, find out what the origin's
+# head branch is and use that
+if (!$rebase_onto_branch) {
+    $rebase_onto_branch=`gsb justprintmasterbranch` =~ s/\n//r;
+    if ($? != 0) {
+        die colored(
+            "No branch to rebase onto given, and failed to determine origin's head\n",
+            "red bold",
+        );
+    }
+}
+# If we're on the master branch, we probably don't want to be doing interactive
+# rebasing - we've probably forgotten to change to a feature branch!
+if ($current_branch eq $rebase_onto_branch) {
+    die colored(
+        "We're on $rebase_onto_branch, do we really want to rebase here?\n",
+        "red bold",
+    );
+}
+say "Interactive rebase of " . colored($current_branch, 'bright_green') 
+    . " onto " . colored($rebase_onto_branch, 'blue');
+sleep 1; # so we can see the message before the editor launches
+
+# Consider handling a -f option to do a fetch for $MASTERBRANCH so we are
+# rebasing onto fresh upstream changes?
+
+# If we have rebase-editor installed, use it automatically
+# see https://github.com/sjurba/rebase-editor
+{
+    local $ENV{GIT_SEQUENCE_EDTIOR};
+    if (-x '/usr/bin/rebase-editor') {
+        $ENV{GIT_SEQUENCE_EDITOR} = 'rebase-editor -c --';
+    }
+
+    exec("git",
+    "rebase",
+    "--interactive",
+    "--autosquash", # auto handle --fixup commits for us
+    "--autostash",  # auto stash any uncommitted changes we have
+    $rebase_onto_branch
+    );
+}
