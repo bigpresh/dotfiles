@@ -1,0 +1,19 @@
+#!/bin/bash
+
+INSTALL_USER=$1
+
+if [[ "$INSTALL_USER" == "" ]]; then
+    echo "Usage: confirm-sftp-url installuser"
+    exit
+fi
+
+CONFIG=/opt/drains-$INSTALL_USER/etc/exchange_Confirm_files.conf
+
+if [ ! -f $CONFIG ]; then
+    echo "$INSTALL_USER has no exchange_Confirm_files.conf!"
+    exit
+fi
+
+
+sudo -u $INSTALL_USER cat $CONFIG | jq -r '"\(.remote.protocol)://\(.remote.user)@\(.remote.host):\(.remote.password)/"'
+
