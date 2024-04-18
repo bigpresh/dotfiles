@@ -15,5 +15,5 @@ if [ ! -f $CONFIG ]; then
 fi
 
 
-sudo -u $INSTALL_USER cat $CONFIG | jq -r '"\(.remote.protocol)://\(.remote.user)@\(.remote.host):\(.remote.password)/"'
+sudo -u $INSTALL_USER cat $CONFIG | jq -r '"\(.remote.protocol)://\(.remote.user):\(.remote.password)@\(.remote.host)/"'
 
