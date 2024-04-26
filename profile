@@ -170,6 +170,10 @@ alias tailf='less +F'
 alias puppettest='sudo puppet apply --modulepath=/etc/puppet/forge-modules:/etc/puppetlabs/code/environments/production/modules:/etc/puppet/modules --verbose /etc/puppet/manifests/site.pp --debug'
 alias jfdi='sudo "$BASH" -c "$(history -p !!)"'
 
+# convenient alias to see first & last line of a file:
+alias toptail="sed -e 1b -e '\$!d'"
+
+
 # Make the MySQL client tell me if I'm about to do something stupid, have it
 # show me warnings if it just did something stupid, and automatically use
 # vertical output if the result would be too wide to display sensibly.
