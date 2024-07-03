@@ -132,3 +132,7 @@ map <C-left> :tabp<cr>
 map <C-right> :tabn<cr>
 
 autocmd BufNewFile,BufRead /home/davidp/dev/puppet* set tabstop=2 shiftwidth=2
+
+" Make tabs and trailing chars clearer
+set list
+set listchars=tab:␉··,trail:·
