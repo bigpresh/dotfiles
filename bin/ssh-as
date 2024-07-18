@@ -1,0 +1,81 @@
+#!/usr/bin/env perl
+
+use 5.012;
+use JSON;
+use File::Spec;
+use Getopt::Long;
+
+my %opts;
+Getopt::Long::Configure ("bundling");
+GetOptions(\%opts, "me|m", "dev|qa|d")
+    or die "Failed to parse arguments - usage $0 [-m,-d] user";
+
+my $want_install = shift;
+
+my $host_type = $opts{dev} ? "qa" : "live";
+say "SSH to $host_type host for $want_install as " 
+    . ($opts{me} ? "me" : $want_install);
+
+
+# Once SSH'd in we'll sudo to the install user, unless "ssh-as -m" was used
+# i.e. "me".
+my $sudo = $opts{me} ? '' : "'sudo -u $want_install -i'";
+
+# Expects checkout of our `puppet` repo under ~/dev/puppet
+my $list_installs_script = File::Spec->catfile(
+    $ENV{HOME}, 'dev/puppet/scripts/list_installs'
+);
+
+if (!-x $list_installs_script) {
+    die "Need to have a Puppet checkout in ~/dev/puppet so we can list installs";
+}
+
+# Find out what box this install is on:
+my $installs_json = `$list_installs_script --json`;
+if ($? != 0) {
+    die "Failed executing list_installs - $!";
+}
+
+my $installs = JSON::decode_json($installs_json);
+
+for my $install (keys %{ $installs->{installations} }) {
+    next unless $install eq $want_install;
+    my $install_data = $installs->{installations}{$install};
+
+    # Find the box we want:
+    my ($found_box) = grep {
+        /h-$host_type-app-/
+    } @{ $install_data->{present_on_nodes} };
+
+    if ($found_box) {
+        say "Found $host_type box $found_box for $install";
+        # Expects my .ssh/config bit that matches h-* and sets hostname with
+        # domain and specifies SSHing as my admin user
+        my $subdomain = $host_type eq 'live' ? 'prod' : 'dev';
+        exec "ssh -t $found_box.$subdomain $sudo";
+    } else {
+        die "No $host_type box found for $install";
+    }
+}
+
+# If we get here, we didn't find the install
+my $err = "Failed to find install '$want_install' in Puppet installations list!";
+
+# If we have Text::Levenshtein available we can try to suggest the cloest
+# match in case of typos / missed hyphens etc
+eval {
+    require Text::Levenshtein;
+    # distance gives us the "edit distance" between the two; for sor
+    my ($closest) =
+        map { 
+            $_->[1]
+        } sort {
+            $a->[0] <=> $b->[0]
+        } map {
+            [ Text::Levenshtein::distance($want_install, $_), $_ ]
+        } keys %{ $installs->{installations} };
+    $err .= "\n\n  Did you mean '$closest', maybe?";
+};
+die $err . "\n";
+
+
