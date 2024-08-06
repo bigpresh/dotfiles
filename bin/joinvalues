@@ -1,0 +1,50 @@
+#!/usr/bin/env perl
+
+# Read values from STDIN, splitting by line - and potentially by other chars -
+# and output them joined by commas or other chars, optionally using an sprintf
+# format string
+#
+# Handy if you e.g. have a list of IDs one per line that you've grepped from
+# somewhere, and want to turn into a comma-separated list to use in a query
+#
+# Examples:
+# * Get a list of subdomains, one per line, add the domain to them, and output
+#   them as a comma separated list
+#      joinvalues -f '%s.example.com' < subdomains.txt
+# * Read numbers from a file and zero-pad them to 8 chars
+#      joinvalues -f '%08d' < numbers.txt
+# * Split lines on pipes, and output the fields joined with ' and '
+#      joinvalues -s '\|' -j ' and ' < test.txt
+#
+# David Precious (BIGPRESH)  <davidp@preshweb.co.uk>
+# Released 2024 under the WTFPL
+
+use 5.012;
+
+use Getopt::Long;
+my %opts;
+GetOptions(\%opts,
+    "format|f=s",  # sprintf format string for each item
+    "split|s=s",   # split on given char/string as well as lines
+    "join|j=s",    # Join values with a different delimiter
+);
+
+while (<>) {
+    chomp;
+    # output the value, possibly via sprintf
+    my @values = $opts{split} ? split $opts{split} : $_;
+    while (my $val = shift @values) {
+        print $opts{format} ? sprintf $opts{format}, $val : $val;
+        # If we have more values, add the separator
+        if (@values) {
+            print exists $opts{join} ? $opts{join} : ','; 
+        }
+    }
+
+    # and if we haven't hit EOF, add the separator
+    unless (eof(STDIN)) {
+        print exists $opts{join} ? $opts{join} : ',';
+    }
+
+}
+
