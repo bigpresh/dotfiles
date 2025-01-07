@@ -46,7 +46,7 @@ sleep 1; # so we can see the message before the editor launches
     local $ENV{GIT_SEQUENCE_EDTIOR};
     my $rebase_editor = `which rebase-editor`;
     if ($rebase_editor) {
-        $ENV{GIT_SEQUENCE_EDITOR} = "$rebase_editor -c --";
+        $ENV{GIT_SEQUENCE_EDITOR} = "rebase_editor -c --";
     }
 
     exec("git",
