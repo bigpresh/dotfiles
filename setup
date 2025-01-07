@@ -67,7 +67,7 @@ fi
 # - if we have git@ for fetch, then the cronjob to auto-update can't work.
 git remote set-url origin https://github.com/bigpresh/dotfiles.git
 git remote set-url --push origin git@github-personal:bigpresh/dotfiles.git
-git pull
+git pull --rebase
 
 # Finally, source the new profile
 . ~/.bashrc
