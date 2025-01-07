@@ -44,8 +44,9 @@ sleep 1; # so we can see the message before the editor launches
 # see https://github.com/sjurba/rebase-editor
 {
     local $ENV{GIT_SEQUENCE_EDTIOR};
-    if (-x '/usr/bin/rebase-editor') {
-        $ENV{GIT_SEQUENCE_EDITOR} = 'rebase-editor -c --';
+    my $rebase_editor = `which rebase-editor`;
+    if ($rebase_editor) {
+        $ENV{GIT_SEQUENCE_EDITOR} = "$rebase_editor -c --";
     }
 
     exec("git",
