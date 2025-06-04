@@ -1,5 +1,28 @@
 #!/usr/bin/env perl
 
+# perlgrep - a Perl-powered grep replacement that can sum/extract
+# 
+# My own tool that I find useful, to search for things like grep, but with
+# useful features to gather information:
+#
+# - add up captures, for e.g. given data like:
+# foo:1
+# bar:5
+# foo:7
+# using `perlgrep -s 'foo:(\d+)' it will add up all the values matched
+#
+# - extract named captures as JSON - for the above,
+# `perlgrep '(?<name>.+):(?<score>\d+)'`
+# would return JSON objects like {"foo":1},{"bar":5}, ...
+#
+# - include first $n lines of file before matches - really helpful if
+# grepping a CSV file and you still want the header
+#
+# - multiple patterns - provide as many `-e` options as you like, by default
+# any pattern matches, or `-a` to insist that all must match
+#
+# Author: David Precious (BIGPRESH) <davidp@preshweb.co.uk>
+
 use strict;
 use Getopt::Long;
 
@@ -7,11 +30,15 @@ my $first_lines;
 my $sum_captures;
 my $count_matches;
 my $debug;
+my $match_all;
+my @patterns;
 
 Getopt::Long::GetOptions(
     'first-lines|h:i'   => \$first_lines,
-    'sum-captures'      => \$sum_captures,
+    'sum-captures|s'    => \$sum_captures,
     'count-matches|c'   => \$count_matches,
+    'pattern|e=s'       => \@patterns, # '-e' to be like grep
+    'match-all|a'       => \$match_all,
     'debug|d'           => \$debug,
 );
 
@@ -20,11 +47,17 @@ if (defined $first_lines && !$first_lines) {
     $first_lines = 1;
 }
 
-my $patt = shift @ARGV;
+# if no -e patterns given, read one from STDIN
+if (@patterns == 0) {
+    @patterns = shift @ARGV;
+}
 
-my $patt_re = qr{$patt}
-    or die "That doesn't look like a valid regexp";
-warn "OK, patt: $patt_re\n" if $debug;
+# validate and "compile" all the patterns
+for my $pattern (@patterns) {
+    $pattern = qr{$pattern}
+        or die "That doesn't look like a valid regexp ('$pattern')";
+    warn "Pattern: $pattern\n" if $debug;
+}
 my @json_data;
 my $output_json;
 my $sum;
@@ -34,34 +67,80 @@ my %matches;
 while ($first_lines-- > 0) {
     print scalar <STDIN>;
 }
-
+line:
 while (my $line = <STDIN>) {
-    if ($line =~ $patt_re) {
-        warn "Matched line: $line\n" if $debug;
-        if (keys %+) {
-            # First, if we used named captures, we're after parseable output
-            # so we'll turn them into JSON at the end
-            push @json_data, {%+};
-        } elsif (defined $1) {
-            # Simple capture
+
+    # if we have to match all patterns, we need to test all the patterns
+    # first - but if any of them capture (named or positional) we need to
+    # do whatever we're going to do (generate JSON, sum captures) only if
+    # all the patterns match, so we need to remember what we got.
+    my @pattern_matches;
+    pattern:
+    for my $pattern (@patterns) {
+        if ($line =~ $pattern) {
+            warn "Line $line matches pattern $pattern\n" if $debug;
+            if (keys %+) {
+                # First, if we used named captures, we're after parseable output
+                # so we'll turn them into JSON at the end
+                push @pattern_matches, { named => { %+ } };
+            } elsif (defined $1) {
+                # Simple capture
+                push @pattern_matches, { positional => $1 };
+            } else {
+                push @pattern_matches, { line => $line };
+            }
+            # if we're not matching all patterns, any match is enough so
+            # shortcut
+            last pattern if @pattern_matches > 0 && !$match_all;
+        } else {
+            # no match for this pattern for this line; if we have to match
+            # all patterns, we can shortcut now
+            if ($match_all) {
+                next line;
+            }
+        }
+
+    } # end of loop @patterns
+
+    # Right, we now know that we've matched one or all of the patterns,
+    # process the matches accordingly
+    my $already_printed_line;
+    for my $match (@pattern_matches) {
+        if ($match->{named}) {
+            push @json_data, $match->{named};
+        } elsif ($match->{positional}) {
             # If we're summing, do so...
             if ($sum_captures) {
-                $sum += $1;
+                $sum += $match->{positional};
             } elsif ($count_matches) {
-                $matches{$1}++;
+                $matches{$match->{positional}}++;
             } else {
                 # output just the bit we wanted to capture
-                print "$1\n";
+                print "$match->{positional}\n";
             }
+
         } else {
             # No captures, output or count the whole line
             if ($count_matches) {
                 $matches{$line}++;
             } else {
-                print $line;
+                # only print the line if:
+                # - we don't have any named/positional matches (if we do,
+                #   we probably don't want to also emit the whole line)
+                # - we haven't already printed it as a result of an earlier
+                #   pattern
+                if (!$already_printed_line && !grep { 
+                        exists $_->{positional} || exists $_->{named}
+                    } @pattern_matches)
+                {
+                    print $line;
+                    $already_printed_line++;
+                }
             }
         }
+
     }
+
 }
 
 if ($sum_captures) {
