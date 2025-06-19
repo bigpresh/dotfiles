@@ -42,12 +42,12 @@ sleep 1; # so we can see the message before the editor launches
 
 # If we have rebase-editor installed, use it automatically
 # see https://github.com/sjurba/rebase-editor
+# Use my rebase editor wrapper script, which modifies the "TODO" file to include
+# the filenames being changed by each commit for convenience; it will also
+# use `rebase-editor` if it's installed.
 {
-    local $ENV{GIT_SEQUENCE_EDTIOR};
-    my $rebase_editor = `which rebase-editor`;
-    if ($rebase_editor) {
-        $ENV{GIT_SEQUENCE_EDITOR} = "rebase-editor -c --";
-    }
+    local $ENV{GIT_SEQUENCE_EDTIOR} = "$ENV{HOME}/dotfiles/bin/git-rebase-add-files-wrapper";
+
 
     exec("git",
     "rebase",
