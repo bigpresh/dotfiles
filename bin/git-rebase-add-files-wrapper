@@ -4,7 +4,12 @@
 # add info on which files were changed in it, then carry on
 TODO_FILE="$1"
 
-# Create enhanced version with file lists
+# Assumes being used in a trusted env - if called with shell metachars in
+# `$TODO_FILE`, Bad Things could happen, but this is to be used internally
+# in a controlled development environment called by git.
+
+
+# Enhance rebase todo-list with affected files
 while IFS= read -r line; do
     if [[ $line =~ ^(pick|squash|fixup|edit|reword|drop)\ ([a-f0-9]+)\ (.*)$ ]]; then
         action="${BASH_REMATCH[1]}"
@@ -17,8 +22,12 @@ while IFS= read -r line; do
     fi
 done < "$TODO_FILE" > "$TODO_FILE.enhanced"
 
-mv "$TODO_FILE.enhanced" "$TODO_FILE"
 
+# Add information on the rebase we're about to do, right after the normal
+# "Rebase sha...sha onto sha" line
+sed -i "/^# Rebase .* onto /a\\# About to rebase $REBASE_CURRENT_BRANCH onto $REBASE_ONTO_BRANCH..." "$TODO_FILE.enhanced"
+
+mv $TODO_FILE.enhanced $TODO_FILE
 
 # Use rebase-editor if available, otherwise fall back to VISUAL
 if which rebase-editor >/dev/null 2>&1; then

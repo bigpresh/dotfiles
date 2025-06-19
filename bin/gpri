@@ -46,7 +46,12 @@ sleep 1; # so we can see the message before the editor launches
 # the filenames being changed by each commit for convenience; it will also
 # use `rebase-editor` if it's installed.
 {
+    # Tell Git to invoke our rebase editor
     local $ENV{GIT_SEQUENCE_EDITOR} = "git-rebase-add-files-wrapper";
+
+    # Pass on the branch names to our rebase editor
+    local $ENV{REBASE_CURRENT_BRANCH} = $current_branch;
+    local $ENV{REBASE_ONTO_BRANCH} = $rebase_onto_branch;
 
 
     exec("git",
