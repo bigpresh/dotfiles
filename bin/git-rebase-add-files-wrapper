@@ -22,7 +22,7 @@ mv "$TODO_FILE.enhanced" "$TODO_FILE"
 
 # Use rebase-editor if available, otherwise fall back to VISUAL
 if which rebase-editor >/dev/null 2>&1; then
-    rebase-editor "$TODO_FILE" -c --
+    rebase-editor -c -- "$TODO_FILE"
 elif [ -n "$VISUAL" ]; then
     $VISUAL "$TODO_FILE"
 else
