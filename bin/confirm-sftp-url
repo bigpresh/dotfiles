@@ -1,13 +1,17 @@
 #!/bin/bash
 
 INSTALL_USER=$1
+CONFIRM_INSTANCE=$2
 
 if [[ "$INSTALL_USER" == "" ]]; then
-    echo "Usage: confirm-sftp-url installuser"
+    echo "Usage: confirm-sftp-url installuser [instancename]"
     exit
 fi
 
-CONFIG=/opt/drains-$INSTALL_USER/etc/exchange_Confirm_files.conf
+if [[ "$CONFIRM_INSTANCE" == "" ]]; then
+    CONFIRM_INSTANCE=main
+fi
+CONFIG=/opt/drains-$INSTALL_USER/etc/exchange_Confirm_${CONFIRM_INSTANCE}_files.conf
 
 if [ ! -f $CONFIG ]; then
     echo "$INSTALL_USER has no exchange_Confirm_files.conf!"
