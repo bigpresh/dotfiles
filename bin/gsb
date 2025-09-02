@@ -126,7 +126,6 @@ if ($pattern =~ /^(master|-|justprintmasterbranch)$/) {
     my $cwd = getcwd();  # repo root to compare against history entries
     for (my $i = $#history; $i >= 0; $i--) {
         my ($repo_root, $from, $to) = $history[$i] =~ m{ : (.+) : (\S+) -> (\S+)};
-        say "History entry: '$repo_root', '$from', '$to' and we're '$cwd'";
         next unless $repo_root eq $cwd;
         push @uniques, $to unless $already_saw{ $to }++;
         last if @uniques > 6;
@@ -138,7 +137,7 @@ if ($pattern =~ /^(master|-|justprintmasterbranch)$/) {
         my $num;
         for my $branch (@uniques) {
             $num++;
-            printf "[%2d] %s\n", $num, $branch;
+            printf "[%2d] %s\n", $num, colored($branch, "blue");
         }
         say "Enter number ?> ";
         chomp(my $want_num = <>);
