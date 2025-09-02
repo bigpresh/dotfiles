@@ -25,9 +25,11 @@ use Cwd;
 use Data::Dump;
 use Term::ANSIColor;
 use Time::Piece;
+use Path::Tiny;
 
 my $pattern = shift or die "Usage: $0 pattern\n";
 my $initial_cwd = getcwd();
+my $branch_history_filename = "$ENV{HOME}/tmp/gsb_history";
 
 # Before we do anything else, we want to get the root of the repo
 while (!-d '.git') {
@@ -113,6 +115,40 @@ if ($pattern =~ /^(master|-|justprintmasterbranch)$/) {
             "red bold",
         );
     }
+} elsif ($pattern eq 'recent') {
+    my @history = path($branch_history_filename)->lines;
+
+    # Read backwards until we've said the $x most recent unique switched-to
+    # branch names...
+    my $how_many = 6;
+    my %already_saw;
+    my @uniques;
+    my $cwd = getcwd();  # repo root to compare against history entries
+    for (my $i = $#history; $i >= 0; $i--) {
+        my ($repo_root, $from, $to) = $history[$i] =~ m{ : (.+) : (\S+) -> (\S+)};
+        say "History entry: '$repo_root', '$from', '$to' and we're '$cwd'";
+        next unless $repo_root eq $cwd;
+        push @uniques, $to unless $already_saw{ $to }++;
+        last if @uniques > 6;
+    }
+    if (!@uniques) {
+        die "No recent branches to report.\n";
+    } else {
+        say "Most recent $how_many branches switched to are:";
+        my $num;
+        for my $branch (@uniques) {
+            $num++;
+            printf "[%2d] %s\n", $num, $branch;
+        }
+        say "Enter number ?> ";
+        chomp(my $want_num = <>);
+        if ($want_num =~ /^\d+$/ and $uniques[$want_num--]) {
+            switch_branch({ name => $uniques[$want_num--]});
+            exit;
+        } else {
+            die "Invalid entry\n";
+        }
+    }
 }
 
 
@@ -145,7 +181,7 @@ for my $branch_spec (@matches) {
 print "Enter number ?> ";
 chomp($num = <>);
 if (my $picked_branch = $matches[$num]) {
-  switch_branch($picked_branch);
+  switch_branch({ name => $picked_branch });
 } else {
   die colored("Invalid entry\n", "red bold");
 }
@@ -190,7 +226,6 @@ sub switch_branch {
   say `git checkout $branch_spec->{name}`;
   if ($? == 0) {
       # record the switch to our history file
-      my $branch_history_filename = "$ENV{HOME}/tmp/gsb_history";
       open my $fh, ">>", $branch_history_filename
         or die "Failed to open $branch_history_filename - $!";
 
@@ -199,4 +234,5 @@ sub switch_branch {
       say {$fh} localtime->datetime . " : $repo_dir : $current_branch -> $branch_spec->{name}";
   }
 }
+
 
