@@ -180,7 +180,7 @@ for my $branch_spec (@matches) {
 print "Enter number ?> ";
 chomp($num = <>);
 if (my $picked_branch = $matches[$num]) {
-  switch_branch({ name => $picked_branch });
+  switch_branch($picked_branch);
 } else {
   die colored("Invalid entry\n", "red bold");
 }
