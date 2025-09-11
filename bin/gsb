@@ -115,7 +115,7 @@ if ($pattern =~ /^(master|-|justprintmasterbranch)$/) {
             "red bold",
         );
     }
-} elsif ($pattern eq 'recent') {
+} elsif ($pattern =~ /^r(ecent)?$/) {
     my @history = path($branch_history_filename)->lines;
 
     # Read backwards until we've said the $x most recent unique switched-to
