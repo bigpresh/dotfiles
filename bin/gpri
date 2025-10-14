@@ -17,6 +17,16 @@ my $rebase_onto_branch = $ARGV[0];
 # If we've not been told the branch to rebase onto, find out what the origin's
 # head branch is and use that
 if (!$rebase_onto_branch) {
+    # but don't do this if the current branch name has "_into_" as it probably
+    # means that branch is intended to merge to another feature branch
+    if ($current_branch =~ /_into_/) {
+        die colored(
+            "Current branch name contains _into_, must provide desired branch"
+            . " to rebase onto for safety",
+            "red bold",
+        );
+    }
+    # Alright, find out what the master/head branch is called
     $rebase_onto_branch=`gsb justprintmasterbranch` =~ s/\n//r;
     if ($? != 0) {
         die colored(
