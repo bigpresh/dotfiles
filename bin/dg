@@ -1,22 +1,29 @@
 #!/usr/bin/env perl
 
-# perlgrep - a Perl-powered grep replacement that can sum/extract
-# 
-# My own tool that I find useful, to search for things like grep, but with
-# useful features to gather information:
+# dg - Dave's grep - a Perl-powered grep replacement that can sum/extract
 #
-# - add up captures, for e.g. given data like:
-# foo:1
-# bar:5
-# foo:7
-# using `perlgrep -s 'foo:(\d+)' it will add up all the values matched
+# My own tool that I find useful, to search for things like grep, using the
+# power of Perl regexps, and with useful features to gather information:
+#
+# - counting captures, e.g. given this data:
+#   foo:1
+#   bar:5
+#   foo:7
+# using `perlgrep -c '(\w+):'` would return the number of occurences of
+# each match, for e.g.
+#   foo: 2
+#   bar: 1
+#
+# - add up captures, for e.g. `perlgrep -s 'foo:(\d+)' on the above data,
+# it will add up all the values matched and return "Sum of captures: 8"
 #
 # - extract named captures as JSON - for the above,
 # `perlgrep '(?<name>.+):(?<score>\d+)'`
 # would return JSON objects like {"foo":1},{"bar":5}, ...
 #
 # - include first $n lines of file before matches - really helpful if
-# grepping a CSV file and you still want the header
+# grepping a CSV file and you still want the header - just add `-h` for
+# the first line, or `-h 2` for 2 lines etc.
 #
 # - multiple patterns - provide as many `-e` options as you like, by default
 # any pattern matches, or `-a` to insist that all must match
