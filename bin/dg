@@ -9,7 +9,7 @@
 #   foo:1
 #   bar:5
 #   foo:7
-# using `perlgrep -c '(\w+):'` would return the number of occurences of
+# using `dg -c '(\w+):'` would return the number of occurences of
 # each match, for e.g.
 #   foo: 2
 #   bar: 1
@@ -18,7 +18,7 @@
 # it will add up all the values matched and return "Sum of captures: 8"
 #
 # - extract named captures as JSON - for the above,
-# `perlgrep '(?<name>.+):(?<score>\d+)'`
+# `dg '(?<name>.+):(?<score>\d+)'`
 # would return JSON objects like {"foo":1},{"bar":5}, ...
 #
 # - include first $n lines of file before matches - really helpful if
@@ -27,6 +27,12 @@
 #
 # - multiple patterns - provide as many `-e` options as you like, by default
 # any pattern matches, or `-a` to insist that all must match
+#
+# At present, it doesn't handle being pointed at files to read, it just
+# expects to read from STDIN - it's trivial to say e.g. `dg ... < file.txt`
+#
+# In future I may add the ability to give it a list of files to search or
+# recursive search facilities.
 #
 # Author: David Precious (BIGPRESH) <davidp@preshweb.co.uk>
 
