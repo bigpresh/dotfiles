@@ -473,6 +473,18 @@ svncommit() {
     # will be opened in my editor
     git_status=$(git status)
     if [[ "$git_status" != "" ]]; then
+
+        # First - if this is the master/main branch, I almost certainly
+        # don't want to be committing there - it should be a feature branch
+        # which is then reviewed (usually as a PR) then merged
+        master_branch=$(gsb justprintmasterbranch)
+        curr_branch=$(git rev-parse --abbrev-ref HEAD)
+        if [[ "$curr_branch" == "$master_branch" ]]; then
+            cecho RED "Trying to commit on master branch '$master_branch'"
+            echo "Interrupt to quit, or enter if you're sure..."
+            read
+        fi
+
         template_file=/tmp/commit-message-template
         echo -n > $template_file
         gh_num=$(echo $git_status | perlgrep 'On branch.+(?:gh|GH)[_-]?(\d+)')
