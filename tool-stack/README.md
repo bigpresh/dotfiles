@@ -41,6 +41,7 @@ since GitHub still doesn't do automated TOCs:
     - [shutter](#shutter)
     - [pv](#pv)
     - [q Text as Data](#q)
+    - [ncdu](#ncdu)
   - [Firefox addons](#firefox-addons)
     - [Textern (edit textareas in editor)](#textern-edit-textareas-in-editor)
     - [DarkReader](#darkreader)
@@ -306,6 +307,17 @@ because older versions didn't support it properly - see my bug report
 was indeed to use a newer version.  At the time of writing, I had 1.8 as the
 Debian-packaged version, but 3.1.6 was the current.
 
+### ncdu
+
+Powerful terminal-based disk usage explorer to find where the space is gone.
+
+Point it at a directory, and it will show you the cumulative usage of each dir
+and files, and let you drill down, and delete with "d".
+
+Use the `-x` option to stay on the same filesystem, much like `find`.
+
+
+
 ## Firefox addons
 
 ### Textern (edit textareas in editor)
@@ -404,6 +416,8 @@ Download the install script from https://install.zerotier.com/ or if feeling
 brave, `curl https://install.zerotier.com | sudo bash`
 
 https://zerotier.com/
+
+Consider also Tailscale
 
 ### VS Code
 
