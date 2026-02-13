@@ -69,7 +69,9 @@ fi
 
 # Ensure the repo is initialised etc.
 echo "Ensure $BACKUP_TARGET is initialised..."
-restic -r $BACKUP_TARGET stats
+# used to use `stats` here to check, but one box I'm backing up
+# has an older restic version that doesn't have that - bah.
+restic -r $BACKUP_TARGET snapshots
 if [[ $? == 0 ]]; then
     echo "Repo $BACKUP_TARGET appears initialised, continue"
 else
