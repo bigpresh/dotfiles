@@ -88,6 +88,7 @@ restic -r $BACKUP_TARGET backup $HOME \
     --exclude dev \
     --exclude .local/share/Trash \
     --exclude .local/share/multimc/assets \
+    --exclude "*/logs" \
     --exclude .minecraft \
     --exclude ".local/share/Euro Truck Simulator 2/screenshot" \
     --exclude .local/share/zeitgeist \
