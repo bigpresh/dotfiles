@@ -1,0 +1,111 @@
+#!/bin/bash
+
+#IFS="$(printf '\n\t')"
+
+# This is intended to make it easy to back up a home dir to my
+# Hetzner Storage Box.
+#
+# Add it to cron to run when you want it to.
+# It will not actually do anything unless .homedir-backup.conf exists.
+#
+# To enable backups:
+# a) add an entry in .ssh/config to define the hostname to back up to
+#    with the username (sub-user) and the SSH key to use etc, e.g.:
+#     Host homedir-backup-storagebox
+#       IdentityFile ~/.ssh/backups.key
+#       Hostname  u123456.your-storagebox.de
+#       Username u12356
+# b) create a .homedirbackup file in your homedir containing the 
+#    RESTIC_PASSWORD env var e.g. `export RESTIC_PASSWORD=hunter2` (this file
+#    will be sourced; future versions of the script may allow other settings;
+#    as it stands it can override $BACKUP_TARGET if needed)
+# c) run the script; it will give you the restic command to initialise the
+#    restic repository ready for use, run that
+# d) run the script again to take the first backup
+# e) if all is well, cron it up.
+#
+# Backups will use the set of excludes in the script to avoid backing up
+# caches and other non-critical stuff.
+#
+# Backups go via SFTP to a restic repo named e.g. username-homedir-hostname.
+#
+# This would likely work just fine with any other SFTP-offering space, not
+# just Hetzner Storage Boxes.
+#
+# restic is https://github.com/restic/restic and available in Debian/Ubuntu
+# packages.  It handles encryption at rest, efficient backup of just changes
+# etc.
+#
+# David Precious <davidp@preshweb.co.uk>, Feb 2026
+# Released under the WTFPL - if it's useful to you, great!
+
+# First, handle differences between interactive env and cron env on some
+# of my boxes:
+if [ "$HOSTNAME" == "" ]; then
+    $HOSTNAME=$(hostname)
+fi
+if [[ "$USER" == "" ]]; then
+    $USER=$LOGNAME
+fi
+
+BACKUP_TARGET=sftp:homedir-backup-storagebox:$USER-homedir-$HOSTNAME
+HOMEDIRBACKUPCONF="$HOME/.homedirbackup"
+if [ -e "$HOMEDIRBACKUPCONF" ]; then
+  . $HOMEDIRBACKUPCONF
+else
+    echo "No $HOMEDIRBACKUPCONF, nothing to do"
+    exit
+fi
+
+if [ ! -x /usr/bin/restic ] ; then
+    echo "No /usr/bin/restic, need to install it?"
+    exit 2;
+fi
+
+if [[ "$RESTIC_PASSWORD" == "" ]]; then
+    echo "No RESTIC_PASSWORD in $HOMEDIRBACKUPCONF?"
+    exit 3;
+fi
+
+# Ensure the repo is initialised etc.
+echo "Ensure $BACKUP_TARGET is initialised..."
+restic -r $BACKUP_TARGET stats
+if [[ $? == 0 ]]; then
+    echo "Repo $BACKUP_TARGET appears initialised, continue"
+else
+    echo "Repo $BACKUP_TARGET not initialised - you probably need to do:"
+    echo "$ restic -r $BACKUP_TARGET init"
+    exit 1
+fi
+
+echo "Starting backup to $BACKUP_TARGET" 
+restic -r $BACKUP_TARGET backup $HOME \
+    --exclude-caches \
+    --exclude tmp \
+    --exclude .cache \
+    --exclude dev \
+    --exclude .local/share/Trash \
+    --exclude .local/share/multimc/assets \
+    --exclude .minecraft \
+    --exclude ".local/share/Euro Truck Simulator 2/screenshot" \
+    --exclude .local/share/zeitgeist \
+    --exclude .mixxx/analysis \
+    --exclude android-studio \
+    --exclude .Android* \
+    --exclude Android \
+    --exclude .android \
+    --exclude ".vscode*" \
+    --exclude .gradle \
+    --exclude .npm \
+    --exclude .wine \
+    --exclude ".mozilla/firefox/*/storage/default/http**" \
+    --exclude ".var/app/*/cache**" \
+    --exclude .local/share/flatpak \
+    --exclude .local/share/docker \
+    --exclude pycache \
+    --exclude "*cache*" \
+    --exclude "*Cache*" \
+    --exclude .bundle \
+    --exclude "*mimetmp*" \
+    --exclude .config/Slack
+
