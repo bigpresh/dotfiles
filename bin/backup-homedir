@@ -42,10 +42,10 @@
 # First, handle differences between interactive env and cron env on some
 # of my boxes:
 if [ "$HOSTNAME" == "" ]; then
-    $HOSTNAME=$(hostname)
+    HOSTNAME=$(hostname)
 fi
 if [[ "$USER" == "" ]]; then
-    $USER=$LOGNAME
+    USER=$LOGNAME
 fi
 
 BACKUP_TARGET=sftp:homedir-backup-storagebox:$USER-homedir-$HOSTNAME
