@@ -199,11 +199,19 @@ sub get_branches {
   }
   # Uniqueness check so that we don't e.g. report both a local branch named devel and a remote
   # branch remotes/origin/devel as two choices named "devel"
+  # The current branch is prefixed with `*`
+  # If you have any worktrees created from other branches, they will be prefixed
+  # with `+`
   my %seen_branch;
   return grep { 
       !$seen_branch{ $_->{name} }++
   } map {
-    m{^(\*)?\s+(?:remotes/origin/)?(.+)} and { name => $2, current => !!$1 }
+    m{^
+        (?:\+)? # maybe a "+" if checked out as worktree - ignore that
+        (\*)?   # capture the "*" for current branch
+        \s+
+        (?:remotes/origin/)?(.+) # capture the branch name
+    }x and { name => $2, current => !!$1 }
   } @all_branches;
 }
 
