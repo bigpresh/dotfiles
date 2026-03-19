@@ -19,7 +19,7 @@ These commands create a lightweight daily ritual: start the day knowing what's o
 
 ## Commands
 
-### `/project:sod-summary` — Start of day
+### `/sod-summary` — Start of day
 
 Run this first thing. It:
 
@@ -40,7 +40,7 @@ Run this first thing. It:
 
 ---
 
-### `/project:ticket-kickoff` — Start a new piece of work
+### `/ticket-kickoff` — Start a new piece of work
 
 Run this before writing any code on a non-trivial ticket. It:
 
@@ -56,7 +56,7 @@ The goal is to catch misunderstandings before they become wasted days, and to cr
 
 ---
 
-### `/project:ticket-closeout` — Finish a piece of work properly
+### `/ticket-closeout` — Finish a piece of work properly
 
 Run this when you think you're done — before you mentally move on. It:
 
@@ -69,21 +69,21 @@ Run this when you think you're done — before you mentally move on. It:
 
 ---
 
-### `/project:worklog` — Log something quickly
+### `/worklog` — Log something quickly
 
 Run this ad-hoc throughout the day to record things that won't show up in git or GitHub — sysadmin work, conversations, decisions made, things you helped with.
 
 ```
-/project:worklog helped Doug get his SSH key set up
-/project:worklog planning chat with Claude about ADHD-addled fuckwittery
-/project:worklog investigated slow query on reports page, turned out to be missing index
+/worklog helped Doug get his SSH key set up
+/worklog planning chat with Claude about ADHD-addled fuckwittery
+/worklog investigated slow query on reports page, turned out to be missing index
 ```
 
 Appends a timestamped entry under today's date in `~/.claude/worklog.md`. The EOD and SOD commands read this file, so these notes feed into your daily summary automatically.
 
 ---
 
-### `/project:eod-summary` — End of day
+### `/eod-summary` — End of day
 
 Run this before closing the laptop. It:
 
