@@ -16,7 +16,7 @@ Don't action them yet — hold them for the summary in Step 4.
 ```bash
 GH_USER=$(gh api /user --jq .login)
 gh api /users/$GH_USER/events 2>/dev/null | head -1 # confirms auth works
-gh pr list --author @me --state open --json number,title,isDraft,reviewDecision,createdAt,assignees,url,labels
+gh pr list --author @me --state open --json number,title,isDraft,reviewDecision,createdAt,assignees,url,labels,reviewRequests
 ```
 
 Work through each PR:
@@ -26,7 +26,7 @@ Work through each PR:
 - If stale, help me update the linked issue status to "Blocked" if appropriate
 
 **All other open PRs:**
-- No reviewer assigned → flag immediately, this needs fixing now
+- No reviewer assigned (check the `reviewRequests` field, not `assignees` — empty `reviewRequests` means no reviewer has been requested) → flag immediately, this needs fixing now
 - Reviewer assigned but no review after two business days → prompt me to chase or add another reviewer
 - Changes requested → this is top priority, flag it prominently in Step 4
 - Approved but not merged:
