@@ -111,7 +111,7 @@ Produce a clear, ordered list of what to work on today. Strict priority order:
 5. **Stale WIP/draft PRs** — need a status update or decision
 6. **Blocked tickets to re-check** — anything that might now be unblocked
 
-Format this as a clean list I can refer back to during the day, with ticket/PR numbers and links. Flag anything time-sensitive or risky prominently.
+Format this as a clean list I can refer back to during the day, with ticket/PR numbers and links I can use to get straight to each PR. Flag anything time-sensitive or risky prominently.
 
 ## Step 5 — Quick gut-check
 
