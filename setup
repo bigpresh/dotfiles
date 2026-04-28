@@ -52,6 +52,7 @@ symlink ~/dotfiles/re.pl ~/.re.pl
 # If we have Claude Code here, then symlink in my custom commands
 if [ -d ~/.claude ]; then
    symlink ~/dotfiles/claude/commands ~/.claude/commands
+   symlink ~/dotfiles/claude/scripts ~/.claude/scripts
 fi
 
 # See if I already have a cronjob configured to update my dotfiles
