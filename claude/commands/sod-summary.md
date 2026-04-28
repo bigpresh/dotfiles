@@ -122,3 +122,12 @@ Before wrapping up, ask:
 If anything comes up, either add it to the relevant ticket/PR as a comment, or note it in `~/.claude/worklog.md` under today's date.
 
 Then: "Right, you know what you're doing today. Go get it."
+
+## Step 6 — Mark today as planned
+
+Once the summary is complete, write today's date to the marker file. The SessionStart nudge hook reads this to know `/sod-summary` has run today, so it stays quiet for the rest of the day.
+
+```bash
+date +%Y-%m-%d > ~/.claude/sod-summary-last-run
+```
+
