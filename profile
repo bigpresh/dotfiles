@@ -989,6 +989,15 @@ function cdk_stack {
     npx cdk $operation $full_stack_name
 }
 
+# If this box has `mpc`, then define a simple function to get the current
+# filename, so I can say e.g. `cp mpd_fileplaying() ...`
+if [ $(which mpc 2>/dev/null) ]; then
+    function mpd_fileplaying {
+        mpc current -f '%file%'
+    }
+fi
+
+
 # Simple coloured text output, e.g. `cecho RED Bad Things Happened!`
 cecho(){
     RED="\033[0;31m"
