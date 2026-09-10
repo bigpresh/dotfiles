@@ -15,13 +15,22 @@ The output JSON has these top-level keys:
 - `worklog` — full text of `~/.claude/worklog.md` (or empty)
 - `session_summaries` — paths of `summary.md` files modified in the last 3 days
 - `open_prs` — `gh pr list --author @me --state open` payload (PRs I authored)
-- `pr_details` — map keyed by PR number, with `mergeable`, `mergeStateStatus`, `reviewRequests`, `reviews`
-- `review_requests` — open PRs across all kaarbontech repos requesting my review (PRs I should review)
+- `pr_details` — map keyed by PR number, with `mergeable`, `mergeStateStatus`, `reviewRequests`, `reviews`, `last_comments` (up to the 3 most recent comments: author, createdAt, body), plus the review clocks: `pending_reviews` (one entry per still-outstanding reviewer: `reviewer`, `requested_at`, `requested_at_is_fallback`, `days_waiting`, `business_days_waiting`) and `longest_wait_days` (largest `business_days_waiting` across pending reviewers, `null` if nobody is pending)
+- `review_requests` — open PRs across all kaarbontech repos requesting my review (PRs I should review), each annotated with `my_review_requested_at`, `my_review_requested_at_is_fallback`, `days_waiting_on_me`, `business_days_waiting_on_me`
 - `project_board` — items on the KT Main board assigned to me, filtered to active (non-Done) statuses
 - `stale_issues` — top 5 open issues assigned to me that look like candidates for "is this actually done?" triage (already filtered for snoozed and recently-updated; scored by board status + activity pattern)
 - `snooze_file` — path to the JSON file storing snooze decisions (`~/.claude/sod-issue-snooze.json`)
 
 Use this JSON for everything below. Only fetch extra data if something is genuinely missing — don't re-run individual `gh` commands that the script already covered.
+
+### Review ages: use the clocks, never the dates
+
+"How long has this been waiting for review?" is measured from when the review was **requested** — which is neither `createdAt` nor `updatedAt`. A PR can sit for a week with no reviewer and get one this morning; reading `createdAt` turns a same-day request into a bogus *"7 days, go and chase them"*, which burns my credibility with the reviewer.
+
+- Threshold **only** on `business_days_waiting` (my PRs) and `business_days_waiting_on_me` (PRs awaiting my review). The script derives both from the actual `review_requested` timeline event.
+- **Never compute a review age yourself from a date field**, and never describe a PR's own age as how long a reviewer has had it. If you want to mention that a PR sat unreviewed for days *before* a reviewer was added, say that explicitly — it's a different (and much milder) observation.
+- These counts are whole weekdays elapsed and deliberately conservative: a 16:00-yesterday request reads `0`. Trust it; don't round up.
+- If `requested_at_is_fallback` / `my_review_requested_at_is_fallback` is `true`, no request event was found and the number is a guess from `createdAt` — flag it as approximate rather than presenting it as measured.
 
 ## Step 1 — Worklog carry-over
 
@@ -40,8 +49,8 @@ From `open_prs` and `pr_details`, work through each PR:
 
 **All other open PRs:**
 - No reviewer assigned (check the `reviewRequests` field in the PR list payload, not `assignees` — empty `reviewRequests` means no reviewer has been requested) → flag immediately, this needs fixing now
-- Reviewer assigned but no review after two business days → prompt me to chase or add another reviewer
-- Changes requested → top priority, flag prominently in Step 5
+- Reviewer assigned but no review after two business days → prompt me to chase or add another reviewer. Decide this on `longest_wait_days >= 2`, **not** on the PR's age. If `longest_wait_days` is `0` or `1` the reviewer is well within their window — say nothing, or note it as "recently requested, no action". Reporting a fresh request as a chase is worse than staying silent
+- Changes requested → check `last_comments` before assigning blame: `reviewDecision` stays `CHANGES_REQUESTED` until the reviewer formally re-reviews, so compare the review date against the latest comments. If I've already responded (rebuttal, fix pushed, "mind taking another look?") and mine is the last word, the ball is in the **reviewer's** court — that's a chase, not a rework. Only if the reviewer's feedback is genuinely unanswered is it my top-priority rework, flagged prominently in Step 5
 - Approved but not merged:
   - Is QA needed? For simple/low-risk changes, confirm it's been tested and suggest merging
   - For anything more complex, prompt me to assign to QA if not already done
@@ -53,8 +62,8 @@ From `open_prs` and `pr_details`, work through each PR:
 
 From `review_requests`, surface any PRs that need my attention. These are quick-win, "drink-your-coffee" tasks — colleagues are blocked waiting on me, so unblocking them is high-leverage.
 
-- **Non-draft PRs** — list each one with author, repo, title, age (compute from `updatedAt`). Flag anything older than 2 business days as needing review *today*.
-- **Draft PRs** — usually noise (the author isn't really ready). Mention them briefly *only* if they've been requesting review for more than a week, as a candidate for asking the author whether the request can be dropped. Don't surface fresh draft requests at all.
+- **Non-draft PRs** — list each one with author, repo, title, and how long they've been waiting on me (`business_days_waiting_on_me`). Flag anything at `>= 2` business days as needing review *today*.
+- **Draft PRs** — usually noise (the author isn't really ready). Mention them briefly *only* if `days_waiting_on_me` exceeds 7, as a candidate for asking the author whether the request can be dropped. Don't surface fresh draft requests at all.
 - If `review_requests` is empty, just say "No PRs awaiting your review." and move on — no need to dwell.
 
 These slot into the priority list at position 2 (after changes-requested PRs on my own work, before in-progress tickets) — see Step 5.
