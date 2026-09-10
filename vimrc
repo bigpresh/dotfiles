@@ -35,6 +35,9 @@ set hidden
 "autocmd FileType perl set smartindent
 autocmd FileType php  set smartindent
 
+" Don't line-wrap long cronjob entries when I edit them
+autocmd FileType crontab setlocal textwidth=0
+
 " have the h and l cursor keys wrap between lines (like <Space> and <BkSpc> do
 " by default), and ~ covert case over line breaks; also have the cursor keys
 " wrap in insert mode:
