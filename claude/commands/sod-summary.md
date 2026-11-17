@@ -89,7 +89,9 @@ From `stale_issues`, present each candidate one at a time for a quick triage dec
 >     URL
 > Decision: **Close** (looks done) / **Snooze 1 week** / **Snooze 2 weeks** / **Snooze until... / Still working on it** / **Skip — open it in a tab**
 
-Use `AskUserQuestion` with the five common options. Default snooze is **1 week**.
+Use `AskUserQuestion` with the common options. Default snooze is **1 week**.
+
+**Put the full issue URL inside the `AskUserQuestion` question text itself**, e.g. `"#14855 drain.conf paths escape the worktree (https://github.com/kaarbontech/drains/issues/14855): what do we do?"`. The question dialog hides whatever was printed above it, so a URL only in the preceding text is a URL I can't see. Always include a **"Look first, decide later"** option: take no action, leave it out of the snooze file, move on to the next one, and list those deferred issues with their URLs at the end of triage.
 
 **Acting on the decision:**
 
@@ -105,7 +107,7 @@ Use `AskUserQuestion` with the five common options. Default snooze is **1 week**
   ```
   Use the `snooze_file` path from the JSON output. Always preserve other entries when writing.
 - **Still working on it** — equivalent to "snooze 1 week" with reason "in progress".
-- **Skip — open in a tab** — print the URL for me to open manually, take no other action.
+- **Skip — open in a tab** / **Look first, decide later** — print the URL for me to open manually, take no other action; re-list it at the end of triage.
 
 **Stop after the user has triaged all five, or says they're done with triage.** Don't loop forever. If a user says "enough for today", stop and continue to the rest of the SOD summary.
 
@@ -134,6 +136,28 @@ Produce a clear, ordered list of what to work on today. Strict priority order:
 
 Flag anything time-sensitive or risky prominently above the numbered list.
 
+## Step 5a — Update for Leo (do NOT skip)
+
+Leo (my boss) gets a short update from me every working morning. I've repeatedly failed to send it in the evening, so it lives here now. A hook blocks my other Claude Code prompts until this step is confirmed done, so don't let me wriggle past it.
+
+1. Work out the previous working day from `today` (Friday if today is Monday, otherwise yesterday) and gather what I did then:
+   ```bash
+   ~/.claude/scripts/eod-summary-auto-fetch.sh <previous-working-day>
+   ```
+   Same JSON shape as the EOD routine: `git_commits`, `prs`, `issues`, `claude_activity` (my typed prompts, grouped by project), `session_summaries`. If it's all empty (bank holiday, sick day), say so and ask me what to report rather than inventing anything.
+2. Draft the update, plain text, ready for me to paste into an email:
+   - **Short**: a handful of bullets grouped by project/ticket, outcome-focused, no blow-by-blow
+   - **Done** (yesterday): what moved forward, merged, deployed, closed. Lean on commits and PR/issue titles for what shipped, and on `claude_activity` for what I was working on; summarise, never quote my prompts
+   - **Waiting on**: anything blocked on review/QA/someone else
+   - **Today**: one or two lines taken from the top of the Step 5 priority list
+   - Plain and informal; Leo and I don't do corporate flannel. Link tickets/PRs with full URLs
+   - Under the draft, note anything it can't see (Slack, meetings, off-Claude firefighting) so I can add it
+3. Show me the draft, then ask: **"Sent it to Leo?"** with `AskUserQuestion` (Sent / Not yet). Only once I say it's sent, record it:
+   ```bash
+   ~/.claude/scripts/leo-update-mark-sent.sh
+   ```
+   If I say "not yet", nag me once more at the end of the summary (Step 7), and don't write the marker.
+
 ## Step 5b — Coffee triage (stale assigned issues)
 
 After the priority list, if `stale_issues` is non-empty, offer the triage from Step 3b:
@@ -152,10 +176,6 @@ If anything comes up, either add it to the relevant ticket/PR as a comment, or n
 
 Then: "Right, you know what you're doing today. Go get it."
 
-## Step 7 — Mark today as planned
+## Step 7 — Done
 
-Once the summary is complete, write today's date to the marker file. The SessionStart nudge hook reads this to know `/sod-summary` has run today, so it stays quiet for the rest of the day.
-
-```bash
-date +%Y-%m-%d > ~/.claude/sod-summary-last-run
-```
+If Step 5a's update still hasn't been confirmed as sent, remind me now: everything else in Claude Code stays blocked until it has.
