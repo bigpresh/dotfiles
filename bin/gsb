@@ -52,7 +52,8 @@ my @matches = grep { $_->{name} =~ $pattern } @branches;
 # If we said `-`, or `master`, then we want the HEAD branch for the repo,
 # check what that is as some repos use an alternative name (main, production,
 # etc) for operational reasons or virtue-signalling.
-if ($pattern =~ /^(master|-|justprintmasterbranch)$/) {
+# `=` is here as an easy typo for `-`
+if ($pattern =~ /^(master|-|=|justprintmasterbranch)$/) {
     # Get the origin name.  Just use the first origin found, which should
     # be fine for most cases.
     my $origin = (split /\n/, `git remote`)[0];
